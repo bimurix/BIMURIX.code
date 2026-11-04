@@ -7,7 +7,8 @@
 import { execSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 
-const raw = execSync("pnpm exec supabase status -o env", { encoding: "utf8" });
+// npx trouve le CLI Supabase installé dans web/node_modules, même si pnpm n'est pas dans le PATH.
+const raw = execSync("npx --no-install supabase status -o env", { encoding: "utf8", cwd: new URL("..", import.meta.url) });
 const status = Object.fromEntries(
   raw.split(/\r?\n/).flatMap((line) => {
     const m = line.match(/^([A-Z0-9_]+)="?(.*?)"?$/);
