@@ -1,23 +1,26 @@
+import { Suspense } from "react";
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
+import type { QuoteFormContent } from "@/lib/quote/form-content";
+import { fetchPublished } from "@/sanity/fetch";
+import { QUOTE_FORM_QUERY } from "@/sanity/queries";
+import { buildFormModel } from "@/ui/patterns/quote-form/form-model";
+import { QuoteForm } from "@/ui/patterns/quote-form/QuoteForm";
 import { Section, SectionHeading } from "../section";
 
 export type QuoteFormData = { heading?: Localized; intro?: Localized };
 
-// Emplacement du formulaire : le formulaire réel (validation, antispam, Supabase, courriels) arrive à l'étape L5.
-const pending = {
-  fr: "Le formulaire de soumission sera branché à l'étape L5. En attendant, écrivez-nous :",
-  en: "The quote form will be connected in step L5. In the meantime, email us:",
-};
-
-export function QuoteFormBlock({ data, locale, email }: { data: QuoteFormData; locale: Locale; email?: string }) {
+/** Bloc « Formulaire de soumission » : libellés et listes modifiables dans Studio (Formulaire de soumission). */
+export async function QuoteFormBlock({ data, locale }: { data: QuoteFormData; locale: Locale }) {
+  const content = await fetchPublished<QuoteFormContent>({ query: QUOTE_FORM_QUERY });
+  const model = buildFormModel(content, locale);
   return (
     <Section>
       <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "")}</SectionHeading>
-      <div className="max-w-3xl border-[1.5px] border-dashed border-ink-3 p-6 text-[16px] text-ink-2">
-        {pending[locale]}{" "}
-        {email && <a href={`mailto:${email}`} className="font-semibold text-blue underline underline-offset-4">{email}</a>}
-      </div>
+      {/* Le service pré-choisi vient de l'adresse (?service=…), lue côté client. */}
+      <Suspense fallback={<div className="h-[60rem] max-w-3xl" aria-hidden="true" />}>
+        <QuoteForm model={model} locale={locale} siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} />
+      </Suspense>
     </Section>
   );
 }

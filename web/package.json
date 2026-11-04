@@ -17,17 +17,21 @@
     "db:status": "supabase status",
     "seed": "node --env-file-if-exists=.env.local scripts/seed-sanity.mts",
     "sanity:types": "sanity schema extract --path src/sanity/schema.json && sanity typegen generate",
-    "seed:login": "sanity exec scripts/seed-sanity.mts --with-user-token -- --cli-session"
+    "seed:login": "sanity exec scripts/seed-sanity.mts --with-user-token -- --cli-session",
+    "db:env": "node scripts/db-env.mjs"
   },
   "dependencies": {
     "@sanity/client": "^8.14.1",
     "@sanity/image-url": "^2.1.1",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0",
     "next": "16.4.5",
     "next-sanity": "^13.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "sanity": "^6.21.0",
-    "styled-components": "^6.6.0"
+    "styled-components": "^6.6.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

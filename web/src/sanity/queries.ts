@@ -60,5 +60,14 @@ export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"
   }
 }`);
 
+// Formulaire de soumission : libellés, listes, consentement, courriels et services proposés.
+export const QUOTE_FORM_QUERY = defineQuery(`{
+  "form": *[_id == "formSettings"][0],
+  "emails": *[_id == "emailTemplates"][0],
+  "services": *[_type == "service"] | order(order asc){_id, title, code, network},
+  "privacyPage": *[_type == "page" && kind == "privacy"][0]{_type, kind, slug},
+  "fromEmail": *[_id == "settings"][0].email
+}`);
+
 // Adresses à pré-générer : une entrée par document et par langue disponible.
 export const SLUGS_QUERY = defineQuery(`*[_type in ["page", "service"] && defined(slug.fr)]{ "fr": slug.fr, "en": slug.en }`);

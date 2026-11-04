@@ -61,7 +61,7 @@ function renderSection(section: Section, ctx: RenderContext) {
     case "imageFigure":
       return <ImageFigure data={section as ImageFigureData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "") || undefined} />;
     case "quoteForm":
-      return <QuoteFormBlock data={section as QuoteFormData} locale={locale} email={shell?.settings?.email} />;
+      return <QuoteFormBlock data={section as QuoteFormData} locale={locale} />;
     default:
       return null;
   }
