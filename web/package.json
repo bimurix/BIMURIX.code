@@ -18,7 +18,8 @@
     "seed": "node --env-file-if-exists=.env.local scripts/seed-sanity.mts",
     "sanity:types": "sanity schema extract --path src/sanity/schema.json && sanity typegen generate",
     "seed:login": "sanity exec scripts/seed-sanity.mts --with-user-token -- --cli-session",
-    "db:env": "node scripts/db-env.mjs"
+    "db:env": "node scripts/db-env.mjs",
+    "admin:add": "node --env-file=.env.development.local scripts/add-admin.mjs"
   },
   "dependencies": {
     "@sanity/client": "^8.14.1",

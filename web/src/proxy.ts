@@ -1,8 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { resolveRoute } from "@/lib/i18n/resolve-route";
+import { refreshAdminSession } from "@/lib/supabase/proxy-session";
 
-export function proxy(request: NextRequest) {
-  const decision = resolveRoute(request.nextUrl.pathname);
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) return refreshAdminSession(request);
+
+  const decision = resolveRoute(pathname);
   if (decision.action === "next") return NextResponse.next();
 
   const url = request.nextUrl.clone();
