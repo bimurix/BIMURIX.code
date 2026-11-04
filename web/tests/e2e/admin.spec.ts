@@ -47,6 +47,15 @@ test("la clé publique ne lit aucune demande (RLS)", async () => {
   expect(error ?? data?.length === 0).toBeTruthy();
 });
 
+// Migration function_grants : un visiteur ne peut appeler aucune fonction (ex. tout anonymiser avec months = 0).
+test("la clé publique n'appelle aucune fonction de la base", async () => {
+  const anon = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!);
+  for (const [fn, args] of [["anonymize_expired_quotes", { months: 0 }], ["admin_stats", {}], ["is_admin", {}]] as const) {
+    const { error } = await anon.rpc(fn, args);
+    expect(error, fn).not.toBeNull();
+  }
+});
+
 test("un compte connecté mais non admin est refusé", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "une fois par exécution");
   const email = `non-admin-${Date.now()}@example.com`;

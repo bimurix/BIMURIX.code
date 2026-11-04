@@ -1,0 +1,11 @@
+# Déploiement Netlify (phase M3). Le site vit dans web/ ; Netlify détecte Next.js
+# et ajoute lui-même son adaptateur (pas de plugin à installer).
+[build]
+  base = "web"
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"
+  # Le formulaire est pré-rendu : la clé publique Turnstile doit exister au build (audit, reco 7).
+  # Toutes les variables sont saisies dans l'interface Netlify, jamais ici.
