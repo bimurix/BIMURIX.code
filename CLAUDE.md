@@ -67,7 +67,7 @@ pnpm db:stop
 
 ## 9. Interdits sans accord explicite
 `git push`, création du dépôt GitHub, déploiement Netlify, configuration DNS ou Resend, écriture dans
-le jeu de données Sanity `production`, suppression de tests ou de règles RLS.
+le dataset Sanity `production` autre que `pnpm seed` sans `--force` (création des documents absents), suppression de tests ou de règles RLS.
 
 ## 10. Terminé =
 Tests verts · lint, typecheck, build OK · rendu vérifié à 360 px et 1440 px en FR **et** EN ·

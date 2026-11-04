@@ -8,6 +8,22 @@
 
 ---
 
+## 0. État d'avancement (2026-11-04)
+
+| Étape | État | Détail |
+|---|---|---|
+| L0 Cadrage | ✅ | CLAUDE.md, SPEC, ADR 001–005, PRODUCT, directions visuelles |
+| Identité visuelle | ✅ | Logo L-01 « Croisement » (ADR-005), `identite-visuelle/` |
+| L1 Squelette | ✅ | Next.js 16, FR/EN, port 3100, Supabase isolé `bimurix` (544xx) |
+| L2 Sanity | 🟡 code fait | Studio, schémas, 10 blocs, seed — **bloqué** : dataset `development`, CORS, jeton |
+| GitHub | 🟡 | Clé dédiée + remote `bimurix/BIMURIX.code` OK, **rien poussé** |
+| L3 → L7, M | ⏳ | — |
+
+Écarts à corriger : `tokens.css` contient encore le cyan (ADR-005 l'exclut) ; signatures courriel en
+`@bimurix.ca` alors que le domaine est `bimurix.com`.
+
+---
+
 ## 1. Nouvelles décisions (s'ajoutent à la v2)
 
 | # | Décision |
