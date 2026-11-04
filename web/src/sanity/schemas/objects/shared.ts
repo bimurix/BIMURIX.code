@@ -78,7 +78,7 @@ export const networkColor = defineType({
     list: [
       { title: "Vert (plomberie)", value: "plumb" },
       { title: "Rouge (chauffage)", value: "heat" },
-      { title: "Cyan (données)", value: "data" },
+      { title: "Violet (données)", value: "data" },
       { title: "Ardoise (TQC)", value: "tqc" },
     ],
     layout: "radio",

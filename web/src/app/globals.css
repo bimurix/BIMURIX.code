@@ -4,12 +4,12 @@
 @theme inline {
   --color-blue: var(--bx-blue);
   --color-blue-deep: var(--bx-blue-deep);
-  --color-cyan: var(--bx-cyan);
   --color-ink: var(--bx-ink);
   --color-ink-2: var(--bx-ink-2);
   --color-ink-3: var(--bx-ink-3);
   --color-paper: var(--bx-paper);
   --color-paper-2: var(--bx-paper-2);
+  --color-grid: var(--bx-grid);
   --color-rule: var(--bx-rule);
   --color-net-plumb: var(--bx-net-plumb);
   --color-net-heat: var(--bx-net-heat);
@@ -41,4 +41,50 @@ body {
 /* Titres en largeur étendue : lettrage de plan (direction A). */
 .font-display {
   font-variation-settings: "wdth" 122;
+}
+
+/* ---------- Feuille de plan ---------- */
+.bx-sheet-grid {
+  background-image:
+    linear-gradient(var(--bx-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bx-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ---------- Isométrique : tracé au chargement, mise en évidence au survol ---------- */
+.bx-pipe {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: bx-draw 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 220ms + 120ms);
+}
+.bx-fitting {
+  opacity: 0;
+  animation: bx-appear 0.4s ease-out forwards;
+  animation-delay: calc(var(--i, 0) * 220ms + 900ms);
+}
+.bx-run {
+  transition: opacity 0.2s ease-out;
+  outline: none;
+}
+@keyframes bx-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes bx-appear {
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bx-pipe { animation: none; stroke-dashoffset: 0; }
+  .bx-fitting { animation: none; opacity: 1; }
+}
+
+/* Survol ou focus d'un réseau (tracé ou légende) : les autres s'estompent. */
+.bx-iso:has([data-net-i="0"]:is(:hover, :focus-visible)) .bx-run:not([data-net-i="0"]),
+.bx-iso:has([data-net-i="1"]:is(:hover, :focus-visible)) .bx-run:not([data-net-i="1"]),
+.bx-iso:has([data-net-i="2"]:is(:hover, :focus-visible)) .bx-run:not([data-net-i="2"]),
+.bx-iso:has([data-net-i="3"]:is(:hover, :focus-visible)) .bx-run:not([data-net-i="3"]) {
+  opacity: 0.18;
+}
+.bx-run:focus-visible .bx-pipe:last-of-type {
+  stroke-width: 8;
 }

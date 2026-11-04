@@ -6,6 +6,8 @@
  *
  * Le jeton SANITY_API_WRITE_TOKEN est lu depuis l'environnement (web/.env.local).
  */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { createClient, type IdentifiedSanityDocumentStub } from "@sanity/client";
 import { formAndEmails } from "./seed/form-and-emails.mts";
 import { legalPages } from "./seed/legal.mts";
@@ -50,3 +52,19 @@ for (const doc of documents) {
 
 await tx.commit({ visibility: "async" });
 console.log(`${documents.length} documents ${force ? "remplacés" : "créés s'ils étaient absents"} dans ${projectId}/${dataset}.`);
+
+// Logo L-01 et icône (ADR-005) : téléversés seulement si le champ est vide dans Studio.
+const brandDir = resolve(process.cwd(), "../identite-visuelle");
+const brandAssets = [
+  { field: "logo", file: "01-logo/svg/bimurix-logo-couleur.svg" },
+  { field: "logoInverse", file: "01-logo/svg/bimurix-logo-blanc.svg" },
+  { field: "favicon", file: "02-site-web/icon-512.png" },
+] as const;
+
+const current = await client.fetch<Record<string, unknown> | null>(`*[_id == "settings"][0]{logo, logoInverse, favicon}`);
+for (const { field, file } of brandAssets) {
+  if (current?.[field]) continue;
+  const asset = await client.assets.upload("image", readFileSync(resolve(brandDir, file)), { filename: file.split("/").pop() });
+  await client.patch("settings").setIfMissing({ [field]: { _type: "image", asset: { _type: "reference", _ref: asset._id } } }).commit();
+  console.log(`Identité : ${field} ← ${file}`);
+}

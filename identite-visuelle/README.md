@@ -26,7 +26,7 @@ Ouvrir `guide-identite.html` pour tout voir (règles, couleurs, typographie, for
 Les fonds de gabarits existent en quatre versions : `clair` (principal), `bleu`, `marine`, `noir-blanc`.
 
 ## Valeurs d'exemple
-Téléphone 514 555-0100, `prenom@bimurix.ca`, `bimurix.ca`, « Prénom Nom », « Titre du poste » et
+Téléphone 514 555-0100, `prenom@bimurix.com`, `bimurix.com`, « Prénom Nom », « Titre du poste » et
 `VOTRE-DOMAINE` sont des **exemples** à remplacer. Le titre des gabarits de publication aussi.
 
 ## Regénérer

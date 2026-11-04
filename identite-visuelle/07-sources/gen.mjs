@@ -79,7 +79,7 @@ const cardCss = k => `@page{size:3.5in 2in;margin:0}html,body{width:3.5in;height
 .verso{background:${k.vbg};${grid(k.vline, 9)}display:grid;place-items:center}`;
 function card(k, forPdf) {
   const recto = `<div class="f recto">${sized(logoSVG(k.logo), 120)}<div><div class="n">Prénom Nom</div><div class="r">Titre du poste</div></div>
-<div class="c">514 555-0100 <span class="ex">(exemple)</span><br>prenom@bimurix.ca <span class="ex">(exemple)</span><br>bimurix.ca <span class="ex">(exemple)</span></div></div>`;
+<div class="c">514 555-0100 <span class="ex">(exemple)</span><br>prenom@bimurix.com <span class="ex">(exemple)</span><br>bimurix.com <span class="ex">(exemple)</span></div></div>`;
   const verso = `<div class="f verso">${sized(stackedSVG(k.stack), 130)}</div>`;
   if (forPdf) return `<!doctype html><html><head><meta charset="utf-8">${FONTS}<style>*{box-sizing:border-box}body{margin:0;font-family:Archivo,sans-serif}svg{display:block}${cardCss(k)}</style></head><body>${recto}${verso}</body></html>`;
   return [recto, verso].map(f => page(1008, 576, `body{zoom:3}${cardCss(k).replace(/@page[^}]+}/, '')}`, f));

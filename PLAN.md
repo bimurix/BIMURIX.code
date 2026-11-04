@@ -17,10 +17,11 @@
 | L1 Squelette | ✅ | Next.js 16, FR/EN, port 3100, Supabase isolé `bimurix` (544xx) |
 | L2 Sanity | ✅ | Studio, schémas, 10 blocs, 16 documents dans `production` (seed via session `sanity login`) |
 | GitHub | 🟡 | Clé dédiée + remote `bimurix/BIMURIX.code` OK, **rien poussé** |
-| L3 → L7, M | ⏳ | — |
+| L3 Système visuel | ✅ | Tokens L-01 sans cyan, logo depuis Sanity, en-tête, menu mobile, pied de page, feuille + cartouche, isométrique animé, services |
+| L4 → L7, M | ⏳ | — |
 
-Écarts à corriger : `tokens.css` contient encore le cyan (ADR-005 l'exclut) ; signatures courriel en
-`@bimurix.ca` alors que le domaine est `bimurix.com`.
+Écarts restants : les PNG et PDF générés (cartes, signatures) affichent encore `bimurix.ca` : relancer
+`identite-visuelle/07-sources/gen.mjs` (les sources texte sont corrigées en `bimurix.com`).
 
 ---
 

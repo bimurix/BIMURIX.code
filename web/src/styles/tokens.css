@@ -1,32 +1,37 @@
 /*
- * Charte Bimurix — direction A « La feuille de plan ».
+ * Charte Bimurix — direction A « La feuille de plan », logo L-01 (ADR-005).
  * Seule source des couleurs, typographies, traits et espacements (CLAUDE.md §5).
+ * Pas de cyan ni de bleu clair (ADR-005).
  */
 :root {
   /* Encre et papier */
   --bx-blue: #0f52ba;
   --bx-blue-deep: #0c4196;
-  --bx-cyan: #00b4d8;
   --bx-ink: #0f172a;
   --bx-ink-2: #475569;
-  --bx-ink-3: #94a3b8;
+  --bx-ink-3: #64748b;
   --bx-paper: #ffffff;
   --bx-paper-2: #f4f7fb;
+  --bx-grid: #e7edf5;
   --bx-rule: #cbd5e1;
 
-  /* Couleurs de réseau (une par service, choisies dans Sanity parmi cette liste) */
-  --bx-net-plumb: #1f8a4c;
-  --bx-net-heat: #c8372d;
-  --bx-net-data: #0089a8;
-  --bx-net-tqc: #5b6b82;
+  /*
+   * Couleurs de réseau : couleurs d'identification de tuyauterie, une par service
+   * (choisies dans Sanity parmi cette liste). Fonctionnelles, pas des couleurs de marque.
+   */
+  --bx-net-plumb: #1f7a45;
+  --bx-net-heat: #c0392b;
+  --bx-net-data: #6a4c9c;
+  --bx-net-tqc: #52627a;
 
   /* États */
   --bx-error: #b42318;
-  --bx-success: #1f8a4c;
+  --bx-success: #1f7a45;
 
   /* Traits */
   --bx-line-hair: 1px;
   --bx-line-frame: 1.5px;
 
   --bx-tap-min: 44px;
+  --bx-header-h: 64px;
 }
