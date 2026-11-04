@@ -43,6 +43,9 @@ Hébergement plus tard : Netlify. Code dans `web/`.
 
 ## 6. Sécurité et données
 - Ne jamais lire, écrire ou recopier `.env*` : l'utilisateur saisit lui-même les secrets.
+  Seule exception, autorisée par le client le 2026-11-04 : lancer `node scripts/db-env.mjs`, qui génère
+  `web/.env.development.local` avec les clés de la pile Supabase **locale** (valables seulement sur ce PC)
+  et les clés de test Turnstile. Ne jamais afficher ni recopier son contenu.
 - Toute entrée validée par Zod côté serveur. Clé `service_role` Supabase uniquement côté serveur.
 - RLS activé sur toutes les tables ; aucune lecture publique des demandes.
 - Loi 25 : consentement horodaté, durée de conservation, anonymisation (jamais de `DELETE` de demande
