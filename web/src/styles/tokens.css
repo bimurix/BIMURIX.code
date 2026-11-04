@@ -1,0 +1,32 @@
+/*
+ * Charte Bimurix — direction A « La feuille de plan ».
+ * Seule source des couleurs, typographies, traits et espacements (CLAUDE.md §5).
+ */
+:root {
+  /* Encre et papier */
+  --bx-blue: #0f52ba;
+  --bx-blue-deep: #0c4196;
+  --bx-cyan: #00b4d8;
+  --bx-ink: #0f172a;
+  --bx-ink-2: #475569;
+  --bx-ink-3: #94a3b8;
+  --bx-paper: #ffffff;
+  --bx-paper-2: #f4f7fb;
+  --bx-rule: #cbd5e1;
+
+  /* Couleurs de réseau (une par service, choisies dans Sanity parmi cette liste) */
+  --bx-net-plumb: #1f8a4c;
+  --bx-net-heat: #c8372d;
+  --bx-net-data: #0089a8;
+  --bx-net-tqc: #5b6b82;
+
+  /* États */
+  --bx-error: #b42318;
+  --bx-success: #1f8a4c;
+
+  /* Traits */
+  --bx-line-hair: 1px;
+  --bx-line-frame: 1.5px;
+
+  --bx-tap-min: 44px;
+}

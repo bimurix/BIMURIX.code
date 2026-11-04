@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+@theme inline {
+  --color-blue: var(--bx-blue);
+  --color-blue-deep: var(--bx-blue-deep);
+  --color-cyan: var(--bx-cyan);
+  --color-ink: var(--bx-ink);
+  --color-ink-2: var(--bx-ink-2);
+  --color-ink-3: var(--bx-ink-3);
+  --color-paper: var(--bx-paper);
+  --color-paper-2: var(--bx-paper-2);
+  --color-rule: var(--bx-rule);
+  --color-net-plumb: var(--bx-net-plumb);
+  --color-net-heat: var(--bx-net-heat);
+  --color-net-data: var(--bx-net-data);
+  --color-net-tqc: var(--bx-net-tqc);
+  --color-error: var(--bx-error);
+  --color-success: var(--bx-success);
+
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+body {
+  background: var(--bx-paper);
+  color: var(--bx-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--bx-blue);
+  color: var(--bx-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--bx-blue);
+  outline-offset: 3px;
+}
+
+/* Titres en largeur étendue : lettrage de plan (direction A). */
+.font-display {
+  font-variation-settings: "wdth" 122;
+}
