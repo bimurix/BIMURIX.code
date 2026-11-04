@@ -25,8 +25,8 @@ livrables nommés, méthode, conditions, exemples illustratifs **étiquetés com
 Professionnel, concret, technique sans jargon inutile, français québécois. Aucune promesse chiffrée.
 
 ## Marque
-Nom : bimurix (logotype texte provisoire, logo à venir via Sanity). Bleu #0F52BA, cyan #00B4D8,
-bleu nuit #0F172A. Direction visuelle **A — « La feuille de plan »** (`directions-visuelles.html`).
+Nom : Bimurix. Logo L-01 « Croisement » (ADR-005), fichiers dans `identite-visuelle/`, à déposer dans Sanity.
+Bleu #0F52BA, bleu nuit #0F172A ; pas de cyan ni de bleu clair. Direction visuelle **A — « La feuille de plan »** (`directions-visuelles.html`).
 
 ## Modes de surface
 Site public : *Persuade*. Tableau de bord : *Operate* (dense, sobre, mêmes polices et couleurs de réseau).

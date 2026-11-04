@@ -1,0 +1,304 @@
+<title>Logo Bimurix</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Planche de présentation, direction A « La feuille de plan » : chaque piste = une feuille numérotée. */
+  :root{
+    --paper:#FFFFFF; --paper-2:#F4F7FB; --ink:#0F172A; --ink-2:#475569; --line:#CBD5E1; --grid:#E6ECF4;
+    --blue:#0F52BA; --ok:#1F8A4C; --no:#C8372D;
+    /* Fonds d'essai du logo : fixes, quel que soit le thème de la page */
+    --lt-bg:#FFFFFF; --lt-grid:#EDF1F7; --lt-ink:#0F172A; --lt-blue:#0F52BA; --lt-accent:#0089A8;
+    --rv-bg:#0F172A; --rv-ink:#FFFFFF; --rv-blue:#5B9BF5; --rv-accent:#22C3E6;
+    --display:"Archivo",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --paper:#0B111D; --paper-2:#111A2B; --ink:#E7EDF5; --ink-2:#9BA9BC; --line:#2A3650; --grid:#172238;
+    --blue:#5B9BF5; --ok:#4CC17E; --no:#F07167; --rv-bg:#050A14; color-scheme:dark } }
+  :root[data-theme="dark"]{
+    --paper:#0B111D; --paper-2:#111A2B; --ink:#E7EDF5; --ink-2:#9BA9BC; --line:#2A3650; --grid:#172238;
+    --blue:#5B9BF5; --ok:#4CC17E; --no:#F07167; --rv-bg:#050A14; color-scheme:dark }
+
+  body{background:var(--paper-2);color:var(--ink);font:16px/1.55 var(--display);font-variation-settings:"wdth" 100}
+  .wrap{max-width:1120px;margin:0 auto;padding-block:40px 80px;
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  h1,h2,h3{text-wrap:balance}
+  h1{font-size:clamp(32px,5vw,52px);line-height:1.02;margin:0 0 14px;font-weight:800;font-variation-settings:"wdth" 122;letter-spacing:-.015em}
+  .lede{max-width:66ch;color:var(--ink-2);margin:0}
+  h2{font-size:clamp(24px,3vw,32px);line-height:1.1;margin:0;font-weight:700;font-variation-settings:"wdth" 118;letter-spacing:-.01em}
+  h3{font:500 12px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2);margin:0 0 6px}
+  p{margin:0}
+  .sheet{margin-top:56px;border-top:1.5px solid var(--ink);padding-top:20px;display:grid;gap:20px}
+  .head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px}
+  .tag{font:500 12px/1 var(--mono);padding:6px 8px;border:1px solid var(--ink-2);color:var(--ink-2)}
+  .tag.reco{border-color:var(--blue);color:var(--paper);background:var(--blue)}
+  .thesis{max-width:70ch;color:var(--ink-2)}
+
+  /* Fonds d'essai */
+  .stages{display:grid;grid-template-columns:3fr 2fr;gap:12px}
+  .stage{--lg-ink:var(--lt-ink);--lg-blue:var(--lt-blue);--lg-accent:var(--lt-accent);--lg-bg:var(--lt-bg);
+    background-color:var(--lt-bg);border:1px solid var(--line);min-height:220px;display:grid;place-items:center;
+    padding:32px 20px;position:relative;overflow:hidden;min-width:0;
+    background-image:linear-gradient(var(--lt-grid) 1px,transparent 1px),linear-gradient(90deg,var(--lt-grid) 1px,transparent 1px);background-size:24px 24px}
+  .stage.rv{--lg-ink:var(--rv-ink);--lg-blue:var(--rv-blue);--lg-accent:var(--rv-accent);--lg-bg:var(--rv-bg);
+    background-color:var(--rv-bg);background-image:none;border-color:var(--rv-bg)}
+  .stage .cap{position:absolute;inset-inline-start:10px;bottom:8px;font:11px var(--mono);color:#64748B}
+  .stage.rv .cap{color:#7C8BA3}
+  .big{font-size:clamp(34px,7vw,76px)}
+  .mid{font-size:clamp(26px,4.4vw,44px)}
+
+  /* L-01 Croisement */
+  .wm{font-family:var(--display);font-weight:800;font-variation-settings:"wdth" 125;line-height:1;letter-spacing:-.005em;
+    white-space:nowrap;display:inline-flex;align-items:baseline;color:var(--lg-ink)}
+  .wm .b{color:var(--lg-blue)}
+  .gx{height:.715em;width:auto;margin-inline-start:.035em}
+  .f-ink{fill:var(--lg-ink)} .f-blue{fill:var(--lg-blue)} .f-acc{fill:var(--lg-accent)}
+  .s-ink{stroke:var(--lg-ink)} .s-blue{stroke:var(--lg-blue)} .s-acc{stroke:var(--lg-accent)}
+
+  /* L-02 Axe de grille */
+  .lk-b{height:1.5em;width:auto;overflow:visible}
+  .t-word{font-family:var(--display);font-weight:700;font-variation-settings:"wdth" 118;letter-spacing:-.01em}
+  .t-bub{font-family:var(--display);font-weight:800;font-variation-settings:"wdth" 100}
+
+  /* L-03 Tronçon */
+  .lk-c{display:inline-flex;align-items:center;gap:.22em;color:var(--lg-ink);white-space:nowrap}
+  .lk-c svg{height:1.2em;width:1.2em}
+  .wm-c{font-family:var(--display);font-weight:600;font-variation-settings:"wdth" 110;letter-spacing:-.015em;line-height:1}
+
+  /* L-00 Votre planche, nettoyée */
+  .wm-d{font-family:var(--display);font-weight:800;font-variation-settings:"wdth" 125;line-height:1;white-space:nowrap;
+    display:inline-flex;align-items:center;color:var(--lg-blue)}
+  .blk{background:var(--lg-ink);color:var(--lg-bg);padding:.1em .16em .1em .14em;margin-inline-end:.06em;
+    clip-path:polygon(0 0,calc(100% - .28em) 0,100% .28em,100% 100%,0 100%)}
+
+  /* Symbole + en-tête mobile */
+  .row{display:grid;grid-template-columns:auto 1fr;gap:12px}
+  .sym{background:var(--paper);border:1px solid var(--line);padding:16px;display:flex;align-items:flex-end;gap:18px}
+  .sym figure{margin:0;display:grid;justify-items:center;gap:6px}
+  .sym figcaption{font:11px var(--mono);color:var(--ink-2)}
+  .phone{border:1px solid var(--line);background:var(--paper);padding:16px;min-width:0;display:grid;gap:8px;align-content:start}
+  .bar{--lg-ink:var(--lt-ink);--lg-blue:var(--lt-blue);--lg-accent:var(--lt-accent);--lg-bg:var(--lt-bg);
+    width:100%;max-width:360px;height:56px;background:var(--lt-bg);border:1px solid #CBD5E1;display:flex;align-items:center;
+    justify-content:space-between;padding-inline:14px 8px;font-size:21px}
+  .bar .cta{font:600 13px var(--display);background:var(--lt-blue);color:#fff;padding:0 12px;height:44px;display:grid;place-items:center}
+  .phone small{font:11px var(--mono);color:var(--ink-2)}
+
+  .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .facts p{font-size:15px}
+
+  /* Lecture critique des planches */
+  .crit{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+  .crit div{background:var(--paper);border:1px solid var(--line);padding:18px 20px}
+  .crit ul{margin:0;padding-inline-start:18px;display:grid;gap:8px;font-size:15px}
+  .crit h3.keep{color:var(--ok)} .crit h3.drop{color:var(--no)}
+
+  .reco-box{margin-top:56px;background:var(--paper);border:1.5px solid var(--blue);padding:24px;display:grid;gap:14px}
+  .reco-box ol{margin:0;padding-inline-start:20px;display:grid;gap:8px;max-width:72ch}
+  .tbl{overflow-x:auto;margin-top:28px}
+  table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px;background:var(--paper)}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:start;vertical-align:top}
+  thead th{font:500 12px var(--mono);color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+  td.y{color:var(--ok);font-weight:600} td.n{color:var(--no);font-weight:600}
+  .note{font-size:14px;color:var(--ink-2);max-width:72ch;margin-top:12px}
+
+  @media (max-width:760px){
+    .stages,.row,.crit,.facts{grid-template-columns:1fr}
+    .sym{justify-content:center}
+  }
+</style>
+
+<!-- Symboles réutilisés : X « croisement », tuyau « tronçon » -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="x-cross">
+      <!-- trait continu (passe devant) -->
+      <polygon class="f-blue" points="0,0 26,0 104,100 78,100"/>
+      <!-- trait coupé (passe derrière) : convention de dessin d'un croisement de réseaux -->
+      <polygon class="f-ink" points="78,0 104,0 82.16,28 56.16,28"/>
+      <polygon class="f-ink" points="21.84,72 47.84,72 26,100 0,100"/>
+    </g>
+    <g id="pipe-b">
+      <path class="s-blue" fill="none" stroke-width="9" stroke-linejoin="round"
+        d="M14 32 V8 H34 A12 12 0 0 1 34 32 H14 V56 H38 A12 12 0 0 0 38 32 H14"/>
+      <!-- raccords contenus dans l'épaisseur du tuyau : des traits qui dépassent feraient lire « ₿ » -->
+      <line class="s-acc" x1="25" y1="3.5" x2="25" y2="12.5" stroke-width="4"/>
+      <line class="s-acc" x1="27" y1="51.5" x2="27" y2="60.5" stroke-width="4"/>
+    </g>
+  </defs>
+</svg>
+
+<main class="wrap">
+  <h1>Logo Bimurix</h1>
+  <p class="lede">Quatre pistes construites à partir de vos trois planches. Chaque piste est montrée en grand,
+    sur fond foncé, en symbole jusqu'à 16&nbsp;px (favicon) et dans l'en-tête du site à 360&nbsp;px.
+    Rendu provisoire avec la police Archivo&nbsp;: le logo retenu sera redessiné en vecteur.</p>
+
+  <section class="crit" aria-label="Lecture de vos planches">
+    <div>
+      <h3 class="keep">Ce qu'on garde de vos planches</h3>
+      <ul>
+        <li>La coupure <b>BIM | URIX</b> en deux couleurs&nbsp;: on lit votre métier dès le premier coup d'œil.</li>
+        <li>La grotesque large et grasse&nbsp;: solide, technique, lisible de loin.</li>
+        <li>Le bleu <span style="font-family:var(--mono)">#0F52BA</span> et le bleu nuit&nbsp;: déjà dans la charte du site.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="drop">Ce qu'on retire</h3>
+      <ul>
+        <li>Les traits de vitesse et le X «&nbsp;éclair&nbsp;»&nbsp;: ils font sport automobile ou livraison, pas modèle coordonné.</li>
+        <li>Les dégradés&nbsp;: ils disparaissent en impression une couleur, en broderie, sur un casque ou un autocollant.</li>
+        <li>Trois bleus différents&nbsp;: un seul bleu, plus le bleu nuit.</li>
+        <li>L'italique de la version encadrée&nbsp;: elle vend la vitesse, Bimurix vend la fiabilité.</li>
+        <li>Il manque un symbole compact pour le favicon, LinkedIn et le casque de chantier.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ L-01 ============ -->
+  <section class="sheet" aria-labelledby="t1">
+    <div class="head"><h2 id="t1">Croisement</h2><span class="tag">L-01</span><span class="tag reco">Recommandée</span></div>
+    <p class="thesis">Votre logotype, avec un X qui dit «&nbsp;coordination&nbsp;»&nbsp;: deux traits se croisent et l'un passe
+      derrière l'autre, comme deux réseaux sur un dessin de coordination.</p>
+    <div class="stages">
+      <div class="stage"><span class="wm big" role="img" aria-label="BIMURIX">BIM<span class="b">URI</span><svg class="gx" viewBox="0 0 104 100"><use href="#x-cross"/></svg></span><span class="cap">fond clair</span></div>
+      <div class="stage rv"><span class="wm mid" role="img" aria-label="BIMURIX">BIM<span class="b">URI</span><svg class="gx" viewBox="0 0 104 100"><use href="#x-cross"/></svg></span><span class="cap">inversé</span></div>
+    </div>
+    <div class="row">
+      <div class="sym">
+        <figure><svg width="64" height="64" viewBox="0 0 64 64" style="--lg-ink:#fff;--lg-blue:#5B9BF5"><rect width="64" height="64" fill="#0F172A"/><g transform="translate(14 14.7) scale(.346)"><use href="#x-cross"/></g></svg><figcaption>64 px</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 64 64" style="--lg-ink:#fff;--lg-blue:#5B9BF5"><rect width="64" height="64" fill="#0F172A"/><g transform="translate(14 14.7) scale(.346)"><use href="#x-cross"/></g></svg><figcaption>32</figcaption></figure>
+        <figure><svg width="16" height="16" viewBox="0 0 64 64" style="--lg-ink:#fff;--lg-blue:#5B9BF5"><rect width="64" height="64" fill="#0F172A"/><g transform="translate(14 14.7) scale(.346)"><use href="#x-cross"/></g></svg><figcaption>16</figcaption></figure>
+      </div>
+      <div class="phone">
+        <div class="bar"><span class="wm" role="img" aria-label="BIMURIX">BIM<span class="b">URI</span><svg class="gx" viewBox="0 0 104 100"><use href="#x-cross"/></svg></span><span class="cta">Soumission</span></div>
+        <small>en-tête du site, 360 px</small>
+      </div>
+    </div>
+    <div class="facts">
+      <div><h3>Ce que ça raconte</h3><p>Sur un plan, quand une conduite passe derrière une autre, on coupe son trait. C'est la règle de dessin d'un conflit résolu. Le X de Bimurix devient ce croisement.</p></div>
+      <div><h3>Forces</h3><p>Garde votre idée (BIM | URIX, X signature). Le X seul devient le symbole. Un aplat par trait&nbsp;: imprimable en une couleur, brodable, découpable en vinyle.</p></div>
+      <div><h3>Risque</h3><p>La coupure du X se lit mal sous 24&nbsp;px de haut. En dessous, on passe au symbole en tuile, où le X occupe toute la place.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ L-02 ============ -->
+  <section class="sheet" aria-labelledby="t2">
+    <div class="head"><h2 id="t2">Axe de grille</h2><span class="tag">L-02</span></div>
+    <p class="thesis">Le nom posé sur une ligne d'axe qui sort d'une bulle «&nbsp;B&nbsp;», comme les axes A, B, C d'un plan de structure.</p>
+    <div class="stages">
+      <div class="stage"><svg class="lk-b big" viewBox="0 0 440 120" role="img" aria-label="bimurix">
+        <circle class="s-ink" cx="54" cy="60" r="42" fill="none" stroke-width="6"/>
+        <text class="t-bub f-ink" x="54" y="78" font-size="50" text-anchor="middle">B</text>
+        <line class="s-blue" x1="96" y1="60" x2="436" y2="60" stroke-width="4" stroke-dasharray="34 8 5 8"/>
+        <text class="t-word f-ink" x="114" y="50" font-size="62">bimurix</text>
+      </svg><span class="cap">fond clair</span></div>
+      <div class="stage rv"><svg class="lk-b mid" viewBox="0 0 440 120" role="img" aria-label="bimurix">
+        <circle class="s-ink" cx="54" cy="60" r="42" fill="none" stroke-width="6"/>
+        <text class="t-bub f-ink" x="54" y="78" font-size="50" text-anchor="middle">B</text>
+        <line class="s-blue" x1="96" y1="60" x2="436" y2="60" stroke-width="4" stroke-dasharray="34 8 5 8"/>
+        <text class="t-word f-ink" x="114" y="50" font-size="62">bimurix</text>
+      </svg><span class="cap">inversé</span></div>
+    </div>
+    <div class="row">
+      <div class="sym">
+        <figure><svg width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0F172A"/><circle cx="32" cy="32" r="21" fill="none" stroke="#fff" stroke-width="4"/><text class="t-bub" x="32" y="41" font-size="25" text-anchor="middle" fill="#fff">B</text></svg><figcaption>64 px</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0F172A"/><circle cx="32" cy="32" r="21" fill="none" stroke="#fff" stroke-width="4"/><text class="t-bub" x="32" y="41" font-size="25" text-anchor="middle" fill="#fff">B</text></svg><figcaption>32</figcaption></figure>
+        <figure><svg width="16" height="16" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0F172A"/><circle cx="32" cy="32" r="27" fill="none" stroke="#fff" stroke-width="6"/><text class="t-bub" x="32" y="44" font-size="34" text-anchor="middle" fill="#fff">B</text></svg><figcaption>16</figcaption></figure>
+      </div>
+      <div class="phone">
+        <div class="bar"><svg class="lk-b" viewBox="0 0 440 120" role="img" aria-label="bimurix" style="height:1.7em">
+          <circle class="s-ink" cx="54" cy="60" r="42" fill="none" stroke-width="7"/>
+          <text class="t-bub f-ink" x="54" y="78" font-size="50" text-anchor="middle">B</text>
+          <text class="t-word f-ink" x="114" y="80" font-size="66">bimurix</text>
+        </svg><span class="cta">Soumission</span></div>
+        <small>en-tête du site, 360 px (sans trait d'axe en petit)</small>
+      </div>
+    </div>
+    <div class="facts">
+      <div><h3>Ce que ça raconte</h3><p>Chaque plan commence par sa grille d'axes. La bulle et le trait mixte (trait long, point) sont reconnus par tout chargé de projet.</p></div>
+      <div><h3>Forces</h3><p>La plus proche de la direction «&nbsp;feuille de plan&nbsp;» du site. Favicon très lisible. Les minuscules donnent un ton plus accessible.</p></div>
+      <div><h3>Risque</h3><p>Une lettre dans un cercle est une forme courante&nbsp;: recherche d'antériorité obligatoire. Le trait d'axe disparaît sous 120&nbsp;px de large, et le favicon 16&nbsp;px demande un cercle plus épais.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ L-03 ============ -->
+  <section class="sheet" aria-labelledby="t3">
+    <div class="head"><h2 id="t3">Tronçon</h2><span class="tag">L-03</span></div>
+    <p class="thesis">Un B tracé comme une conduite continue, avec ses coudes, un té au centre et deux raccords, comme sur un dessin de tronçon préfabriqué.</p>
+    <div class="stages">
+      <div class="stage"><span class="lk-c big" role="img" aria-label="bimurix"><svg viewBox="0 0 64 64"><use href="#pipe-b"/></svg><span class="wm-c">bimurix</span></span><span class="cap">fond clair</span></div>
+      <div class="stage rv"><span class="lk-c mid" role="img" aria-label="bimurix"><svg viewBox="0 0 64 64"><use href="#pipe-b"/></svg><span class="wm-c">bimurix</span></span><span class="cap">inversé</span></div>
+    </div>
+    <div class="row">
+      <div class="sym">
+        <figure><svg width="64" height="64" viewBox="0 0 64 64" style="--lg-blue:#fff;--lg-accent:#22C3E6"><rect width="64" height="64" fill="#0F52BA"/><g transform="translate(32 32) scale(.74) translate(-32 -32)"><use href="#pipe-b"/></g></svg><figcaption>64 px</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 64 64" style="--lg-blue:#fff;--lg-accent:#22C3E6"><rect width="64" height="64" fill="#0F52BA"/><g transform="translate(32 32) scale(.74) translate(-32 -32)"><use href="#pipe-b"/></g></svg><figcaption>32</figcaption></figure>
+        <figure><svg width="16" height="16" viewBox="0 0 64 64" style="--lg-blue:#fff;--lg-accent:#22C3E6"><rect width="64" height="64" fill="#0F52BA"/><g transform="translate(32 32) scale(.74) translate(-32 -32)"><use href="#pipe-b"/></g></svg><figcaption>16</figcaption></figure>
+      </div>
+      <div class="phone">
+        <div class="bar"><span class="lk-c" role="img" aria-label="bimurix"><svg viewBox="0 0 64 64"><use href="#pipe-b"/></svg><span class="wm-c">bimurix</span></span><span class="cta">Soumission</span></div>
+        <small>en-tête du site, 360 px</small>
+      </div>
+    </div>
+    <div class="facts">
+      <div><h3>Ce que ça raconte</h3><p>La préfabrication MEP est votre service le plus concret. Le symbole montre une pièce qu'un atelier pourrait réellement fabriquer.</p></div>
+      <div><h3>Forces</h3><p>Le symbole le plus original des quatre. Parle directement aux entrepreneurs en mécanique et aux fabricants.</p></div>
+      <div><h3>Risque</h3><p>Réduit Bimurix à la plomberie aux yeux d'un propriétaire ou d'une firme en structure. Les monogrammes au trait sont nombreux, et un B barré se confond vite avec le symbole du bitcoin&nbsp;: les raccords doivent rester dans le tuyau.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ L-00 ============ -->
+  <section class="sheet" aria-labelledby="t0">
+    <div class="head"><h2 id="t0">Votre planche, nettoyée</h2><span class="tag">L-00</span></div>
+    <p class="thesis">Votre version encadrée, sans italique, sans dégradé et sans trait de vitesse. Le bloc BIM prend le coin coupé d'un cartouche.</p>
+    <div class="stages">
+      <div class="stage"><span class="wm-d big" role="img" aria-label="BIMURIX"><span class="blk">BIM</span>URIX</span><span class="cap">fond clair</span></div>
+      <div class="stage rv"><span class="wm-d mid" role="img" aria-label="BIMURIX"><span class="blk">BIM</span>URIX</span><span class="cap">inversé</span></div>
+    </div>
+    <div class="row">
+      <div class="sym">
+        <figure><svg width="64" height="64" viewBox="0 0 64 64"><path d="M0 0H52L64 12V64H0Z" fill="#0F172A"/><text class="t-bub" x="32" y="40" font-size="20" text-anchor="middle" fill="#fff" style="font-variation-settings:'wdth' 125">BIM</text></svg><figcaption>64 px</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 64 64"><path d="M0 0H52L64 12V64H0Z" fill="#0F172A"/><text class="t-bub" x="32" y="40" font-size="20" text-anchor="middle" fill="#fff" style="font-variation-settings:'wdth' 125">BIM</text></svg><figcaption>32</figcaption></figure>
+        <figure><svg width="16" height="16" viewBox="0 0 64 64"><path d="M0 0H52L64 12V64H0Z" fill="#0F172A"/><text class="t-bub" x="32" y="40" font-size="20" text-anchor="middle" fill="#fff" style="font-variation-settings:'wdth' 125">BIM</text></svg><figcaption>16</figcaption></figure>
+      </div>
+      <div class="phone">
+        <div class="bar"><span class="wm-d" role="img" aria-label="BIMURIX"><span class="blk">BIM</span>URIX</span><span class="cta">Soumission</span></div>
+        <small>en-tête du site, 360 px</small>
+      </div>
+    </div>
+    <div class="facts">
+      <div><h3>Ce que ça raconte</h3><p>«&nbsp;BIM&nbsp;» posé dans une étiquette, la suite du nom libre à côté.</p></div>
+      <div><h3>Forces</h3><p>Aucune rupture avec ce que vous avez déjà montré. Très lisible, simple à produire.</p></div>
+      <div><h3>Risque</h3><p>Peu distinctif&nbsp;: bloc + mot est un schéma très courant. Trois lettres dans le favicon deviennent illisibles à 16&nbsp;px.</p></div>
+    </div>
+  </section>
+
+  <section class="reco-box" aria-labelledby="tr">
+    <h2 id="tr">Recommandation&nbsp;: L-01 Croisement</h2>
+    <p style="max-width:72ch">C'est votre idée, gardée là où elle fonctionne et corrigée là où elle ne tient pas. Le X raconte la coordination,
+      qui touche vos quatre services, au lieu d'un seul. Il donne un vrai symbole pour les petits formats, et tout s'imprime en une couleur.
+      Pour aller plus loin, la bulle d'axe de L-02 peut servir de repère graphique sur le site (numéros de section), sans entrer dans le logo.</p>
+    <h3>Suite</h3>
+    <ol>
+      <li>Vous choisissez une piste, ou un mélange (par exemple le X de L-01 avec les minuscules de L-02).</li>
+      <li>Je redessine les lettres en vecteur, j'ajuste l'espacement et l'épaisseur du X à celle des lettres.</li>
+      <li>Livraison&nbsp;: SVG horizontal, symbole, une couleur, inversé&nbsp;; favicons 16, 32, 180 et 512&nbsp;px&nbsp;; logo déposé dans Sanity.</li>
+      <li>Avant toute impression&nbsp;: recherche du nom et du symbole dans la base des marques de commerce canadiennes (OPIC).</li>
+    </ol>
+  </section>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Critère</th><th>L-01 Croisement</th><th>L-02 Axe</th><th>L-03 Tronçon</th><th>L-00 Nettoyée</th></tr></thead>
+      <tbody>
+        <tr><td>Lien avec votre idée</td><td class="y">Fort</td><td>Moyen</td><td class="n">Faible</td><td class="y">Total</td></tr>
+        <tr><td>Lisible en favicon 16 px</td><td class="y">Oui</td><td class="y">Oui</td><td>Moyen</td><td class="n">Non</td></tr>
+        <tr><td>Distinctif</td><td class="y">Oui</td><td>Moyen</td><td class="y">Oui</td><td class="n">Non</td></tr>
+        <tr><td>Couvre les 4 services</td><td class="y">Oui</td><td class="y">Oui</td><td class="n">Non (MEP)</td><td class="y">Oui</td></tr>
+        <tr><td>Impression une couleur</td><td class="y">Oui</td><td class="y">Oui</td><td class="y">Oui</td><td class="y">Oui</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Ces appréciations sont un avis de conception, pas une mesure. Le texte des logos est rendu avec la police Archivo chargée en ligne&nbsp;; si elle ne charge pas, les proportions changent.</p>
+</main>
