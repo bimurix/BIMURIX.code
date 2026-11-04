@@ -35,7 +35,7 @@ export function RichText({ data, locale }: { data: RichTextData; locale: Locale 
   return (
     <Section>
       <SectionHeading>{pick(data.heading, locale, "")}</SectionHeading>
-      <div className="max-w-[68ch]">
+      <div className="max-w-[60ch]">
         <PortableText value={body} components={components(locale)} />
       </div>
     </Section>

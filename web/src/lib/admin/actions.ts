@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createMailer } from "@/lib/mail/mailer";
-import { textToHtml } from "@/lib/quote/templates";
+import { oneLine, textToHtml } from "@/lib/quote/templates";
 import { createUserClient } from "@/lib/supabase/server";
 import { requireAdmin } from "./auth";
 import { getAdminContent } from "./data";
@@ -80,7 +80,7 @@ export async function sendReply(_prev: ActionResult, form: FormData): Promise<Ac
   const from = { email: content.fromEmail ?? "contact@bimurix.com", name: content.fromName ?? "Bimurix" };
   let providerId: string;
   try {
-    ({ id: providerId } = await createMailer()({ from, to: { email: request.email, name: request.full_name }, replyTo: from.email, subject, text: body, html: textToHtml(body) }));
+    ({ id: providerId } = await createMailer()({ from, to: { email: request.email, name: request.full_name }, replyTo: from.email, subject: oneLine(subject), text: body, html: textToHtml(body) }));
   } catch (e) {
     console.error(`[admin] envoi de réponse : ${(e as Error).message}`);
     return { ok: false, error: "Le courriel n'a pas pu être envoyé. Rien n'a été enregistré." };

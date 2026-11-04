@@ -5,6 +5,11 @@ export function fillTemplate(template: string, vars: TemplateVars): string {
   return template.replace(/\{(name|company|service|reference)\}/g, (_, key: keyof TemplateVars) => vars[key]);
 }
 
+/** Objet de courriel : une seule ligne, quelle que soit la saisie du visiteur (pas d'injection d'en-tête). */
+export function oneLine(value: string): string {
+  return value.replace(/[\r\n\t]+/g, " ").trim().slice(0, 250);
+}
+
 const REFERENCE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // sans 0/O ni 1/I/L : lisible au téléphone
 
 /** Référence courte d'une demande, ex. « BX-7K4Q9M ». */

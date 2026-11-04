@@ -21,7 +21,9 @@
 | L4 Pages + SEO | ✅ | 9 pages FR/EN + 404, 10 blocs rendus, gabarit service, métadonnées, hreflang, sitemap, robots, JSON-LD — édition visuelle reportée (jeton Viewer requis) |
 | L5 Formulaire | ✅ | Migration + RLS, validation Zod, antispam (Turnstile + piège + limite IP), courriels Mailpit/Resend, formulaire FR/EN — parcours complet vérifié (base + 2 courriels Mailpit) |
 | L6 Tableau de bord | ✅ | Lien magique + liste blanche, RLS, boîte de réception (filtres, recherche, indicateurs), fiche, statuts, notes, réponse avec modèles Studio, anonymisation, conservation 24 mois (pg_cron) |
-| L7, M | ⏳ | — |
+| L7 Sécurité, a11y, perf | ✅ | En-têtes (CSP, HSTS…), dépendances corrigées, axe WCAG AA 0 violation, JS ≈ 149 Ko gzip |
+| Audit complet | ✅ | 16/20 → 19/20, voir `docs/AUDIT-2026-11.md` |
+| M Mise en ligne | ⏳ | Valeurs d'exemple à remplacer (`pnpm check:placeholders`), puis GitHub, Netlify, Supabase cloud, Resend |
 
 Écarts restants : les PNG et PDF générés (cartes, signatures) affichent encore `bimurix.ca` : relancer
 `identite-visuelle/07-sources/gen.mjs` (les sources texte sont corrigées en `bimurix.com`).

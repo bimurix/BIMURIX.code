@@ -20,7 +20,8 @@ export function MobileMenu({ model, locale }: { model: NavModel; locale: Locale 
 
   useEffect(() => {
     if (!open) return;
-    history.pushState({ bxMenu: true }, "");
+    // On garde l'état du routeur Next (history.state) : on ne fait qu'y ajouter un marqueur.
+    history.pushState({ ...history.state, bxMenu: true }, "");
     window.addEventListener("popstate", close);
     return () => window.removeEventListener("popstate", close);
   }, [open, close]);
@@ -33,7 +34,7 @@ export function MobileMenu({ model, locale }: { model: NavModel; locale: Locale 
 
   // Un lien navigue lui-même : on neutralise l'entrée au lieu de revenir en arrière.
   const closeFromLink = () => {
-    if (history.state?.bxMenu) history.replaceState(null, "");
+    if (history.state?.bxMenu) history.replaceState({ ...history.state, bxMenu: false }, "");
     close();
   };
 

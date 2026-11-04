@@ -32,7 +32,7 @@ export function Deliverables({ data, locale, illustrativeLabel }: { data: Delive
           );
         })}
       </ul>
-      {data.note && <p className="mt-10 max-w-[68ch] text-[15px] text-ink-3">{pick(data.note, locale, "")}</p>}
+      {data.note && <p className="mt-10 max-w-[60ch] text-[15px] text-ink-3">{pick(data.note, locale, "")}</p>}
     </Section>
   );
 }

@@ -32,6 +32,7 @@ test("/fr redirige vers /", async ({ page }) => {
 test("le lien de langue mène à l'autre version", async ({ page }) => {
   await page.goto("/");
   await clickLanguage(page, "English");
-  await expect(page).toHaveURL("/en");
+  // Délai large : en dev, /en peut être compilée à la demande au premier passage.
+  await expect(page).toHaveURL("/en", { timeout: 15_000 });
   await expect(page.locator("html")).toHaveAttribute("lang", "en-CA");
 });

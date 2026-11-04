@@ -26,6 +26,9 @@ test("demande complète : enregistrée, référence affichée, 2 courriels dans 
   test.skip(!localStackReady, "pile Supabase locale non configurée (pnpm db:start puis pnpm db:env)");
   test.skip(info.project.name !== "desktop", "une seule demande réelle par exécution");
   const email = `e2e-${Date.now()}@example.com`;
+  // IP fictive propre à ce test (prise en compte en local seulement) : la limite d'envois par IP
+  // ne bloque pas les exécutions répétées. Sur Netlify, seul l'en-tête de Netlify compte.
+  await page.setExtraHTTPHeaders({ "x-forwarded-for": `10.0.${Date.now() % 250}.${Math.floor(Math.random() * 250)}` });
 
   await page.goto("/soumission?service=service-tqc");
   await page.locator("#fullName").fill("Essai Automatique");

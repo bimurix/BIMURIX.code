@@ -49,7 +49,7 @@ function NetworkList({ heading, items, note, network, locale }: { heading?: Loca
           </li>
         ))}
       </ul>
-      {note && <p className="mt-8 max-w-[68ch] text-[15px] text-ink-3">{pick(note, locale, "")}</p>}
+      {note && <p className="mt-8 max-w-[60ch] text-[15px] text-ink-3">{pick(note, locale, "")}</p>}
     </Section>
   );
 }

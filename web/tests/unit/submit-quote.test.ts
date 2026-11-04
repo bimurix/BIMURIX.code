@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { MAX_REQUESTS_PER_IP, submitQuote, type SubmitDeps } from "@/lib/quote/submit-quote";
-import { escapeHtml, fillTemplate, newReference } from "@/lib/quote/templates";
+import { escapeHtml, fillTemplate, newReference, oneLine } from "@/lib/quote/templates";
 
 const options = {
   services: ["service-tqc", "other"],
@@ -111,6 +111,10 @@ describe("modèles de courriel", () => {
 
   it("échappe le HTML saisi par le visiteur", () => {
     expect(escapeHtml(`<script>"x"</script>`)).toBe("&lt;script&gt;&quot;x&quot;&lt;/script&gt;");
+  });
+
+  it("garde l'objet du courriel sur une seule ligne", () => {
+    expect(oneLine("Nouvelle demande : ACME\r\nBcc: pirate@example.com")).toBe("Nouvelle demande : ACME Bcc: pirate@example.com");
   });
 
   it("produit une référence lisible", () => {

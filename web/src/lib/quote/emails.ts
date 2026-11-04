@@ -4,7 +4,7 @@ import type { Mailer } from "@/lib/mail/mailer";
 import { serviceOptions, type QuoteFormContent } from "./form-content";
 import type { QuoteInput } from "./schema";
 import type { QuoteRow } from "./submit-quote";
-import { escapeHtml, fillTemplate, textToHtml } from "./templates";
+import { escapeHtml, fillTemplate, oneLine, textToHtml } from "./templates";
 
 const FALLBACK_FROM = "contact@bimurix.com";
 
@@ -57,14 +57,14 @@ export async function sendQuoteEmails(
     from,
     to: { email: notifyTo },
     replyTo: input.email,
-    subject: fillTemplate(content?.emails?.internalSubject ?? "Nouvelle demande : {company} — {service} ({reference})", vars),
+    subject: oneLine(fillTemplate(content?.emails?.internalSubject ?? "Nouvelle demande : {company} — {service} ({reference})", vars)),
     text: `${lines.map(([k, v]) => `${k} : ${v}`).join("\n")}\n\nDescription :\n${input.description}`,
     html: `<table style="font:14px Arial,sans-serif">${table}</table><h3 style="font:600 15px Arial,sans-serif">Description</h3>${textToHtml(input.description)}`,
   });
   await markSent("notification_sent_at");
 
   const lang = input.preferredLanguage;
-  const subject = fillTemplate(pick(content?.emails?.ackSubject, lang, fallbackAck[lang].subject), vars);
+  const subject = oneLine(fillTemplate(pick(content?.emails?.ackSubject, lang, fallbackAck[lang].subject), vars));
   const body = `${fillTemplate(pick(content?.emails?.ackBody, lang, fallbackAck[lang].body), vars)}\n\n${pick(content?.emails?.signature, lang, "Bimurix")}`;
   await mailer({ from, to: { email: input.email, name: input.fullName }, replyTo: notifyTo, subject, text: body, html: textToHtml(body) });
   await markSent("ack_email_sent_at");

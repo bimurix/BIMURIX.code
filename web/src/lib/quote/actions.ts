@@ -14,9 +14,14 @@ import { verifyTurnstile } from "./turnstile";
 
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 
+/**
+ * IP du visiteur pour la limite d'envois. Sur Netlify, seul l'en-tête posé par Netlify fait foi :
+ * X-Forwarded-For peut être fourni par le client et servirait à contourner la limite.
+ */
 async function clientIp(): Promise<string | undefined> {
   const h = await headers();
-  return h.get("x-nf-client-connection-ip") ?? h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? h.get("x-real-ip") ?? undefined;
+  if (process.env.NETLIFY) return h.get("x-nf-client-connection-ip") ?? undefined;
+  return h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? h.get("x-real-ip") ?? undefined;
 }
 
 /** Action du formulaire de soumission : assemble les dépendances réelles autour de submitQuote. */

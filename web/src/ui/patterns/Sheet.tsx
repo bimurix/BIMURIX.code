@@ -31,14 +31,16 @@ export function TitleBlock({ data, labels, brand }: TitleBlockProps) {
     [labels.date, data?.date],
   ] as const;
   return (
-    <dl className="grid grid-cols-3 border-t-[1.5px] border-ink bg-paper font-mono text-[12px] sm:border-s-[1.5px]">
-      <div className="col-span-3 border-b border-ink px-3 py-2">{brand}</div>
-      {cells.map(([label, value], i) => (
-        <div key={label} className={`px-3 py-2 ${i < 2 ? "border-e border-ink" : ""}`}>
-          <dt className="text-[10px] text-ink-3">{label}</dt>
-          <dd className="text-ink">{value ?? "—"}</dd>
-        </div>
-      ))}
-    </dl>
+    <div className="border-t-[1.5px] border-ink bg-paper font-mono text-[12px] sm:border-s-[1.5px]">
+      <div className="border-b border-ink px-3 py-2">{brand}</div>
+      <dl className="grid grid-cols-3">
+        {cells.map(([label, value], i) => (
+          <div key={label} className={`px-3 py-2 ${i < 2 ? "border-e border-ink" : ""}`}>
+            <dt className="text-[11px] text-ink-3">{label}</dt>
+            <dd className="text-ink">{value ?? "—"}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   );
 }

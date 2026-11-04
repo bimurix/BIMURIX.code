@@ -70,7 +70,7 @@ test("admin : voit la demande, change le statut, ajoute une note et répond", as
   await magicLogin(page, ADMIN);
   await expect(page.getByRole("heading", { name: "Demandes de soumission" })).toBeVisible();
   await page.getByRole("link", { name: reference }).click();
-  await expect(page.getByRole("heading", { name: "Client Essai" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Client Essai" })).toBeVisible({ timeout: 15_000 });
 
   await page.locator("#request-status").selectOption("in_review");
   await expect(page.getByText("Statut : En cours")).toBeVisible();
