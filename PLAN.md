@@ -15,7 +15,7 @@
 | L0 Cadrage | ✅ | CLAUDE.md, SPEC, ADR 001–005, PRODUCT, directions visuelles |
 | Identité visuelle | ✅ | Logo L-01 « Croisement » (ADR-005), `identite-visuelle/` |
 | L1 Squelette | ✅ | Next.js 16, FR/EN, port 3100, Supabase isolé `bimurix` (544xx) |
-| L2 Sanity | 🟡 code fait | Studio, schémas, 10 blocs, seed — **bloqué** : dataset `development`, CORS, jeton |
+| L2 Sanity | ✅ | Studio, schémas, 10 blocs, 16 documents dans `production` (seed via session `sanity login`) |
 | GitHub | 🟡 | Clé dédiée + remote `bimurix/BIMURIX.code` OK, **rien poussé** |
 | L3 → L7, M | ⏳ | — |
 

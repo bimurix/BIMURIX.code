@@ -19,10 +19,6 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 const token = process.env.SANITY_API_WRITE_TOKEN;
 const force = process.argv.includes("--force");
 
-if (!token) {
-  console.error("SANITY_API_WRITE_TOKEN manquant : ajoute-le dans web/.env.local (jeton Editor).");
-  process.exit(1);
-}
 // decision: ADR-004 (révisé) — le contenu vit dans `production` : écraser ce que le client a modifié
 // dans Studio exige une double confirmation.
 if (force && !process.argv.includes("--i-know-this-overwrites")) {
@@ -30,7 +26,20 @@ if (force && !process.argv.includes("--i-know-this-overwrites")) {
   process.exit(1);
 }
 
-const client = createClient({ projectId, dataset, token, apiVersion: "2026-11-01", useCdn: false });
+/** Jeton du fichier .env.local, sinon session `sanity login` (via `pnpm seed:login`), sans jeton à copier. */
+async function getClient() {
+  const apiVersion = "2026-11-01";
+  if (token) return createClient({ projectId, dataset, token, apiVersion, useCdn: false });
+  // `sanity/cli` ne se charge que sous `sanity exec` : hors de ce contexte, Node plante au lieu de lever une erreur.
+  if (process.argv.includes("--cli-session")) {
+    const { getCliClient } = await import("sanity/cli");
+    return getCliClient({ apiVersion, useCdn: false });
+  }
+  console.error("Aucun accès en écriture : lance « pnpm exec sanity login » puis « pnpm seed:login », ou ajoute SANITY_API_WRITE_TOKEN dans web/.env.local.");
+  process.exit(1);
+}
+
+const client = await getClient();
 const documents: IdentifiedSanityDocumentStub[] = [...singletons, ...formAndEmails, ...services1, ...services2, ...pages, ...legalPages];
 
 const tx = client.transaction();

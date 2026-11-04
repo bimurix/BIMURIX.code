@@ -16,7 +16,8 @@
     "db:reset": "supabase db reset",
     "db:status": "supabase status",
     "seed": "node --env-file-if-exists=.env.local scripts/seed-sanity.mts",
-    "sanity:types": "sanity schema extract --path src/sanity/schema.json && sanity typegen generate"
+    "sanity:types": "sanity schema extract --path src/sanity/schema.json && sanity typegen generate",
+    "seed:login": "sanity exec scripts/seed-sanity.mts --with-user-token -- --cli-session"
   },
   "dependencies": {
     "@sanity/client": "^8.14.1",
