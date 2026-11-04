@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, htmlLang, locales } from "@/lib/i18n/locales";
+import { SanityLive } from "@/sanity/live";
 import "../../globals.css";
 
 const archivo = Archivo({ subsets: ["latin", "latin-ext"], axes: ["wdth"], variable: "--font-archivo" });
@@ -22,7 +23,11 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[lo
 
   return (
     <html lang={htmlLang[locale]} className={`${archivo.variable} ${jetbrains.variable} antialiased`}>
-      <body className="min-h-dvh">{children}</body>
+      <body className="min-h-dvh">
+        {children}
+        {/* Rafraîchit la page dès qu'un contenu est publié dans Studio. Brouillons : L4 (édition visuelle). */}
+        <SanityLive includeDrafts={false} />
+      </body>
     </html>
   );
 }
