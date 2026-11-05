@@ -1,5 +1,4 @@
-# Déploiement Netlify (phase M3). Le site vit dans web/ ; Netlify détecte Next.js
-# et ajoute lui-même son adaptateur (pas de plugin à installer).
+# Déploiement Netlify (phase M3). Le site vit dans web/.
 [build]
   base = "web"
   command = "pnpm build"
@@ -9,3 +8,8 @@
   NODE_VERSION = "24"
   # Le formulaire est pré-rendu : la clé publique Turnstile doit exister au build (audit, reco 7).
   # Toutes les variables sont saisies dans l'interface Netlify, jamais ici.
+
+# Adaptateur Next.js de Netlify, déclaré explicitement : sans lui, un déploiement envoyé par
+# l'API publiait .next en fichiers statiques, sans fonctions (formulaire, /admin, proxy FR/EN inactifs).
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

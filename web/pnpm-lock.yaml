@@ -208,6 +208,9 @@ importers:
       '@axe-core/playwright':
         specifier: ^4.14.0
         version: 4.14.0(playwright-core@1.64.1)
+      '@netlify/plugin-nextjs':
+        specifier: 5.16.4
+        version: 5.16.4
       '@playwright/test':
         specifier: ^1.64.1
         version: 1.64.1
@@ -1568,6 +1571,10 @@ packages:
 
   '@mux/playback-core@0.36.1':
     resolution: {integrity: sha512-bZbjGBC5SlCLUTpebhKgtE4uEMnErn4TMOJYmcACQlfx5cXnQ3PFiWdeMOlmm43Az5tdkBqzkiDhPastM9NHRQ==}
+
+  '@netlify/plugin-nextjs@5.16.4':
+    resolution: {integrity: sha512-yvFqkPxCeDrdC9y51Fxt5rK0lNWPo+esoc5uYbHBkM6kgop7s7jL2NtFFjN8g5SitbCnXoVm+dOlrgKEYfdx2g==}
+    engines: {node: '>=18.0.0'}
 
   '@next/env@16.4.5':
     resolution: {integrity: sha512-JwSPwpdkZL5VMl2jA/q+JI8MZdweAL3xmw5/tb9y/TLtmS0YXZnmYDzSihwk8xTj1OL+WM53gTqaj96yuLp6Xw==}
@@ -7398,6 +7405,8 @@ snapshots:
     dependencies:
       hls.js: 1.7.4
       mux-embed: 5.19.0
+
+  '@netlify/plugin-nextjs@5.16.4': {}
 
   '@next/env@16.4.5': {}
 
