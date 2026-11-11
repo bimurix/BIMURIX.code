@@ -37,6 +37,9 @@ const lines = [
   "# Sel du hachage des adresses IP (limite d'envois) : valeur de développement.",
   "IP_HASH_SALT=bimurix-local-dev",
   "",
+  "# Contenu Sanity de développement : le site en ligne lit « production » (ADR-004, révision 2026-11-10).",
+  "NEXT_PUBLIC_SANITY_DATASET=development",
+  "",
 ];
 writeFileSync(new URL("../.env.development.local", import.meta.url), lines.join("\n"));
-console.log("web/.env.development.local écrit (Supabase local, Mailpit, Turnstile test).");
+console.log("web/.env.development.local écrit (Supabase local, Mailpit, Turnstile test, dataset development).");

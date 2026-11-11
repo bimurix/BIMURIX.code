@@ -1,6 +1,6 @@
 import { block, internalCta, keyed, l, pt, titled } from "./helpers.mts";
 
-// Textes : docs/source/Bimurix_Contenu_Complet_Site_Vitrine.md §3, §8, §9 (EN : traduction à relire).
+// Textes : docs/source/2026-11-03_contenu-site-vitrine.md §3, §8, §9 (EN : traduction à relire).
 const tb = (sheet: string) => ({ sheet, revision: "0", date: "2026-11" });
 const requestQuote = l("Demander une soumission", "Request a quote");
 

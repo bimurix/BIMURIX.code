@@ -1,6 +1,6 @@
 import { internalCta, keyed, l, titled } from "./helpers.mts";
 
-// Textes : docs/source/Bimurix_Contenu_Complet_Site_Vitrine.md §6 et §7 (EN : traduction à relire).
+// Textes : docs/source/2026-11-03_contenu-site-vitrine.md §6 et §7 (EN : traduction à relire).
 const quote = "page-quote";
 
 export const services2 = [

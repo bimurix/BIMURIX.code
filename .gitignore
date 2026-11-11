@@ -4,3 +4,6 @@ node_modules/
 !.env.example
 .DS_Store
 *.log
+
+# Documents d'affaires (marges, sous-traitance) : jamais dans le dépôt.
+affaires/
