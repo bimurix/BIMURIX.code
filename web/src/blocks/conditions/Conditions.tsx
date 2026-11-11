@@ -5,37 +5,38 @@ import { Section, SectionHeading } from "../section";
 export type ConditionsData = {
   heading?: Localized;
   launch?: {
-    deadline?: string | null;
-    creditText?: Localized;
     professionalNote?: Localized;
     conditions?: Array<{ _key: string; title?: Localized; text?: Localized }> | null;
   } | null;
 };
 
-// Mise en page : étape N3. Rien ne s'affiche si le réglage « Lancement et conditions » est vide.
+/**
+ * Conditions en liste de définitions : deux colonnes dès md, une sur mobile.
+ * La mention professionnelle (ADR-006 n° 11) est encadrée, comme un cartouche de feuille.
+ * Rien ne s'affiche si le réglage « Lancement et conditions » est vide.
+ */
 export function Conditions({ data, locale }: { data: ConditionsData; locale: Locale }) {
   const launch = data.launch;
   const items = (launch?.conditions ?? []).filter((c) => pick(c.title, locale, ""));
-  const credit = pick(launch?.creditText, locale, "");
   const note = pick(launch?.professionalNote, locale, "");
-  if (items.length === 0 && !credit && !note) return null;
+  if (items.length === 0 && !note) return null;
 
   return (
     <Section id="conditions">
       <SectionHeading>{pick(data.heading, locale, "")}</SectionHeading>
-      {launch?.deadline && <p className="mb-4 font-mono text-[14px] text-ink-2"><time dateTime={launch.deadline}>{launch.deadline}</time></p>}
-      {credit && <p className="mb-6 max-w-[62ch] text-[17px] leading-relaxed">{credit}</p>}
       {items.length > 0 && (
-        <dl className="max-w-3xl border-t-[1.5px] border-ink">
+        <dl className="grid border-t-[1.5px] border-ink md:grid-cols-2 md:gap-x-12">
           {items.map((c) => (
-            <div key={c._key} className="border-b border-rule py-4 sm:grid sm:grid-cols-[12rem_1fr] sm:gap-6">
-              <dt className="font-semibold">{pick(c.title, locale, "")}</dt>
-              <dd className="mt-1 text-ink-2 sm:mt-0">{pick(c.text, locale, "")}</dd>
+            <div key={c._key} className="border-b border-rule py-5">
+              <dt className="font-display text-lg font-bold">{pick(c.title, locale, "")}</dt>
+              <dd className="mt-1 max-w-[52ch] text-ink-2">{pick(c.text, locale, "")}</dd>
             </div>
           ))}
         </dl>
       )}
-      {note && <p className="mt-6 max-w-[62ch] text-[15px] text-ink-2">{note}</p>}
+      {note && (
+        <p className="mt-10 max-w-[62ch] border-[1.5px] border-ink bg-paper-2 p-5 text-[16px] leading-relaxed font-medium text-ink">{note}</p>
+      )}
     </Section>
   );
 }

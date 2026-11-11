@@ -10,27 +10,40 @@ export type ProofData = {
   sourceName?: string | null;
   sourceUrl?: string | null;
   figures?: Array<{ _key: string; value?: string; label?: Localized }> | null;
+  ui?: { sourceLabel?: Localized } | null;
 };
 
-// Ne rend rien sans nom et lien de source, ou si le bloc est désactivé (ADR-006 n° 5). Mise en page : étape N3.
+/**
+ * Chiffres d'un tiers : attribution et lien de source collés aux chiffres, dans le même cadre (ADR-006 n° 5 et 21).
+ * Ne rend rien si le bloc est désactivé ou sans source.
+ */
 export function Proof({ data, locale }: { data: ProofData; locale: Locale }) {
   if (!canShowProof(data)) return null;
   const attribution = pick(data.attribution, locale, "");
+  const figures = (data.figures ?? []).filter((f) => f.value);
+  const sourceLabel = pick(data.ui?.sourceLabel, locale, "");
   return (
     <Section id="preuve">
       <SectionHeading>{pick(data.heading, locale, "")}</SectionHeading>
-      <dl className="grid gap-6 border-t-[1.5px] border-ink pt-6 sm:grid-cols-3">
-        {(data.figures ?? []).map((f) => (
-          <div key={f._key}>
-            <dd className="font-mono text-3xl font-bold">{f.value}</dd>
-            <dt className="mt-1 text-ink-2">{pick(f.label, locale, "")}</dt>
-          </div>
-        ))}
-      </dl>
-      {attribution && <p className="mt-6 max-w-[62ch] text-[15px] text-ink-2">{attribution}</p>}
-      <p className="mt-2 text-[14px] text-ink-2">
-        {locale === "fr" ? "Source : " : "Source: "}<a href={data.sourceUrl ?? undefined} rel="noopener noreferrer" className="underline underline-offset-2">{data.sourceName}</a>
-      </p>
+      <figure className="border-[1.5px] border-ink bg-paper">
+        <dl className="grid divide-y divide-rule sm:grid-cols-[repeat(auto-fit,minmax(0,1fr))] sm:divide-x sm:divide-y-0">
+          {figures.map((f) => (
+            <div key={f._key} className="flex flex-col-reverse justify-end gap-1 p-5">
+              <dt className="max-w-[28ch] text-ink-2">{pick(f.label, locale, "")}</dt>
+              <dd className="font-mono text-4xl font-bold tabular-nums">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <figcaption className="border-t border-ink bg-paper-2 px-5 py-3 text-[15px] text-ink-2">
+          {attribution && <span className="block max-w-[62ch]">{attribution}</span>}
+          <span className="mt-1 block text-[14px]">
+            {sourceLabel && `${sourceLabel}${locale === "fr" ? " : " : ": "}`}
+            <a href={data.sourceUrl ?? undefined} rel="noopener noreferrer" className="inline-flex min-h-(--bx-tap-min) items-center text-ink underline underline-offset-4 hover:text-blue">
+              {data.sourceName}
+            </a>
+          </span>
+        </figcaption>
+      </figure>
     </Section>
   );
 }

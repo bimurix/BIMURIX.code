@@ -7,6 +7,7 @@ import { SanityLive } from "@/sanity/live";
 import { SHELL_QUERY } from "@/sanity/queries";
 import type { Shell } from "@/sanity/types-content";
 import { buildNavModel } from "@/ui/patterns/nav-model";
+import { LaunchBanner } from "@/ui/patterns/LaunchBanner";
 import { SiteFooter } from "@/ui/patterns/SiteFooter";
 import { SiteHeader } from "@/ui/patterns/SiteHeader";
 import "../../globals.css";
@@ -35,6 +36,7 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[lo
     <html lang={htmlLang[locale]} className={`${archivo.variable} ${jetbrains.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
         <SiteHeader shell={shell} locale={locale} model={model} />
+        <LaunchBanner shell={shell} locale={locale} />
         <main id="contenu" className="flex-1">
           {children}
         </main>

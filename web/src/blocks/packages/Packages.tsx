@@ -1,55 +1,65 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
-import { formatPrice, visiblePackages, type PackageData } from "@/lib/packages/packages";
+import { pathFor, type RouteTarget } from "@/lib/links";
+import { packageHref } from "@/lib/packages/launch";
+import { visiblePackages, type PackageData } from "@/lib/packages/packages";
+import type { UiStrings } from "@/sanity/types-content";
 import { Section, SectionHeading } from "../section";
+import { PackageRow } from "./PackageRow";
 
 export type PackagesData = {
   heading?: Localized;
   intro?: Localized;
   showTaxNote?: boolean | null;
   taxNote?: Localized;
+  creditText?: Localized;
   packages?: PackageData[] | null;
+  ui?: UiStrings | null;
+  quotePage?: RouteTarget;
 };
 
-// Valeurs de secours neutres : le texte public vient de Sanity (CLAUDE.md §4). Mise en page : étape N3.
-const fallback = {
-  fr: { from: "À partir de", quote: "Sur soumission", days: "jours ouvrables" },
-  en: { from: "From", quote: "On quote", days: "business days" },
-} as const;
+const COLUMNS = ["colCode", "colPackage", "colScope", "colLeadTime", "colPrice", "colAction"] as const;
 
+/**
+ * Nomenclature de feuille de plan (ADR-006 n° 6) : un tableau, pas une grille de cartes.
+ * Sous 768 px, chaque ligne devient une fiche empilée ; les rôles ARIA gardent la sémantique de tableau.
+ * Tous les textes viennent de Sanity (CLAUDE.md §4) ; rien ne s'affiche sans forfait visible.
+ */
 export function Packages({ data, locale }: { data: PackagesData; locale: Locale }) {
   const items = visiblePackages(data.packages);
   if (items.length === 0) return null;
-  const labels = fallback[locale];
+  const ui = data.ui;
+  const quotePath = pathFor(data.quotePage, locale);
   const taxNote = data.showTaxNote === false ? "" : pick(data.taxNote, locale, "");
+  const credit = pick(data.creditText, locale, "");
+  const heading = pick(data.heading, locale, "");
 
   return (
     <Section id="forfaits">
-      <SectionHeading intro={pick(data.intro, locale, "") || undefined}>{pick(data.heading, locale, "")}</SectionHeading>
-      <ol className="border-t-[1.5px] border-ink">
-        {items.map((p) => {
-          const price = formatPrice(p.price, p.priceMode, locale);
-          const scope = pick(p.scope, locale, "");
-          const inclusions = (p.inclusions ?? []).map((i) => ({ key: i._key, text: pick(i, locale, "") })).filter((i) => i.text);
-          return (
-            <li key={p._id} data-highlighted={p.highlighted ? "true" : undefined} className="border-b border-rule py-6">
-              <p className="font-mono text-[13px] text-ink-2">{p.code}</p>
-              <h3 className="font-display text-xl font-bold">{pick(p.title, locale, "")}</h3>
-              {scope && <p className="mt-1 text-ink-2">{scope}</p>}
-              <p className="mt-2 font-mono text-[15px]">
-                {price ? `${price.from ? `${labels.from} ` : ""}${price.amount}` : labels.quote}
-                {p.leadTimeDays ? ` · ${p.leadTimeDays} ${labels.days}` : ""}
-              </p>
-              {inclusions.length > 0 && (
-                <ul className="mt-3 list-disc ps-5 text-ink-2">
-                  {inclusions.map((i, n) => <li key={i.key ?? n}>{i.text}</li>)}
-                </ul>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-      {taxNote && <p className="mt-4 text-[14px] text-ink-2">{taxNote}</p>}
+      <SectionHeading intro={pick(data.intro, locale, "") || undefined}>{heading}</SectionHeading>
+      <table className="block w-full border-t-[1.5px] border-ink text-start md:table" role="table">
+        {heading && <caption className="sr-only">{heading}</caption>}
+        <thead className="sr-only md:not-sr-only md:table-header-group" role="rowgroup">
+          <tr className="md:table-row" role="row">
+            {COLUMNS.map((key) => (
+              <th key={key} scope="col" role="columnheader" className={`border-b border-ink py-2 pe-4 text-start font-mono text-[12px] font-medium text-ink-2 ${key === "colPrice" ? "text-end" : ""}`}>
+                <span className={key === "colAction" ? "sr-only" : undefined}>{pick(ui?.[key], locale, "")}</span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="block md:table-row-group" role="rowgroup">
+          {items.map((p) => (
+            <PackageRow key={p._id} pkg={p} locale={locale} ui={ui} href={packageHref(quotePath, p.code)} />
+          ))}
+        </tbody>
+      </table>
+      {(taxNote || credit) && (
+        <div className="mt-6 max-w-[62ch] space-y-2 text-[15px] text-ink-2">
+          {taxNote && <p>{taxNote}</p>}
+          {credit && <p>{credit}</p>}
+        </div>
+      )}
     </Section>
   );
 }

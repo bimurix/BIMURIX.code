@@ -15,6 +15,20 @@ export const uiStringKeys = [
   ["revision", "Cartouche : « Révision »"],
   ["date", "Cartouche : « Date »"],
   ["backHome", "Lien « Retour à l'accueil »"],
+  ["priceFrom", "Forfaits : « À partir de » (devant un prix minimal)"],
+  ["priceQuote", "Forfaits : « Sur soumission » (aucun montant affiché)"],
+  ["businessDays", "Forfaits : « jours ouvrables »"],
+  ["colCode", "Nomenclature : en-tête « Code »"],
+  ["colPackage", "Nomenclature : en-tête « Forfait »"],
+  ["colScope", "Nomenclature : en-tête « Portée »"],
+  ["colLeadTime", "Nomenclature : en-tête « Délai »"],
+  ["colPrice", "Nomenclature : en-tête « Prix »"],
+  ["colAction", "Nomenclature : en-tête de la colonne du bouton (lu par les lecteurs d'écran)"],
+  ["inclusionsLabel", "Forfaits : « Ce qui est inclus »"],
+  ["choosePackage", "Forfaits : bouton « Choisir ce forfait »"],
+  ["highlightedLabel", "Forfaits : repère du forfait mis en avant"],
+  ["sourceLabel", "Preuve : « Source »"],
+  ["bannerUntil", "Bandeau de lancement : « jusqu'au » (devant la date limite)"],
 ] as const;
 
 export const uiStrings = defineType({

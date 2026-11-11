@@ -13,7 +13,7 @@
 | N0 Cadrage | ✅ 2026-11-10 | ADR-006, ce plan, SPEC, lexique |
 | N1 Rangement | ✅ 2026-11-10 | Dossiers datés, `affaires/` hors Git, 9 skills, dataset `development` |
 | N2 Sanity | ✅ 2026-11-10 | Un forfait masqué dans Studio disparaît du site |
-| N3 Blocs visuels | ⏳ | Blocs `packages`, `conditions`, `proof` rendus à 360 px et 1440 px |
+| N3 Blocs visuels | ✅ 2026-11-10 | Blocs `packages`, `conditions`, `proof` rendus à 360 px et 1440 px |
 | N4 Contenu | ⏳ | Accueil + 4 pages d'offres + FAQ complets en FR et EN |
 | N5 Formulaire et admin | ⏳ | Demande d'appel : ligne en base, 2 courriels Mailpit, visible dans `/admin` |
 | N6 Vérification | ⏳ | Tout vert, revue de code et de sécurité |

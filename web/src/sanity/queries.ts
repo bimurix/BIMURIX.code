@@ -6,6 +6,10 @@ const cta = `{label, style, "link": link${link}}`;
 const asset = `asset->{url, "width": metadata.dimensions.width, "height": metadata.dimensions.height}`;
 const image = `{alt, illustrative, ${asset}}`;
 
+// Petits textes et page de soumission joints aux blocs de l'offre (forfaits : lien `?forfait=`).
+const uiRef = `*[_id == "uiStrings"][0]`;
+const quotePageRef = `*[_type == "page" && kind == "quote"][0]{_type, kind, slug}`;
+
 // Sections du constructeur de pages, avec leurs liens et images résolus.
 const sections = `sections[]{
   ...,
@@ -19,11 +23,14 @@ const sections = `sections[]{
   _type == "packages" => {
     ...,
     "taxNote": *[_id == "launchSettings"][0].taxNote,
+    "creditText": *[_id == "launchSettings"][0].creditText,
+    "ui": ${uiRef}, "quotePage": ${quotePageRef},
     "packages": *[_type == "package" && visible != false && defined(service) && service->visible != false && (!defined(^.service) || service._ref == ^.service._ref)] | order(order asc){
       _id, code, title, priceMode, price, scope, leadTimeDays, inclusions, highlighted, visible, order, "service": service->{_id, visible}
     }
   },
-  _type == "conditions" => { ..., "launch": *[_id == "launchSettings"][0]{deadline, creditText, conditions, professionalNote} },
+  _type == "proof" => { ..., "ui": ${uiRef} },
+  _type == "conditions" => { ..., "launch": *[_id == "launchSettings"][0]{conditions, professionalNote} },
   _type == "deliverables" => { ..., items[]{..., "image": image${image}} },
   _type == "imageFigure" => { ..., "image": image${image} },
   _type == "quoteCta" => { ..., "button": button${cta} },
@@ -43,6 +50,7 @@ export const SHELL_QUERY = defineQuery(`{
   },
   "footer": *[_id == "footer"][0]{ blurb, copyright, columns[]{_key, title, links[]{_key, ...${cta}}} },
   "ui": *[_id == "uiStrings"][0],
+  "launch": *[_id == "launchSettings"][0]{bannerEnabled, bannerText, deadline},
   "services": *[_type == "service" && visible != false] | order(order asc){_id, _type, code, network, title, slug, cardTitle},
   "quotePage": *[_type == "page" && kind == "quote"][0]{_type, kind, slug},
   "routes": *[_type in ["page", "service"] && visible != false && (defined(slug.fr) || kind == "home")]{_type, kind, slug, "noIndex": seo.noIndex, _updatedAt}
@@ -73,6 +81,7 @@ export const QUOTE_FORM_QUERY = defineQuery(`{
   "form": *[_id == "formSettings"][0],
   "emails": *[_id == "emailTemplates"][0],
   "services": *[_type == "service" && visible != false] | order(order asc){_id, title, code, network},
+  "packages": *[_type == "package"]{_id, code, title, visible, order, "service": service->{_id, visible}},
   "privacyPage": *[_type == "page" && kind == "privacy"][0]{_type, kind, slug},
   "fromEmail": *[_id == "settings"][0].email
 }`);

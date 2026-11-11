@@ -25,7 +25,9 @@ export type ServiceSummary = RouteTarget & {
 
 export type UiStrings = Partial<Record<
   "requestQuote" | "discoverServices" | "learnMore" | "menu" | "closeMenu" | "services" | "skipToContent"
-  | "networkHint" | "illustrativeExample" | "sheet" | "revision" | "date" | "backHome",
+  | "networkHint" | "illustrativeExample" | "sheet" | "revision" | "date" | "backHome"
+  | "priceFrom" | "priceQuote" | "businessDays" | "colCode" | "colPackage" | "colScope" | "colLeadTime" | "colPrice" | "colAction"
+  | "inclusionsLabel" | "choosePackage" | "highlightedLabel" | "sourceLabel" | "bannerUntil",
   Localized
 >>;
 
@@ -41,6 +43,8 @@ export type Shell = {
   } | null;
   footer?: { blurb?: Localized; copyright?: Localized; columns?: Array<{ _key: string; title?: Localized; links?: Cta[] }> } | null;
   ui?: UiStrings | null;
+  /** Bandeau de lancement (réglage `launchSettings`), ADR-006 n° 13. */
+  launch?: { bannerEnabled?: boolean | null; bannerText?: Localized; deadline?: string | null } | null;
   services?: ServiceSummary[];
   quotePage?: RouteTarget;
   routes?: RouteTarget[];

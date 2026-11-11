@@ -1,4 +1,5 @@
 import { internalCta, keyed, l, ref } from "./helpers.mts";
+import { uiStringsN3 } from "./ui-strings-n3.mts";
 
 // Valeurs génériques marquées « (exemple) » ou 555 : à remplacer dans Studio (decision: D12).
 const settings = {
@@ -79,6 +80,7 @@ const uiStrings = {
   revision: l("Révision", "Revision"),
   date: l("Date", "Date"),
   backHome: l("Retour à l'accueil", "Back to home"),
+  ...uiStringsN3,
 };
 
 export const singletons = [settings, navigation, footer, uiStrings];
