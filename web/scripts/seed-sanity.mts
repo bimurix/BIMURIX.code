@@ -1,5 +1,5 @@
 /**
- * Contenu de départ Bimurix → Sanity (dataset `production`, voir ADR-004 révisé).
+ * Contenu de départ Bimurix → Sanity (dataset choisi par NEXT_PUBLIC_SANITY_DATASET ; `production` par défaut, voir ADR-004 révisé).
  *
  *   pnpm seed                                          crée les documents absents, ne touche pas aux autres
  *   pnpm seed --force --i-know-this-overwrites         remplace tous les documents de départ
@@ -11,6 +11,7 @@ import { resolve } from "node:path";
 import { createClient, type IdentifiedSanityDocumentStub } from "@sanity/client";
 import { formAndEmails } from "./seed/form-and-emails.mts";
 import { legalPages } from "./seed/legal.mts";
+import { launchSettingsDoc, packageDocs } from "./seed/packages.mts";
 import { pages } from "./seed/pages.mts";
 import { services1 } from "./seed/services-1.mts";
 import { services2 } from "./seed/services-2.mts";
@@ -42,7 +43,16 @@ async function getClient() {
 }
 
 const client = await getClient();
-const documents: IdentifiedSanityDocumentStub[] = [...singletons, ...formAndEmails, ...services1, ...services2, ...pages, ...legalPages];
+const documents: IdentifiedSanityDocumentStub[] = [...singletons, ...formAndEmails, ...services1, ...services2, ...packageDocs, launchSettingsDoc, ...pages, ...legalPages];
+
+// Cible réelle du client (pas seulement la variable d'environnement) : on n'écrit jamais ailleurs que prévu.
+const target = client.config();
+console.log(`Cible : ${target.projectId}/${target.dataset} (${documents.length} documents)`);
+if (target.dataset !== dataset) {
+  console.error(`Refusé : le client vise « ${target.dataset} » au lieu de « ${dataset} ».`);
+  process.exit(1);
+}
+if (process.argv.includes("--dry-run")) process.exit(0);
 
 const tx = client.transaction();
 for (const doc of documents) {
