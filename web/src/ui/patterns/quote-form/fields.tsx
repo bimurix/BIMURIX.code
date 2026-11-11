@@ -66,8 +66,9 @@ export function TextArea(props: Base & { maxLength: number }) {
 export type Choice = { value: string; label: string };
 
 export function SelectField(props: Base & { options: Choice[]; defaultValue?: string; value?: string; onValueChange?: (value: string) => void; placeholder: string }) {
-  // Contrôlé seulement si `value` est fourni (le service suit le forfait choisi).
-  const state = props.value === undefined ? { defaultValue: props.defaultValue ?? "" } : { value: props.value, onChange: (e: React.ChangeEvent<HTMLSelectElement>) => props.onValueChange?.(e.target.value) };
+  // Contrôlé seulement si `value` est fourni (le service suit le forfait choisi) ; `onValueChange` marche dans les deux cas.
+  const onChange = props.onValueChange ? (e: React.ChangeEvent<HTMLSelectElement>) => props.onValueChange?.(e.target.value) : undefined;
+  const state = props.value === undefined ? { defaultValue: props.defaultValue ?? "", onChange } : { value: props.value, onChange };
   return (
     <div>
       <Label {...props} />

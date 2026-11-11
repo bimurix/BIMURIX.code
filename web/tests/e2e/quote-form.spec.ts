@@ -129,3 +129,13 @@ test("connexion lente : le bouton d'envoi est inactif jusqu'au chargement du scr
   release();
   await expect(button).toBeEnabled({ timeout: 20_000 });
 });
+
+// N6 : choisir un forfait dans la liste (sans passer par ?forfait=) doit aussi choisir son offre.
+test("choisir un forfait dans la liste choisit l'offre correspondante", async ({ page }) => {
+  await page.goto("/soumission");
+  await expect(async () => {
+    await page.locator("#packageCode").selectOption("F-04");
+    await expect(page.locator("#service")).not.toHaveValue("", { timeout: 1000 });
+  }).toPass({ timeout: 15_000 });
+  await expect(page.locator("#service")).toHaveValue("service-combinee");
+});
