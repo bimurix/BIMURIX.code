@@ -38,6 +38,8 @@ web/
 │  ├─ lib/                    Logique sans interface, testable
 │  │  ├─ quote/               Cas d'usage « demande » : schéma Zod, envoi, courriels
 │  │  ├─ admin/               Auth, lecture et actions du tableau de bord
+│  │  ├─ packages/            Forfaits : prix affiché ou « sur soumission », visibilité, date limite, garde de la preuve
+│  │  ├─ redirect-target.ts   Cible d'une redirection (interne seulement, sans boucle)
 │  │  ├─ supabase/            Clients serveur, admin, session
 │  │  ├─ mail/  i18n/         Envoi (Mailpit / Resend) · langues et routage
 │  ├─ ui/
@@ -46,9 +48,10 @@ web/
 │  │  └─ admin/               Pièces du tableau de bord
 │  ├─ styles/tokens.css       Seule source des couleurs, tailles et traits
 │  └─ proxy.ts                Routage FR / EN et garde de /admin
-├─ scripts/                   seed-sanity.mts + seed/*.mts, db-env, add-admin, check-placeholders
+├─ scripts/                   seed-sanity.mts + seed/*.mts, db-env, add-admin, check-placeholders,
+│                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset)
 ├─ supabase/migrations/       SQL versionné, appliqué par `pnpm db:reset`
-└─ tests/unit · tests/e2e     Vitest · Playwright (mobile et bureau)
+└─ tests/unit · tests/e2e     Vitest · Playwright (mobile et bureau ; warm-up.ts préchauffe les routes en dev)
 ```
 
 ### Sens des dépendances (ne pas l'inverser)
@@ -68,7 +71,7 @@ web/
 | Une colonne en base | Nouvelle migration dans `supabase/migrations/` (jamais modifier une ancienne) |
 
 ### Limites
-Fichier ≤ 300 lignes, fonction ≤ 40 lignes (au 2026-11-10 : plus gros fichier 194 lignes).
+Fichier ≤ 300 lignes, fonction ≤ 40 lignes (au 2026-11-10 : plus gros fichier 165 lignes).
 Server Components par défaut ; `"use client"` seulement pour l'interaction.
 
 ## 3. Les données

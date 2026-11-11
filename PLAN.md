@@ -16,7 +16,7 @@
 | N3 Blocs visuels | ✅ 2026-11-10 | Blocs `packages`, `conditions`, `proof` rendus à 360 px et 1440 px |
 | N4 Contenu | ✅ 2026-11-10 | Accueil + 4 pages d'offres + FAQ complets en FR et EN (dataset `development`, script `patch-content-n4.mts`) |
 | N5 Formulaire et admin | ✅ 2026-11-10 | Demande d'appel : ligne en base, 2 courriels Mailpit, visible dans `/admin` |
-| N6 Vérification | ⏳ | Tout vert, revue de code et de sécurité |
+| N6 Vérification | ✅ 2026-11-10 | Rapport : `docs/audits/2026-11-10_verification-n6.md` (5 défauts corrigés) |
 | M Déploiement | ⏸ sur feu vert | Contenu copié vers `production`, Netlify, GitHub |
 
 Mettre ce tableau à jour à la fin de chaque étape (✅ + date).
