@@ -16,4 +16,8 @@ export const uiStringsN3 = {
   highlightedLabel: l("Recommandé", "Recommended"),
   sourceLabel: l("Source", "Source"),
   bannerUntil: l("jusqu'au", "until"),
+  // N4 : pages d'offres
+  forWhom: l("Pour qui", "Who it's for"),
+  responsibilities: l("Qui fait quoi", "Who does what"),
+  offerPackages: l("Forfaits de cette offre", "Packages for this offer"),
 };

@@ -27,7 +27,7 @@ export type UiStrings = Partial<Record<
   "requestQuote" | "discoverServices" | "learnMore" | "menu" | "closeMenu" | "services" | "skipToContent"
   | "networkHint" | "illustrativeExample" | "sheet" | "revision" | "date" | "backHome"
   | "priceFrom" | "priceQuote" | "businessDays" | "colCode" | "colPackage" | "colScope" | "colLeadTime" | "colPrice" | "colAction"
-  | "inclusionsLabel" | "choosePackage" | "highlightedLabel" | "sourceLabel" | "bannerUntil",
+  | "forWhom" | "responsibilities" | "offerPackages" | "inclusionsLabel" | "choosePackage" | "highlightedLabel" | "sourceLabel" | "bannerUntil",
   Localized
 >>;
 

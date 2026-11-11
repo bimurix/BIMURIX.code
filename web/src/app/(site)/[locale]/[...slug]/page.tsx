@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { RenderSections } from "@/blocks/render";
 import { hasLocale } from "@/lib/i18n/locales";
 import { pick } from "@/lib/i18n/pick";
 import { buildMetadata } from "@/lib/seo";
-import { getAllSlugParams, getDocumentBySlug } from "@/sanity/content";
+import { getAllSlugParams, getDocumentBySlug, getRedirect } from "@/sanity/content";
 import { fetchPublished } from "@/sanity/fetch";
 import { SHELL_QUERY } from "@/sanity/queries";
 import type { Shell } from "@/sanity/types-content";
@@ -18,10 +18,13 @@ export async function generateStaticParams() {
 async function load(params: PageProps<"/[locale]/[...slug]">["params"]) {
   const { locale, slug } = await params;
   if (!hasLocale(locale)) notFound();
-  const [shell, doc] = await Promise.all([
-    fetchPublished<Shell>({ query: SHELL_QUERY }),
-    getDocumentBySlug(locale, slug.map(decodeURIComponent).join("/")),
-  ]);
+  const path = slug.map(decodeURIComponent).join("/");
+  const [shell, doc] = await Promise.all([fetchPublished<Shell>({ query: SHELL_QUERY }), getDocumentBySlug(locale, path)]);
+  // Une adresse qui a changé renvoie vers la nouvelle (document « Redirection » dans Studio).
+  if (!doc) {
+    const moved = await getRedirect(`/${locale === "en" ? "en/" : ""}${path}`);
+    if (moved?.to) (moved.permanent === false ? redirect : permanentRedirect)(moved.to);
+  }
   // L'accueil et la page 404 n'ont pas d'adresse propre.
   if (!doc || (doc._type === "page" && (doc.kind === "home" || doc.kind === "notFound"))) notFound();
   return { locale, shell, doc };

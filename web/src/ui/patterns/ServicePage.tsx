@@ -1,10 +1,12 @@
 import { HeroSheet } from "@/blocks/hero-sheet/HeroSheet";
 import { Method } from "@/blocks/method/Method";
+import { Packages } from "@/blocks/packages/Packages";
 import { PointsList } from "@/blocks/points-list/PointsList";
 import { QuoteCta } from "@/blocks/quote-cta/QuoteCta";
 import { Section, SectionHeading } from "@/blocks/section";
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
+import type { PackageData } from "@/lib/packages/packages";
 import type { Cta, ImageAsset, NetworkColor, Shell, TitleBlockData } from "@/sanity/types-content";
 import { networkVar, NetworkSwatch } from "@/ui/components/NetworkSwatch";
 
@@ -33,7 +35,24 @@ export type ServiceDoc = {
   ctaHeading?: Localized;
   ctaText?: Localized;
   ctaButton?: Cta;
+  audience?: Localized;
+  responsibilityNote?: Localized;
+  taxNote?: Localized;
+  creditText?: Localized;
+  packages?: PackageData[];
 };
+
+/** Petit texte sous un titre de section (pour qui, qui fait quoi). */
+function Note({ heading, text, locale }: { heading?: Localized; text?: Localized; locale: Locale }) {
+  const body = pick(text, locale, "");
+  if (!body) return null;
+  return (
+    <Section>
+      <SectionHeading>{pick(heading, locale, "")}</SectionHeading>
+      <p className="max-w-[62ch] border-t-[1.5px] border-ink pt-5 text-[17px] leading-relaxed text-ink">{body}</p>
+    </Section>
+  );
+}
 
 /** Liste à puces « raccords » dans la couleur du réseau du service. */
 function NetworkList({ heading, items, note, network, locale }: { heading?: Localized; items?: Array<Keyed<Localized & object>>; note?: Localized; network: NetworkColor; locale: Locale }) {
@@ -60,7 +79,7 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
   const meta = (
     <p className="flex items-center gap-3 text-[14px] text-ink-2">
       <NetworkSwatch network={network} />
-      <span className="font-mono text-[13px]">{doc.code}</span>
+      <span className="shrink-0 font-mono text-[13px] whitespace-nowrap">{doc.code}</span>
       <span>{pick(doc.title, locale, "")}</span>
     </p>
   );
@@ -74,14 +93,20 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
         titleBlock={doc.titleBlock}
         meta={meta}
       />
+      <Note heading={shell?.ui?.forWhom} text={doc.audience} locale={locale} />
       {doc.offerings?.length ? (
         <PointsList data={{ heading: doc.offeringsHeading, items: doc.offerings, layout: "columns" }} locale={locale} />
       ) : null}
       <NetworkList heading={doc.deliverablesHeading} items={doc.deliverables} note={doc.deliverablesNote} network={network} locale={locale} />
+      <Packages
+        data={{ heading: shell?.ui?.offerPackages, taxNote: doc.taxNote, creditText: doc.creditText, packages: doc.packages, ui: shell?.ui, quotePage: shell?.quotePage }}
+        locale={locale}
+      />
       {doc.methodSteps?.length ? (
         <Method data={{ heading: doc.methodHeading, steps: doc.methodSteps.map((s) => ({ _key: s._key, title: s })) }} locale={locale} />
       ) : null}
       <NetworkList heading={doc.extraHeading} items={doc.extraItems} note={doc.extraNote} network={network} locale={locale} />
+      <Note heading={shell?.ui?.responsibilities} text={doc.responsibilityNote} locale={locale} />
       <QuoteCta data={{ heading: doc.ctaHeading, text: doc.ctaText, button: doc.ctaButton }} locale={locale} />
     </>
   );

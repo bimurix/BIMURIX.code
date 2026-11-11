@@ -4,7 +4,7 @@ import type { Section } from "@/blocks/render";
 import type { ImageAsset, TitleBlockData } from "./types-content";
 import type { ServiceDoc } from "@/ui/patterns/ServicePage";
 import { fetchPublished } from "./fetch";
-import { DOCUMENT_BY_SLUG_QUERY, HOME_QUERY, NOT_FOUND_QUERY, SLUGS_QUERY } from "./queries";
+import { DOCUMENT_BY_SLUG_QUERY, HOME_QUERY, NOT_FOUND_QUERY, REDIRECT_QUERY, SLUGS_QUERY } from "./queries";
 
 export type Seo = { title?: Localized; description?: Localized; noIndex?: boolean; image?: ImageAsset } | null;
 
@@ -28,6 +28,8 @@ export const getNotFoundPage = () => fetchPublished<PageDoc>({ query: NOT_FOUND_
 export function getDocumentBySlug(locale: Locale, slug: string) {
   return fetchPublished<RoutedDoc>({ query: DOCUMENT_BY_SLUG_QUERY, params: { locale, slug } });
 }
+
+export const getRedirect = (from: string) => fetchPublished<{ to?: string; permanent?: boolean } | null>({ query: REDIRECT_QUERY, params: { from } });
 
 /** Paramètres à pré-générer pour [locale]/[...slug] (une adresse par langue disponible). */
 export async function getAllSlugParams(): Promise<Array<{ locale: Locale; slug: string[] }>> {

@@ -28,6 +28,9 @@ export const uiStringKeys = [
   ["choosePackage", "Forfaits : bouton « Choisir ce forfait »"],
   ["highlightedLabel", "Forfaits : repère du forfait mis en avant"],
   ["sourceLabel", "Preuve : « Source »"],
+  ["forWhom", "Page d'offre : « Pour qui »"],
+  ["responsibilities", "Page d'offre : « Responsabilités »"],
+  ["offerPackages", "Page d'offre : titre des forfaits de l'offre"],
   ["bannerUntil", "Bandeau de lancement : « jusqu'au » (devant la date limite)"],
 ] as const;
 

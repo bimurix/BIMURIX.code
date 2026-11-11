@@ -72,9 +72,18 @@ export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"
     code, network, heroHeading, heroIntro, "heroCta": heroCta${cta}, "heroImage": heroImage${image},
     offeringsHeading, offerings, deliverablesHeading, deliverables, deliverablesNote,
     methodHeading, methodSteps, extraHeading, extraItems, extraNote,
-    ctaHeading, ctaText, "ctaButton": ctaButton${cta}
+    audience, responsibilityNote,
+    ctaHeading, ctaText, "ctaButton": ctaButton${cta},
+    "taxNote": *[_id == "launchSettings"][0].taxNote,
+    "creditText": *[_id == "launchSettings"][0].creditText,
+    "packages": *[_type == "package" && visible != false && service._ref == ^._id] | order(order asc){
+      _id, code, title, priceMode, price, scope, leadTimeDays, inclusions, highlighted, visible, order, "service": service->{_id, visible}
+    }
   }
 }`);
+
+// Ancienne adresse d'une page ou d'une offre dont l'adresse a changé (document « Redirection »).
+export const REDIRECT_QUERY = defineQuery(`*[_type == "redirect" && from == $from][0]{to, permanent}`);
 
 // Formulaire de soumission : libellés, listes, consentement, courriels et services proposés.
 export const QUOTE_FORM_QUERY = defineQuery(`{
