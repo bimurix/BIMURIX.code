@@ -23,3 +23,10 @@ Le client a choisi d'utiliser **un seul dataset Sanity, `production`**, dès le 
 - le contenu modifié dans Studio en local est le contenu réel du futur site ;
 - `pnpm seed` ne crée que les documents absents ; l'écrasement exige `--force --i-know-this-overwrites` ;
 - un dataset `development` pourra être ajouté plus tard (variable `NEXT_PUBLIC_SANITY_DATASET`).
+
+## Révision (2026-11-10)
+Le site est en ligne sur Netlify et lit `production`. Le client veut refaire la vitrine (ADR-006) **entièrement
+en local, puis tout déployer d'un coup**. Un dataset **`development`** est donc créé :
+- en mode dev, `node scripts/db-env.mjs` écrit `NEXT_PUBLIC_SANITY_DATASET=development` dans
+  `web/.env.development.local` (nom non secret) ; ailleurs la valeur par défaut reste `production` ;
+- `production` n'est plus modifié avant la phase M ; le contenu y sera copié par export puis import.

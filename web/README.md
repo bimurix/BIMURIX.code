@@ -1,6 +1,6 @@
 # Bimurix — site et tableau de bord (`web/`)
 
-Next.js 16 · Sanity 6 (Studio sur `/studio`) · Supabase · Tailwind 4. Voir `../PLAN.md`, `../CLAUDE.md`, `../docs/`.
+Next.js 16 · Sanity 6 (Studio sur `/studio`) · Supabase · Tailwind 4. Voir `../PLAN.md`, `../CLAUDE.md`, `../docs/ARCHITECTURE.md`.
 
 ## Démarrer en local
 
