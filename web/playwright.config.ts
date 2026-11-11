@@ -5,6 +5,8 @@ const baseURL = "http://localhost:3100";
 
 export default defineConfig({
   testDir: "tests/e2e",
+  globalSetup: "./tests/e2e/warm-up.ts",
+  timeout: 45_000,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
