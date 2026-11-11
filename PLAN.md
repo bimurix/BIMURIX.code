@@ -76,7 +76,7 @@ que les offres visibles).
 
 | Page | Sections, dans l'ordre |
 |---|---|
-| Accueil | hero (promesse + « Réserver un appel de 20 minutes » + « Voir les forfaits ») · preuve (masquée sans lien) · forfaits · conditions · inclus · comment ça marche · FAQ · appel final |
+| Accueil | hero (promesse + « Réserver un appel de 20 minutes » + « Voir les forfaits ») · preuve (2 chiffres + source, ADR-006 n° 21) · forfaits · conditions · inclus · comment ça marche · FAQ · appel final |
 | 4 pages d'offres | titre, pour qui, portée, livrables, forfaits de l'offre, responsabilités, appel final |
 | À propos | positionnement v3.1 (spécialiste BIM MEP et préfabrication, bilingue, automatisation Dynamo et pyRevit) |
 | Soumission | formulaire (N5) |
@@ -110,15 +110,13 @@ Fichiers partagés, à modifier **un à la fois** : `src/blocks/schemas.ts`, `sr
 ## 6. Phase M — déploiement (plus tard, sur feu vert du client)
 
 1. Remplacer les valeurs d'exemple dans Studio ; `pnpm check:placeholders` à zéro.
-2. Client : confirmer ou retirer chaque élément « hypothèse à valider » (ADR-006 n° 3) et fournir le lien de l'étude de cas.
+2. Saisir la date limite (mise en ligne + 60 jours) ; client : téléphone, NEQ et nom légal s'il veut les afficher.
 3. Copier le contenu `development` → `production` (export puis import), déployer les schémas.
 4. Migration Supabase sur `bimurix-prod`, variables Netlify, déploiement, GitHub (push sur demande).
 5. Checklist `shipping-and-launch`, test de retour arrière.
 
-## 7. Questions ouvertes pour le client (ne bloquent pas le développement)
+## 7. Questions du client : tranchées
 
-- Date limite des forfaits de lancement.
-- Courriel, téléphone, ville affichée (Longueuil ?), NEQ, responsable Loi 25.
-- Lien exact de l'étude de cas J.M. Brennan.
-- Garantie de correction gratuite : confirmée ?
-- Prix « hypothèse à valider » : lesquels publier ?
+Toutes les questions ouvertes sont tranchées dans ADR-006, décisions 13 à 21 (date limite, courriel, téléphone,
+ville, NEQ, responsable Loi 25, garantie, prix à valider, chiffres J.M. Brennan). À appliquer au contenu en N4.
+Seuls faits encore attendus du client, sans bloquer : téléphone d'affaires, NEQ, nom légal.

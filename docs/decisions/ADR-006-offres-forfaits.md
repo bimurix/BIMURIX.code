@@ -38,3 +38,19 @@ Date limite des forfaits de lancement, courriel, téléphone, ville affichée (�
 - `design/PRODUCT.md` : la règle « aucune promesse chiffrée » devient « aucun chiffre sans source ; les prix et
   délais publiés sont ceux confirmés par le client ».
 - SysQue, AutoSPRINK et Trimble sont des marques de tiers : citées comme outils utilisés, sans logo.
+
+## Décisions complémentaires (2026-11-10) — questions ouvertes tranchées sur délégation du client
+
+| # | Question | Décision | Pourquoi |
+|---|---|---|---|
+| 13 | Date limite des forfaits | Aucune date fixe pour l'instant. Règle : **date de mise en ligne + 60 jours**, saisie dans Studio à la phase M. Champ vide = aucune date affichée. | Le test dure 60 jours à partir du lancement réel, pas à partir d'aujourd'hui. |
+| 14 | Courriel | `contact@bimurix.com` (domaine déjà vérifié pour l'envoi et la réception). Ce n'est plus une valeur d'exemple. | Adresse déjà en service. |
+| 15 | Téléphone | **Non affiché** tant que le client n'a pas de ligne d'affaires. Champ vidé ; le site ne montre rien si le champ est vide. | Ne pas publier un faux numéro ni un numéro personnel par défaut. |
+| 16 | Ville | Région desservie : **« Grand Montréal »**. Aucune adresse ni ville de bureau. « Longueuil » (maquette) retiré. | Le test de marché vise le Grand Montréal ; pas d'adresse d'affaires confirmée. |
+| 17 | NEQ et nom légal | NEQ **non affiché** tant qu'il n'est pas fourni. Nom affiché : « Bimurix ». | L'affichage du NEQ sur un site n'est pas obligatoire ; le nom légal exact n'est pas connu. |
+| 18 | Responsable Loi 25 | Titre **« Fondateur de Bimurix »** + `contact@bimurix.com`. Aucun nom de personne saisi par Claude. | La loi demande le titre et les coordonnées du responsable ; par défaut c'est la personne ayant la plus haute autorité. Le client peut ajouter son nom dans Studio. |
+| 19 | Garantie de correction gratuite | **Non publiée.** Réévaluer après les 3 premiers mandats. | Elle engage la responsabilité sur des longueurs de coupe qui dépendent aussi des documents fournis ; à encadrer d'abord dans le contrat. |
+| 20 | Prix « hypothèse à valider » | Restent masqués. Chacun s'active dans Studio quand une soumission réelle l'a confirmé. | Règles de décision sur les prix du document v3.1. |
+| 21 | Chiffres J.M. Brennan | Source vérifiée le 2026-11-10 : étude de cas Trimble MEP, <https://www.casestudies.com/company/trimble-mep/case-study/15-cost-savings-with-streamlined-bim-workflow>. Formulation corrigée pour coller à la source : **« environ 90 % de préfabrication »** et **« environ 15 % d'économies globales »**, attribués à J.M. Brennan. Le chiffre **718 000 pi² est retiré** : il n'apparaît pas sur la page citée (seulement dans une copie PDF). Bloc publié avec le lien. | La maquette disait « 90 % de la tuyauterie » et « 15 % sur le coût total du projet » : la source ne précise pas ces portées. Remplace la réserve du n° 5 sur le lien manquant. |
+
+Restent des faits que seul le client peut fournir, sans bloquer : numéro de téléphone d'affaires, NEQ, nom légal.
