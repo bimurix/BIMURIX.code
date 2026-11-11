@@ -37,9 +37,9 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
                 return (
                   <li key={cta._key}>
                     {isExternalHref(href) ? (
-                      <a href={href} className="inline-flex min-h-10 items-center text-[15px] hover:underline">{label}</a>
+                      <a href={href} className="inline-flex min-h-11 items-center text-[15px] hover:underline">{label}</a>
                     ) : (
-                      <Link href={href} className="inline-flex min-h-10 items-center text-[15px] hover:underline">{label}</Link>
+                      <Link href={href} className="inline-flex min-h-11 items-center text-[15px] hover:underline">{label}</Link>
                     )}
                   </li>
                 );
