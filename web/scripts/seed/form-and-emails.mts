@@ -45,7 +45,7 @@ const formSettings = {
   label_submit: l("Envoyer ma demande", "Send my request"),
   label_sending: l("Envoi de votre demande…", "Sending your request…"),
   ...formSettingsN5,
-  descriptionHelp: l("Disciplines concernées, état d'avancement, livrables attendus.", "Disciplines involved, project progress, expected deliverables."),
+  descriptionHelp: l("Une phrase suffit : ce que vous voulez préfabriquer ou faire vérifier.", "One sentence is enough: what you want prefabricated or checked."),
   filesHelp: l("Pour partager des fichiers, ajoutez un lien (ACC, Drive, WeTransfer) dans la description.", "To share files, add a link (ACC, Drive, WeTransfer) in the description."),
   includeServices: true,
   extraServiceOptions: keyed([opt("multiple", "Plusieurs services", "Several services"), opt("other", "Autre demande", "Other request")]),

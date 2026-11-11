@@ -13,16 +13,16 @@ export const formSettingsN5 = {
   requestTypeQuoteShort: l("Soumission", "Quote"),
   packageOther: l("Autre ou je ne sais pas", "Other or not sure"),
   successBodyCall: l(
-    "Votre demande d'appel a été transmise. Nous communiquerons avec vous par courriel pour confirmer un moment.",
-    "Your call request has been sent. We will contact you by email to confirm a time.",
+    "Votre demande d'appel a été transmise. Nous vous écrivons d'ici un jour ouvrable pour fixer l'heure de l'appel.",
+    "Your call request has been sent. We will email you within one business day to set a time.",
   ),
 };
 
 export const emailTemplatesN5 = {
   ackSubjectCall: l("Nous avons bien reçu votre demande d'appel ({reference})", "We received your call request ({reference})"),
   ackBodyCall: l(
-    "Bonjour {name},\n\nMerci d'avoir demandé un appel de 20 minutes avec Bimurix. Forfait visé : {package}. Nous vous écrirons pour confirmer un moment.\n\nVotre référence : {reference}.",
-    "Hello {name},\n\nThank you for requesting a 20-minute call with Bimurix. Package of interest: {package}. We will email you to confirm a time.\n\nYour reference: {reference}.",
+    "Bonjour {name},\n\nMerci d'avoir demandé un appel de 20 minutes avec Bimurix. Forfait visé : {package}. Nous vous écrivons d'ici un jour ouvrable pour fixer l'heure de l'appel.\n\nVotre référence : {reference}.",
+    "Hello {name},\n\nThank you for requesting a 20-minute call with Bimurix. Package of interest: {package}. We will email you within one business day to set a time.\n\nYour reference: {reference}.",
   ),
   internalSubjectCall: "Demande d'appel : {company} — {service} · {package} ({reference})",
 };
