@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { pathFor } from "@/lib/links";
-import { serviceOptions, type FormOption, type QuoteFormContent } from "@/lib/quote/form-content";
+import { packageChoices, PACKAGE_OTHER, serviceOptions, type FormOption, type QuoteFormContent } from "@/lib/quote/form-content";
 import type { Choice } from "./fields";
 
 const fallback = {
@@ -15,6 +15,8 @@ const fallback = {
     rateLimited: "Trop de demandes envoyées en peu de temps. Réessayez dans quelques minutes.", captcha: "La vérification antispam a échoué. Réessayez.",
     reference: "Votre référence", privacy: "Politique de confidentialité", contactInfo: "Coordonnées", project: "Votre projet", langFr: "Français", langEn: "English",
     consent: "J'accepte que Bimurix utilise ces renseignements pour traiter ma demande.",
+    requestType: "Type de demande", requestTypeCall: "Réserver un appel de 20 minutes", requestTypeQuote: "Demander une soumission",
+    package: "Forfait visé", packageOther: "Autre ou je ne sais pas", moreDetails: "Plus de détails", successBodyCall: "",
   },
   en: {
     fullName: "Full name", company: "Company", email: "Business email", phone: "Phone", preferredLanguage: "Preferred language",
@@ -26,12 +28,16 @@ const fallback = {
     rateLimited: "Too many requests in a short time. Please try again in a few minutes.", captcha: "The anti-spam check failed. Please try again.",
     reference: "Your reference", privacy: "Privacy policy", contactInfo: "Contact details", project: "Your project", langFr: "Français", langEn: "English",
     consent: "I agree that Bimurix may use this information to handle my request.",
+    requestType: "Type of request", requestTypeCall: "Book a 20-minute call", requestTypeQuote: "Request a quote",
+    package: "Package of interest", packageOther: "Other or not sure", moreDetails: "More details", successBodyCall: "",
   },
 };
 
 export type FormModel = {
   t: Record<keyof (typeof fallback)["fr"], string>;
   help: { description: string; files: string };
+  /** Forfaits visibles (code + libellé) puis « autre » ; `serviceId` sert à pré-choisir l'offre. */
+  packages: Array<Choice & { serviceId?: string }>;
   options: Record<"service" | "projectType" | "region" | "phase" | "timeline" | "budget" | "software", Choice[]>;
   privacyHref: string | null;
 };
@@ -50,12 +56,18 @@ export function buildFormModel(content: QuoteFormContent, locale: Locale): FormM
       fullName: label("fullName", fb.fullName), company: label("company", fb.company), email: label("email", fb.email), phone: label("phone", fb.phone),
       preferredLanguage: label("preferredLanguage", fb.preferredLanguage), service: label("service", fb.service), projectType: label("projectType", fb.projectType),
       region: label("region", fb.region), phase: label("phase", fb.phase), timeline: label("timeline", fb.timeline), budget: label("budget", fb.budget),
-      software: label("software", fb.software), description: label("description", fb.description), optional: label("optional", fb.optional),
+      software: label("software", fb.software), requestType: label("requestType", fb.requestType), package: label("package", fb.package), moreDetails: label("moreDetails", fb.moreDetails),
+      requestTypeCall: text("requestTypeCall", fb.requestTypeCall), requestTypeQuote: text("requestTypeQuote", fb.requestTypeQuote), packageOther: text("packageOther", fb.packageOther),
+      successBodyCall: text("successBodyCall", ""), description: label("description", fb.description), optional: label("optional", fb.optional),
       submit: label("submit", fb.submit), sending: label("sending", fb.sending), required: text("errorRequired", fb.required),
       invalidEmail: text("errorEmail", fb.invalidEmail), successTitle: text("successTitle", fb.successTitle), successBody: text("successBody", fb.successBody),
       failureTitle: text("failureTitle", fb.failureTitle), failureBody: text("failureBody", fb.failureBody), consent: text("consentText", fb.consent),
     },
     help: { description: text("descriptionHelp", ""), files: text("filesHelp", "") },
+    packages: [
+      ...packageChoices(content).map((p) => ({ value: p.code as string, label: `${p.code} — ${pick(p.title, locale, "")}`.replace(/ — $/, ""), serviceId: p.service?._id })),
+      { value: PACKAGE_OTHER, label: text("packageOther", fb.packageOther) },
+    ],
     options: {
       service: choices(serviceOptions(content)),
       projectType: choices(f.projectTypes),

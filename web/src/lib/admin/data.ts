@@ -2,10 +2,10 @@ import "server-only";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { fetchPublished } from "@/sanity/fetch";
 import { QUOTE_FORM_QUERY } from "@/sanity/queries";
-import type { QuoteFormContent } from "@/lib/quote/form-content";
+import { packageChoices, PACKAGE_OTHER, type QuoteFormContent } from "@/lib/quote/form-content";
 import type { NetworkColor } from "@/sanity/types-content";
 import type { AdminContext } from "./auth";
-import { isStatus, type QuoteStatus } from "./labels";
+import { isRequestType, isStatus, type QuoteStatus, type RequestType } from "./labels";
 
 export const PAGE_SIZE = 25;
 
@@ -19,6 +19,8 @@ export type RequestRow = {
   phone: string | null;
   locale: "fr" | "en";
   preferred_language: "fr" | "en";
+  request_type: RequestType;
+  package_code: string | null;
   service: string;
   project_type: string | null;
   region: string | null;
@@ -39,25 +41,26 @@ export type RequestRow = {
 
 export type MessageRow = { id: string; kind: "outbound" | "inbound" | "note" | "event"; subject: string | null; body: string; created_at: string; author_id: string | null };
 
-export type Filters = { status?: QuoteStatus; service?: string; q?: string; days?: number; page: number };
+export type Filters = { status?: QuoteStatus; type?: RequestType; service?: string; q?: string; days?: number; page: number };
 
 export function parseFilters(sp: Record<string, string | string[] | undefined>): Filters {
   const one = (k: string) => (typeof sp[k] === "string" ? (sp[k] as string) : undefined);
   const days = Number(one("jours"));
   const page = Math.max(1, Number(one("page")) || 1);
   const q = one("q")?.trim().slice(0, 80);
-  return { status: isStatus(one("statut")) ? (one("statut") as QuoteStatus) : undefined, service: one("service")?.slice(0, 80), q: q || undefined, days: [7, 30, 90, 365].includes(days) ? days : undefined, page };
+  return { status: isStatus(one("statut")) ? (one("statut") as QuoteStatus) : undefined, type: isRequestType(one("type")) ? (one("type") as RequestType) : undefined, service: one("service")?.slice(0, 80), q: q || undefined, days: [7, 30, 90, 365].includes(days) ? days : undefined, page };
 }
 
 /** Liste paginée (RLS : seules les données visibles par un admin reviennent). */
 export async function listRequests({ supabase }: AdminContext, f: Filters) {
   let query = supabase
     .from("quote_requests")
-    .select("id, reference, created_at, full_name, company, service, region, status, last_reply_at, anonymized_at", { count: "exact" })
+    .select("id, reference, created_at, full_name, company, request_type, package_code, service, region, status, last_reply_at, anonymized_at", { count: "exact" })
     .order("created_at", { ascending: false })
     .range((f.page - 1) * PAGE_SIZE, f.page * PAGE_SIZE - 1);
   if (f.status) query = query.eq("status", f.status);
   else query = query.neq("status", "spam");
+  if (f.type) query = query.eq("request_type", f.type);
   if (f.service) query = query.eq("service", f.service);
   if (f.days) query = query.gte("created_at", new Date(Date.now() - f.days * 86_400_000).toISOString());
   if (f.q) {
@@ -67,7 +70,7 @@ export async function listRequests({ supabase }: AdminContext, f: Filters) {
   }
   const { data, count, error } = await query;
   if (error) throw error;
-  return { rows: (data ?? []) as Array<Pick<RequestRow, "id" | "reference" | "created_at" | "full_name" | "company" | "service" | "region" | "status" | "last_reply_at" | "anonymized_at">>, total: count ?? 0 };
+  return { rows: (data ?? []) as Array<Pick<RequestRow, "id" | "reference" | "created_at" | "full_name" | "company" | "request_type" | "package_code" | "service" | "region" | "status" | "last_reply_at" | "anonymized_at">>, total: count ?? 0 };
 }
 
 export async function getRequest({ supabase }: AdminContext, id: string) {
@@ -105,5 +108,12 @@ export async function getAdminContent() {
     const options = (content?.form?.[list] as Array<{ value: string; label?: Localized }> | undefined) ?? [];
     return pick(options.find((o) => o.value === value)?.label, "fr", value);
   };
-  return { services, labelFor, templates: content?.emails?.replyTemplates ?? [], signature: content?.emails?.signature, fromEmail: content?.fromEmail, fromName: content?.emails?.fromName };
+  /** Forfait lisible : « F-01 — Titre » (forfaits publiés), « Autre » ou le code brut si le forfait a été masqué depuis. */
+  const packageLabel = (code: string | null) => {
+    if (!code) return "—";
+    if (code === PACKAGE_OTHER) return pick(content?.form?.packageOther as Localized, "fr", "Autre");
+    const found = packageChoices(content).find((p) => p.code === code);
+    return found ? `${code} — ${pick(found.title, "fr", "")}`.replace(/ — $/, "") : code;
+  };
+  return { services, labelFor, packageLabel, templates: content?.emails?.replyTemplates ?? [], signature: content?.emails?.signature, fromEmail: content?.fromEmail, fromName: content?.emails?.fromName };
 }

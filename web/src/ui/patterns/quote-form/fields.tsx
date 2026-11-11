@@ -65,7 +65,9 @@ export function TextArea(props: Base & { maxLength: number }) {
 
 export type Choice = { value: string; label: string };
 
-export function SelectField(props: Base & { options: Choice[]; defaultValue?: string; placeholder: string }) {
+export function SelectField(props: Base & { options: Choice[]; defaultValue?: string; value?: string; onValueChange?: (value: string) => void; placeholder: string }) {
+  // Contrôlé seulement si `value` est fourni (le service suit le forfait choisi).
+  const state = props.value === undefined ? { defaultValue: props.defaultValue ?? "" } : { value: props.value, onChange: (e: React.ChangeEvent<HTMLSelectElement>) => props.onValueChange?.(e.target.value) };
   return (
     <div>
       <Label {...props} />
@@ -73,7 +75,7 @@ export function SelectField(props: Base & { options: Choice[]; defaultValue?: st
         id={props.name}
         name={props.name}
         required={props.required}
-        defaultValue={props.defaultValue ?? ""}
+        {...state}
         aria-invalid={props.error ? true : undefined}
         aria-describedby={describedBy(props)}
         className={`${control} ${props.error ? "border-error" : "border-ink"}`}
@@ -88,7 +90,7 @@ export function SelectField(props: Base & { options: Choice[]; defaultValue?: st
   );
 }
 
-export function ChoiceGroup(props: Base & { options: Choice[]; type: "radio" | "checkbox"; defaultValue?: string }) {
+export function ChoiceGroup(props: Base & { options: Choice[]; type: "radio" | "checkbox"; defaultValue?: string; onValueChange?: (value: string) => void }) {
   return (
     <fieldset aria-describedby={describedBy(props)}>
       <legend className="mb-1.5 text-[15px] font-semibold text-ink">
@@ -98,7 +100,7 @@ export function ChoiceGroup(props: Base & { options: Choice[]; type: "radio" | "
       <div className="flex flex-wrap gap-2">
         {props.options.map((o) => (
           <label key={o.value} className="inline-flex min-h-11 cursor-pointer items-center gap-2 border-[1.5px] border-rule px-3 text-[15px] has-checked:border-blue has-checked:bg-paper-2">
-            <input type={props.type} name={props.name} value={o.value} defaultChecked={o.value === props.defaultValue} className="size-4 accent-(--bx-blue)" />
+            <input type={props.type} name={props.name} value={o.value} defaultChecked={o.value === props.defaultValue} onChange={props.onValueChange ? () => props.onValueChange?.(o.value) : undefined} className="size-4 accent-(--bx-blue)" />
             {o.label}
           </label>
         ))}

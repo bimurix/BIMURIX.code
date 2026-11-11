@@ -1,3 +1,4 @@
+import { emailTemplatesN5, formSettingsN5 } from "./form-n5.mts";
 import { keyed, l } from "./helpers.mts";
 
 const opt = (value: string, fr: string, en: string) => ({ value, label: l(fr, en) });
@@ -43,6 +44,7 @@ const formSettings = {
   label_optional: l("facultatif", "optional"),
   label_submit: l("Envoyer ma demande", "Send my request"),
   label_sending: l("Envoi de votre demande…", "Sending your request…"),
+  ...formSettingsN5,
   descriptionHelp: l("Disciplines concernées, état d'avancement, livrables attendus.", "Disciplines involved, project progress, expected deliverables."),
   filesHelp: l("Pour partager des fichiers, ajoutez un lien (ACC, Drive, WeTransfer) dans la description.", "To share files, add a link (ACC, Drive, WeTransfer) in the description."),
   includeServices: true,
@@ -110,6 +112,7 @@ const emailTemplates = {
   ),
   signature: l("L'équipe Bimurix\ncontact@bimurix.com", "The Bimurix team\ncontact@bimurix.com"),
   internalSubject: "Nouvelle demande : {company} — {service} ({reference})",
+  ...emailTemplatesN5,
   replyTemplates: keyed([
     {
       name: "Demande de précisions",

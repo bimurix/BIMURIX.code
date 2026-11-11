@@ -1,8 +1,8 @@
-// Variables des modèles de courriel saisis dans Studio : {name}, {company}, {service}, {reference}.
-export type TemplateVars = { name: string; company: string; service: string; reference: string };
+// Variables des modèles de courriel saisis dans Studio : {name}, {company}, {service}, {reference}, {type}, {package}.
+export type TemplateVars = { name: string; company: string; service: string; reference: string; type?: string; package?: string };
 
 export function fillTemplate(template: string, vars: TemplateVars): string {
-  return template.replace(/\{(name|company|service|reference)\}/g, (_, key: keyof TemplateVars) => vars[key]);
+  return template.replace(/\{(name|company|service|reference|type|package)\}/g, (_, key: keyof TemplateVars) => vars[key] ?? "");
 }
 
 /** Objet de courriel : une seule ligne, quelle que soit la saisie du visiteur (pas d'injection d'en-tête). */

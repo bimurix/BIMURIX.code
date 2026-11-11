@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin/auth";
 import { getAdminContent, getStats, listRequests, PAGE_SIZE, parseFilters } from "@/lib/admin/data";
-import { formatDate, STATUSES, statusLabel } from "@/lib/admin/labels";
+import { formatDate, REQUEST_TYPES, requestTypeLabel, STATUSES, statusLabel } from "@/lib/admin/labels";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
 import { StatusBadge } from "@/ui/admin/StatusBadge";
 
@@ -18,6 +18,7 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
   const pageHref = (page: number) => {
     const p = new URLSearchParams();
     if (filters.status) p.set("statut", filters.status);
+    if (filters.type) p.set("type", filters.type);
     if (filters.service) p.set("service", filters.service);
     if (filters.days) p.set("jours", String(filters.days));
     if (filters.q) p.set("q", filters.q);
@@ -45,7 +46,7 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
         ))}
       </dl>
 
-      <form method="get" className="grid gap-3 bg-paper p-4 sm:grid-cols-[2fr_1fr_1fr_1fr_auto] sm:items-end" role="search">
+      <form method="get" className="grid gap-3 bg-paper p-4 sm:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto] sm:items-end" role="search">
         <label className="text-[13px] text-ink-2">Recherche
           <input name="q" defaultValue={filters.q} placeholder="Nom, entreprise, courriel, référence" className="mt-1 block min-h-11 w-full border border-ink px-3 text-[15px] text-ink" />
         </label>
@@ -53,6 +54,12 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
           <select name="statut" defaultValue={filters.status ?? ""} className="mt-1 block min-h-11 w-full border border-ink bg-paper px-2 text-[15px] text-ink">
             <option value="">Tous (sauf indésirables)</option>
             {STATUSES.map((s) => <option key={s} value={s}>{statusLabel[s]}</option>)}
+          </select>
+        </label>
+        <label className="text-[13px] text-ink-2">Type
+          <select name="type" defaultValue={filters.type ?? ""} className="mt-1 block min-h-11 w-full border border-ink bg-paper px-2 text-[15px] text-ink">
+            <option value="">Tous</option>
+            {REQUEST_TYPES.map((t) => <option key={t} value={t}>{requestTypeLabel[t]}</option>)}
           </select>
         </label>
         <label className="text-[13px] text-ink-2">Service
@@ -71,18 +78,18 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
       </form>
 
       <div className="overflow-x-auto border-[1.5px] border-ink bg-paper">
-        <table className="w-full min-w-[760px] text-[14px]">
+        <table className="w-full min-w-[860px] text-[14px]">
           <caption className="sr-only">Demandes de soumission, les plus récentes d&apos;abord</caption>
           <thead className="border-b border-ink text-start text-[12px] text-ink-2">
             <tr>
-              {["Date", "Référence", "Client", "Service", "Région", "Statut", "Dernière réponse"].map((h) => (
+              {["Date", "Référence", "Type", "Client", "Service", "Région", "Statut", "Dernière réponse"].map((h) => (
                 <th key={h} scope="col" className="px-3 py-2 text-start font-semibold">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 && (
-              <tr><td colSpan={7} className="px-3 py-10 text-center text-ink-2">Aucune demande pour ces filtres.</td></tr>
+              <tr><td colSpan={8} className="px-3 py-10 text-center text-ink-2">Aucune demande pour ces filtres.</td></tr>
             )}
             {rows.map((r) => {
               const svc = serviceInfo.get(r.service);
@@ -90,6 +97,7 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
                 <tr key={r.id} className={`border-b border-rule hover:bg-paper-2 ${r.status === "new" ? "font-semibold" : ""}`}>
                   <td className="px-3 py-2.5 whitespace-nowrap text-ink-2">{formatDate(r.created_at)}</td>
                   <td className="px-3 py-2.5 font-mono"><Link href={`/admin/demandes/${r.id}`} className="text-blue underline-offset-4 hover:underline">{r.reference}</Link></td>
+                  <td className="px-3 py-2.5 whitespace-nowrap">{requestTypeLabel[r.request_type] ?? r.request_type}{r.package_code && <span className="block font-mono text-[13px] font-normal text-ink-2">{r.package_code}</span>}</td>
                   <td className="px-3 py-2.5 text-ink">{r.full_name}<span className="block text-[13px] font-normal text-ink-2">{r.company}</span></td>
                   <td className="px-3 py-2.5"><span className="flex items-center gap-2">{svc?.network && <NetworkSwatch network={svc.network} />}{svc?.label ?? r.service}</span></td>
                   <td className="px-3 py-2.5 text-ink-2">{r.region ? content.labelFor("regions", r.region) : "—"}</td>

@@ -21,6 +21,9 @@ export const formFieldKeys = [
   ["email", "Courriel professionnel"],
   ["phone", "Téléphone"],
   ["preferredLanguage", "Langue de communication"],
+  ["requestType", "Type de demande (titre du choix)"],
+  ["package", "Forfait visé"],
+  ["moreDetails", "Volet « Plus de détails » (demande d’appel)"],
   ["service", "Service recherché"],
   ["projectType", "Type de projet"],
   ["region", "Région du projet"],
@@ -46,6 +49,12 @@ export const formSettings = defineType({
   ],
   fields: [
     ...formFieldKeys.map(([name, title]) => defineField({ name: `label_${name}`, title, type: "localeString", group: "texts" })),
+    // decision: ADR-006 n° 7 — type de demande et forfait visé.
+    defineField({ name: "requestTypeCall", title: "Choix : appel", type: "localeString", group: "texts", description: "Ex. : Réserver un appel de 20 minutes." }),
+    defineField({ name: "requestTypeQuote", title: "Choix : soumission", type: "localeString", group: "texts", description: "Ex. : Demander une soumission." }),
+    defineField({ name: "requestTypeCallShort", title: "Nom court : appel (courriels)", type: "localeString", group: "texts", description: "Variable {type} des courriels. Ex. : Appel de 20 minutes." }),
+    defineField({ name: "requestTypeQuoteShort", title: "Nom court : soumission (courriels)", type: "localeString", group: "texts", description: "Variable {type} des courriels. Ex. : Soumission." }),
+    defineField({ name: "packageOther", title: "Forfait : « autre »", type: "localeString", group: "texts", description: "Ex. : Autre ou je ne sais pas." }),
     defineField({ name: "descriptionHelp", title: "Aide sous « Description »", type: "localeText", group: "texts" }),
     defineField({ name: "filesHelp", title: "Aide pour les fichiers", type: "localeText", group: "texts", description: "Ex. : partagez un lien (ACC, Drive, WeTransfer) dans la description." }),
 
@@ -62,6 +71,7 @@ export const formSettings = defineType({
     defineField({ name: "errorEmail", title: "Courriel invalide", type: "localeString", group: "messages" }),
     defineField({ name: "successTitle", title: "Succès : titre", type: "localeString", group: "messages" }),
     defineField({ name: "successBody", title: "Succès : texte", type: "localeText", group: "messages" }),
+    defineField({ name: "successBodyCall", title: "Succès : texte (demande d’appel)", type: "localeText", group: "messages", description: "Facultatif ; sinon le texte de succès ci-dessus est utilisé." }),
     defineField({ name: "failureTitle", title: "Échec : titre", type: "localeString", group: "messages" }),
     defineField({ name: "failureBody", title: "Échec : texte", type: "localeText", group: "messages" }),
 

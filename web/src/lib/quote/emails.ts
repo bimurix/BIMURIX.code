@@ -1,7 +1,7 @@
 import "server-only";
-import { pick } from "@/lib/i18n/pick";
+import { pick, type Localized } from "@/lib/i18n/pick";
 import type { Mailer } from "@/lib/mail/mailer";
-import { serviceOptions, type QuoteFormContent } from "./form-content";
+import { packageChoices, PACKAGE_OTHER, serviceOptions, type QuoteFormContent } from "./form-content";
 import type { QuoteInput } from "./schema";
 import type { QuoteRow } from "./submit-quote";
 import { escapeHtml, fillTemplate, oneLine, textToHtml } from "./templates";
@@ -20,6 +20,17 @@ function labelOf(content: QuoteFormContent, list: "regions" | "projectTypes" | "
   return pick(option?.label, "fr", value);
 }
 
+/** Type de demande et forfait dans la langue voulue (valeurs de secours neutres si Studio est incomplet). */
+function requestLabels(content: QuoteFormContent, input: QuoteInput, lang: "fr" | "en") {
+  const f = (content?.form ?? {}) as Record<string, Localized>;
+  const typeFallback = { call: { fr: "Appel", en: "Call" }, quote: { fr: "Soumission", en: "Quote" } }[input.requestType][lang];
+  const type = pick(input.requestType === "call" ? f.requestTypeCallShort : f.requestTypeQuoteShort, lang, typeFallback);
+  const code = input.packageCode;
+  const found = packageChoices(content).find((p) => p.code === code);
+  const pkg = !code ? "—" : code === PACKAGE_OTHER ? pick(f.packageOther, lang, "—") : `${code} — ${pick(found?.title, lang, "")}`.replace(/ — $/, "");
+  return { type, package: pkg };
+}
+
 /**
  * Notification interne (en français, pour Bimurix) puis accusé de réception au client dans sa langue.
  * Chaque envoi réussi est horodaté en base par l'appelant (markSent).
@@ -33,7 +44,9 @@ export async function sendQuoteEmails(
 ) {
   const from = { email: content?.fromEmail ?? FALLBACK_FROM, name: content?.emails?.fromName ?? "Bimurix" };
   const service = serviceOptions(content).find((o) => o.value === input.service);
-  const vars = { name: input.fullName, company: input.company, service: pick(service?.label, input.preferredLanguage, input.service), reference: row.reference };
+  const vars = { name: input.fullName, company: input.company, service: pick(service?.label, input.preferredLanguage, input.service), reference: row.reference, ...requestLabels(content, input, input.preferredLanguage) };
+  const internal = requestLabels(content, input, "fr");
+  const isCall = input.requestType === "call";
   const notifyTo = content?.form?.notificationEmail ?? FALLBACK_FROM;
 
   const lines: Array<[string, string]> = [
@@ -43,6 +56,8 @@ export async function sendQuoteEmails(
     ["Courriel", input.email],
     ["Téléphone", input.phone ?? "—"],
     ["Langue", input.preferredLanguage === "fr" ? "Français" : "English"],
+    ["Type de demande", internal.type],
+    ["Forfait visé", internal.package],
     ["Service", pick(service?.label, "fr", input.service)],
     ["Type de projet", labelOf(content, "projectTypes", input.projectType)],
     ["Région", labelOf(content, "regions", input.region)],
@@ -57,15 +72,15 @@ export async function sendQuoteEmails(
     from,
     to: { email: notifyTo },
     replyTo: input.email,
-    subject: oneLine(fillTemplate(content?.emails?.internalSubject ?? "Nouvelle demande : {company} — {service} ({reference})", vars)),
+    subject: oneLine(fillTemplate((isCall ? content?.emails?.internalSubjectCall : undefined) ?? content?.emails?.internalSubject ?? "{type} : {company} — {service} ({reference})", { ...vars, ...internal })),
     text: `${lines.map(([k, v]) => `${k} : ${v}`).join("\n")}\n\nDescription :\n${input.description}`,
     html: `<table style="font:14px Arial,sans-serif">${table}</table><h3 style="font:600 15px Arial,sans-serif">Description</h3>${textToHtml(input.description)}`,
   });
   await markSent("notification_sent_at");
 
   const lang = input.preferredLanguage;
-  const subject = oneLine(fillTemplate(pick(content?.emails?.ackSubject, lang, fallbackAck[lang].subject), vars));
-  const body = `${fillTemplate(pick(content?.emails?.ackBody, lang, fallbackAck[lang].body), vars)}\n\n${pick(content?.emails?.signature, lang, "Bimurix")}`;
+  const subject = oneLine(fillTemplate(pick((isCall ? content?.emails?.ackSubjectCall : undefined) ?? content?.emails?.ackSubject, lang, fallbackAck[lang].subject), vars));
+  const body = `${fillTemplate(pick((isCall ? content?.emails?.ackBodyCall : undefined) ?? content?.emails?.ackBody, lang, fallbackAck[lang].body), vars)}\n\n${pick(content?.emails?.signature, lang, "Bimurix")}`;
   await mailer({ from, to: { email: input.email, name: input.fullName }, replyTo: notifyTo, subject, text: body, html: textToHtml(body) });
   await markSent("ack_email_sent_at");
 }

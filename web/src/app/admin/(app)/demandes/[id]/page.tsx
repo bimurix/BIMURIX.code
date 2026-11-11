@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/auth";
 import { getAdminContent, getMessages, getRequest } from "@/lib/admin/data";
-import { formatDate } from "@/lib/admin/labels";
+import { formatDate, requestTypeLabel } from "@/lib/admin/labels";
 import { pick } from "@/lib/i18n/pick";
 import { fillTemplate } from "@/lib/quote/templates";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
@@ -26,7 +26,7 @@ export default async function RequestPage({ params }: PageProps<"/admin/demandes
 
   const svc = content.services.find((s) => s.value === request.service);
   const lang = request.preferred_language;
-  const vars = { name: request.full_name, company: request.company, service: svc?.label ?? request.service, reference: request.reference };
+  const vars = { name: request.full_name, company: request.company, service: svc?.label ?? request.service, reference: request.reference, type: requestTypeLabel[request.request_type], package: content.packageLabel(request.package_code) };
   const signature = pick(content.signature, lang, "");
   const templates = content.templates.map((t) => ({
     name: t.name,
@@ -38,6 +38,8 @@ export default async function RequestPage({ params }: PageProps<"/admin/demandes
     ["Courriel", request.anonymized_at ? "—" : <a href={`mailto:${request.email}`} className="text-blue underline underline-offset-4">{request.email}</a>],
     ["Téléphone", request.phone ? <a href={`tel:${request.phone.replace(/[^\d+]/g, "")}`} className="font-mono">{request.phone}</a> : "—"],
     ["Langue", lang === "fr" ? "Français" : "English"],
+    ["Type de demande", requestTypeLabel[request.request_type] ?? request.request_type],
+    ["Forfait visé", request.package_code ? <span key="p" className="font-mono">{content.packageLabel(request.package_code)}</span> : "—"],
     ["Service", <span key="s" className="inline-flex items-center gap-2">{svc?.network && <NetworkSwatch network={svc.network} />}{svc?.label ?? request.service}</span>],
     ["Type de projet", content.labelFor("projectTypes", request.project_type)],
     ["Région", content.labelFor("regions", request.region)],

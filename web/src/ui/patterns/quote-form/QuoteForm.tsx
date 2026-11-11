@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Script from "next/script";
 import { useSearchParams } from "next/navigation";
-import { startTransition, useActionState, useEffect, useRef } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n/locales";
 import { submitQuoteAction } from "@/lib/quote/actions";
 import type { SubmitResult } from "@/lib/quote/schema";
@@ -23,8 +23,23 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
   const params = useSearchParams();
   const formRef = useRef<HTMLFormElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
-  const preset = params.get("service") ?? undefined;
+  const presetService = params.get("service") ?? undefined;
+  // decision: ADR-006 n° 7 — ?forfait=<code> (lien d'une ligne de forfait) pré-choisit le forfait et son offre.
+  const presetCode = params.get("forfait")?.trim().toUpperCase();
+  const presetPackage = model.packages.find((p) => p.value === presetCode);
+  const [requestType, setRequestType] = useState<"call" | "quote">("call");
+  const [service, setService] = useState(() => {
+    const fromPackage = presetPackage?.serviceId;
+    const wanted = presetService ?? fromPackage;
+    return options.service.some((o) => o.value === wanted) ? (wanted as string) : "";
+  });
+  const detailsRef = useRef<HTMLDetailsElement>(null);
   const fields = state && !state.ok ? (state.fields ?? {}) : {};
+
+  // Demande d'appel : les champs de précision se replient (parcours court) ; soumission : toujours ouverts.
+  useEffect(() => {
+    if (detailsRef.current) detailsRef.current.open = requestType === "quote";
+  }, [requestType]);
 
   // Après une réponse : jeton antispam renouvelé (usage unique) et message annoncé aux lecteurs d'écran.
   useEffect(() => {
@@ -37,8 +52,8 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
     return (
       <div ref={statusRef} tabIndex={-1} role="status" className="max-w-3xl border-[1.5px] border-success p-6 outline-none sm:p-8">
         <h2 className="font-display text-2xl font-bold text-ink">{t.successTitle}</h2>
-        <p className="mt-3 text-[17px] leading-relaxed text-ink-2">{t.successBody}</p>
-        <p className="mt-4 font-mono text-[14px] text-ink">{t.reference} : <strong>{state.reference}</strong></p>
+        <p className="mt-3 text-[17px] leading-relaxed text-ink-2">{requestType === "call" && t.successBodyCall ? t.successBodyCall : t.successBody}</p>
+        <p className="mt-4 font-mono text-[14px] text-ink">{t.reference}{locale === "fr" ? " " : ""}: <strong>{state.reference}</strong></p>
       </div>
     );
   }
@@ -83,6 +98,8 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
         )}
       </div>
 
+      <ChoiceGroup {...common} name="requestType" type="radio" required label={t.requestType} defaultValue="call" onValueChange={(v) => setRequestType(v === "quote" ? "quote" : "call")} options={[{ value: "call", label: t.requestTypeCall }, { value: "quote", label: t.requestTypeQuote }]} error={err("requestType")} />
+
       <fieldset className="space-y-5">
         <legend className="font-display mb-4 text-xl font-bold text-ink">{t.contactInfo}</legend>
         <div className="grid gap-5 sm:grid-cols-2">
@@ -96,7 +113,14 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
 
       <fieldset className="space-y-5">
         <legend className="font-display mb-4 text-xl font-bold text-ink">{t.project}</legend>
-        <SelectField {...common} name="service" label={t.service} required placeholder={t.choose} options={options.service} defaultValue={options.service.some((o) => o.value === preset) ? preset : undefined} error={err("service")} />
+        <SelectField {...common} name="packageCode" label={t.package} placeholder={t.choose} options={model.packages} defaultValue={presetPackage?.value} onValueChange={(code) => {
+          const linked = model.packages.find((p) => p.value === code)?.serviceId;
+          if (linked && options.service.some((o) => o.value === linked)) setService(linked);
+        }} error={err("packageCode")} />
+        <SelectField {...common} name="service" label={t.service} required placeholder={t.choose} options={options.service} value={service} onValueChange={setService} error={err("service")} />
+        <details ref={detailsRef} className={requestType === "quote" ? "[&>summary]:hidden" : ""}>
+          <summary className="inline-flex min-h-11 cursor-pointer items-center text-[15px] font-semibold text-blue underline underline-offset-4">{t.moreDetails} ({t.optional})</summary>
+          <div className="mt-5 space-y-5">
         <div className="grid gap-5 sm:grid-cols-2">
           <SelectField {...common} name="projectType" label={t.projectType} placeholder={t.choose} options={options.projectType} error={err("projectType")} />
           <SelectField {...common} name="region" label={t.region} placeholder={t.choose} options={options.region} error={err("region")} />
@@ -105,6 +129,8 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
           <SelectField {...common} name="budget" label={t.budget} placeholder={t.choose} options={options.budget} error={err("budget")} />
         </div>
         <ChoiceGroup {...common} name="software" type="checkbox" label={t.software} options={options.software} error={err("software")} />
+          </div>
+        </details>
         <TextArea {...common} name="description" label={t.description} required maxLength={5000} help={[model.help.description, model.help.files].filter(Boolean).join(" ")} error={err("description")} />
       </fieldset>
 

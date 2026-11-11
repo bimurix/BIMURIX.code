@@ -10,6 +10,8 @@ const options = {
   timelines: ["tbd"],
   budgets: ["tbd"],
   software: ["revit", "ifc"],
+  // Forfaits visibles publiés dans Sanity (F-09 est masqué : absent de la liste) + « autre ».
+  packages: ["F-01", "F-02", "other"],
 };
 
 function validForm(extra: Record<string, string | string[]> = {}) {
@@ -20,6 +22,7 @@ function validForm(extra: Record<string, string | string[]> = {}) {
     company: "Construction ABC",
     email: "marie@abc.ca",
     preferredLanguage: "fr",
+    requestType: "quote",
     service: "service-tqc",
     region: "montreal",
     software: ["revit", "ifc"],
@@ -53,6 +56,47 @@ describe("submitQuote", () => {
     expect(res).toMatchObject({ ok: true });
     expect(d.insert).toHaveBeenCalledWith(expect.objectContaining({ email: "marie@abc.ca", software_formats: ["revit", "ifc"], consent_policy_version: "2026-11", consent_at: "2026-11-04T12:00:00.000Z" }));
     expect(d.afterInsert).toHaveBeenCalledOnce();
+  });
+
+  it("enregistre une demande d'appel avec son forfait", async () => {
+    const d = deps();
+    const res = await submitQuote(validForm({ requestType: "call", packageCode: "F-01" }), d);
+    expect(res).toMatchObject({ ok: true });
+    expect(d.insert).toHaveBeenCalledWith(expect.objectContaining({ request_type: "call", package_code: "F-01" }));
+  });
+
+  it("enregistre une soumission sans forfait (package_code nul)", async () => {
+    const d = deps();
+    await submitQuote(validForm(), d);
+    expect(d.insert).toHaveBeenCalledWith(expect.objectContaining({ request_type: "quote", package_code: null }));
+  });
+
+  it("accepte la valeur « autre » comme forfait", async () => {
+    expect(await submitQuote(validForm({ packageCode: "other" }), deps())).toMatchObject({ ok: true });
+  });
+
+  it("refuse un forfait masqué (absent des forfaits visibles)", async () => {
+    const d = deps();
+    expect(await submitQuote(validForm({ packageCode: "F-09" }), d)).toMatchObject({ ok: false, code: "VALIDATION_FAILED", fields: { packageCode: "invalid" } });
+    expect(d.insert).not.toHaveBeenCalled();
+  });
+
+  it("refuse un forfait inconnu", async () => {
+    expect(await submitQuote(validForm({ packageCode: "inventé" }), deps())).toMatchObject({ ok: false, fields: { packageCode: "invalid" } });
+  });
+
+  it("refuse un forfait si la liste des forfaits est vide (fail-closed)", async () => {
+    expect(await submitQuote(validForm({ packageCode: "F-01" }), deps({ options: async () => ({ ...options, packages: [] }) }))).toMatchObject({ ok: false, fields: { packageCode: "invalid" } });
+  });
+
+  it("refuse sans type de demande", async () => {
+    const f = validForm();
+    f.delete("requestType");
+    expect(await submitQuote(f, deps())).toMatchObject({ ok: false, code: "VALIDATION_FAILED", fields: { requestType: "required" } });
+  });
+
+  it("refuse un type de demande inconnu", async () => {
+    expect(await submitQuote(validForm({ requestType: "rendez-vous" }), deps())).toMatchObject({ ok: false, fields: { requestType: "invalid" } });
   });
 
   it("signale les champs requis vides", async () => {
@@ -119,5 +163,13 @@ describe("modèles de courriel", () => {
 
   it("produit une référence lisible", () => {
     expect(newReference()).toMatch(/^BX-[A-HJ-NP-Z2-9]{6}$/);
+  });
+});
+
+describe("modèles de courriel : type et forfait", () => {
+  it("remplace {type} et {package}, et laisse vide s'ils manquent", () => {
+    const vars = { name: "Marie", company: "", service: "", reference: "BX-1", type: "Appel", package: "F-01 — Tuyauterie" };
+    expect(fillTemplate("{type} / {package}", vars)).toBe("Appel / F-01 — Tuyauterie");
+    expect(fillTemplate("{type}|{package}", { name: "", company: "", service: "", reference: "" })).toBe("|");
   });
 });

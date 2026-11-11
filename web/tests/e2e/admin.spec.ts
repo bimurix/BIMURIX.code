@@ -97,3 +97,36 @@ test("admin : voit la demande, change le statut, ajoute une note et répond", as
   expect(data?.status).toBe("replied");
   expect(data?.last_reply_at).not.toBeNull();
 });
+
+test("admin : le type et le forfait se voient dans la liste et la fiche, et le filtre « Type » fonctionne", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "une fois par exécution");
+  const server = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, { auth: { persistSession: false } });
+  const stamp = Date.now().toString(36).slice(-5).toUpperCase();
+  const common = { locale: "fr", company: "Essai inc.", preferred_language: "fr", service: "service-tqc", description: "Demande créée par le test du filtre.", consent_at: new Date().toISOString(), consent_policy_version: "2026-11" };
+  const call = `BX-C${stamp}`;
+  const quote = `BX-Q${stamp}`;
+  const { error } = await server.from("quote_requests").insert([
+    { ...common, reference: call, full_name: "Client Appel", email: `appel-${stamp}@example.com`, request_type: "call", package_code: "F-01" },
+    { ...common, reference: quote, full_name: "Client Soumission", email: `soum-${stamp}@example.com`, request_type: "quote", package_code: null },
+  ]);
+  expect(error).toBeNull();
+
+  await magicLogin(page, ADMIN);
+  const row = (ref: string) => page.getByRole("row").filter({ hasText: ref });
+  await expect(row(call)).toContainText("Appel");
+  await expect(row(call)).toContainText("F-01");
+  await expect(row(quote)).toContainText("Soumission");
+
+  await page.goto(`/admin?type=call&q=${stamp}`);
+  await expect(row(call)).toBeVisible();
+  await expect(row(quote)).toHaveCount(0);
+  await page.goto(`/admin?type=quote&q=${stamp}`);
+  await expect(row(quote)).toBeVisible();
+  await expect(row(call)).toHaveCount(0);
+
+  await page.goto(`/admin?q=${call}`);
+  await page.getByRole("link", { name: call }).click();
+  await expect(page.getByRole("heading", { name: "Client Appel" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("Type de demande")).toBeVisible();
+  await expect(page.getByRole("definition").filter({ hasText: "F-01" })).toBeVisible();
+});

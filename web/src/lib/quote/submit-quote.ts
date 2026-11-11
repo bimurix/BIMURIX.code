@@ -9,6 +9,8 @@ export type QuoteRow = {
   email: string;
   phone: string | null;
   preferred_language: "fr" | "en";
+  request_type: "call" | "quote";
+  package_code: string | null;
   service: string;
   project_type: string | null;
   region: string | null;
@@ -25,6 +27,7 @@ export type QuoteRow = {
 
 export type AllowedOptions = {
   services: string[];
+  packages: string[];
   projectTypes: string[];
   regions: string[];
   phases: string[];
@@ -52,6 +55,7 @@ function outsideOptions(input: QuoteInput, opts: AllowedOptions): (keyof QuoteIn
   const bad: (keyof QuoteInput)[] = [];
   const check = (key: keyof QuoteInput, value: string | undefined, list: string[]) => value && !list.includes(value) && bad.push(key);
   if (!opts.services.includes(input.service)) bad.push("service");
+  check("packageCode", input.packageCode, opts.packages);
   check("projectType", input.projectType, opts.projectTypes);
   check("region", input.region, opts.regions);
   check("phase", input.phase, opts.phases);
@@ -103,6 +107,8 @@ function toRow(input: QuoteInput, deps: SubmitDeps): Omit<QuoteRow, "reference">
     email: input.email,
     phone: input.phone ?? null,
     preferred_language: input.preferredLanguage,
+    request_type: input.requestType,
+    package_code: input.packageCode ?? null,
     service: input.service,
     project_type: input.projectType ?? null,
     region: input.region ?? null,

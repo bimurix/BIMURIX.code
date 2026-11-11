@@ -22,6 +22,15 @@ export const statusTone: Record<QuoteStatus, string> = {
   spam: "bg-paper-2 text-error",
 };
 
+// decision: ADR-006 n° 7 — type de demande (appel de 20 minutes ou soumission).
+export const REQUEST_TYPES = ["call", "quote"] as const;
+export type RequestType = (typeof REQUEST_TYPES)[number];
+export const requestTypeLabel: Record<RequestType, string> = { call: "Appel", quote: "Soumission" };
+
+export function isRequestType(value: unknown): value is RequestType {
+  return typeof value === "string" && (REQUEST_TYPES as readonly string[]).includes(value);
+}
+
 export function isStatus(value: unknown): value is QuoteStatus {
   return typeof value === "string" && (STATUSES as readonly string[]).includes(value);
 }
