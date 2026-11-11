@@ -112,3 +112,20 @@ test("demande complète : enregistrée, référence affichée, 2 courriels dans 
     expect(messages.some((m) => m.To.some((t) => t.Address === email))).toBe(true);
   }).toPass({ timeout: 15_000 });
 });
+
+// N6 : sur une connexion lente, le formulaire est affiché avant que son script soit chargé. Un clic sur « Envoyer » ne faisait
+// alors rien, et la touche Entrée envoyait les renseignements du visiteur dans l'adresse de la page (formulaire GET).
+// Le bouton reste inactif tant que le formulaire n'est pas prêt, puis s'active.
+test("connexion lente : le bouton d'envoi est inactif jusqu'au chargement du script, puis actif", async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => (release = resolve));
+  await page.route("**/_next/static/**/*.js", async (route) => {
+    await gate;
+    await route.continue();
+  });
+  await page.goto("/soumission", { waitUntil: "domcontentloaded" });
+  const button = page.getByRole("button", { name: "Envoyer ma demande" });
+  await expect(button).toBeDisabled();
+  release();
+  await expect(button).toBeEnabled({ timeout: 20_000 });
+});

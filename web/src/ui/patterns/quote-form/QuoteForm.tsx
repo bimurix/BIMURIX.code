@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Script from "next/script";
 import { useSearchParams } from "next/navigation";
-import { startTransition, useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Locale } from "@/lib/i18n/locales";
 import { submitQuoteAction } from "@/lib/quote/actions";
 import type { SubmitResult } from "@/lib/quote/schema";
@@ -16,10 +16,15 @@ declare global {
 
 type Props = { model: FormModel; locale: Locale; siteKey?: string };
 
+const noop = () => () => {};
+/** Faux côté serveur et à l'hydratation, vrai ensuite : le bouton d'envoi reste inactif tant que le formulaire n'est pas prêt (N6). */
+const useHydrated = () => useSyncExternalStore(noop, () => true, () => false);
+
 /** Formulaire de soumission (îlot client). Le succès ne s'affiche qu'après l'enregistrement réel en base. */
 export function QuoteForm({ model, locale, siteKey }: Props) {
   const { t, options } = model;
   const [state, dispatch, pending] = useActionState<SubmitResult | null, FormData>(submitQuoteAction, null);
+  const hydrated = useHydrated();
   const params = useSearchParams();
   const formRef = useRef<HTMLFormElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -151,7 +156,7 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
           </>
         )}
 
-        <button type="submit" disabled={pending} className="inline-flex min-h-12 w-full items-center justify-center bg-blue px-6 text-[16px] font-semibold text-paper hover:bg-blue-deep disabled:opacity-60 sm:w-auto">
+        <button type="submit" disabled={pending || !hydrated} className="inline-flex min-h-12 w-full items-center justify-center bg-blue px-6 text-[16px] font-semibold text-paper hover:bg-blue-deep disabled:opacity-60 sm:w-auto">
           {pending ? t.sending : t.submit}
         </button>
       </div>
