@@ -13,14 +13,18 @@ export const structure: StructureResolver = (S) =>
         .title("Pages")
         .child(S.documentTypeList("page").title("Pages")),
       S.listItem()
-        .title("Services")
-        .child(S.documentTypeList("service").title("Services").defaultOrdering([{ field: "order", direction: "asc" }])),
+        .title("Offres")
+        .child(S.documentTypeList("service").title("Offres").defaultOrdering([{ field: "order", direction: "asc" }])),
+      S.listItem()
+        .title("Forfaits")
+        .child(S.documentTypeList("package").title("Forfaits").defaultOrdering([{ field: "order", direction: "asc" }])),
       S.divider(),
       singleton(S, "settings", "Identité et coordonnées"),
       singleton(S, "navigation", "Menu principal"),
       singleton(S, "footer", "Pied de page"),
       singleton(S, "uiStrings", "Petits textes du site"),
       S.divider(),
+      singleton(S, "launchSettings", "Lancement et conditions"),
       singleton(S, "formSettings", "Formulaire de soumission"),
       singleton(S, "emailTemplates", "Courriels"),
       S.divider(),

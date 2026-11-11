@@ -1,5 +1,8 @@
 import type { Localized } from "@/lib/i18n/pick";
 import type { RouteTarget, SanityLink } from "@/lib/links";
+import type { PackageData } from "@/lib/packages/packages";
+
+export type { PackageData, PriceMode } from "@/lib/packages/packages";
 
 // Types des données lues par SHELL_QUERY et HOME_QUERY (projection GROQ, pas les documents bruts).
 export type NetworkColor = "plumb" | "heat" | "data" | "tqc";
@@ -10,6 +13,8 @@ export type Cta = { _key?: string; label?: Localized; style?: "primary" | "secon
 
 export type ServiceSummary = RouteTarget & {
   _id: string;
+  /** Faux = offre masquée ; absent = visible (ADR-006 n° 4). */
+  visible?: boolean | null;
   code?: string;
   network?: NetworkColor;
   title?: Localized;
@@ -42,3 +47,16 @@ export type Shell = {
 } | null;
 
 export type TitleBlockData = { sheet?: string; revision?: string; date?: string } | null | undefined;
+
+/** Réglage « Lancement et conditions » (document unique `launchSettings`). */
+export type LaunchSettings = {
+  bannerEnabled?: boolean | null;
+  bannerText?: Localized;
+  deadline?: string | null;
+  taxNote?: Localized;
+  creditText?: Localized;
+  conditions?: Array<{ _key: string; title?: Localized; text?: Localized }> | null;
+  professionalNote?: Localized;
+} | null;
+
+export type PackageList = PackageData[];

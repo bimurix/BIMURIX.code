@@ -4,12 +4,15 @@ import { pick } from "@/lib/i18n/pick";
 import { pathFor } from "@/lib/links";
 import type { Shell, TitleBlockData } from "@/sanity/types-content";
 import type { IsoRun } from "@/ui/patterns/IsoNetworks";
+import { Conditions, type ConditionsData } from "./conditions/Conditions";
 import { Deliverables, type DeliverablesData } from "./deliverables/Deliverables";
 import { Faq, type FaqData } from "./faq/Faq";
 import { HeroSheet, type HeroSheetData } from "./hero-sheet/HeroSheet";
 import { ImageFigure, type ImageFigureData } from "./image-figure/ImageFigure";
 import { Method, type MethodData } from "./method/Method";
+import { Packages, type PackagesData } from "./packages/Packages";
 import { PointsList, type PointsListData } from "./points-list/PointsList";
+import { Proof, type ProofData } from "./proof/Proof";
 import { QuoteCta, type QuoteCtaData } from "./quote-cta/QuoteCta";
 import { QuoteFormBlock, type QuoteFormData } from "./quote-form/QuoteFormBlock";
 import { RichText, type RichTextData } from "./rich-text/RichText";
@@ -62,6 +65,12 @@ function renderSection(section: Section, ctx: RenderContext) {
       return <ImageFigure data={section as ImageFigureData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "") || undefined} />;
     case "quoteForm":
       return <QuoteFormBlock data={section as QuoteFormData} locale={locale} />;
+    case "packages":
+      return <Packages data={section as PackagesData} locale={locale} />;
+    case "conditions":
+      return <Conditions data={section as ConditionsData} locale={locale} />;
+    case "proof":
+      return <Proof data={section as ProofData} locale={locale} />;
     default:
       return null;
   }

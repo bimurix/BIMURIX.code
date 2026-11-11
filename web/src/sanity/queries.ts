@@ -1,7 +1,7 @@
 import { defineQuery } from "next-sanity";
 
 // Fragments réutilisés : un lien résout sa cible (type, kind, adresse FR/EN) pour construire l'URL.
-const link = `{kind, external, email, "internal": internal->{_type, kind, slug}, "serviceId": service->_id}`;
+const link = `{kind, external, email, "internal": select(internal->visible == false => null, internal->{_type, kind, slug}), "serviceId": service->_id}`;
 const cta = `{label, style, "link": link${link}}`;
 const asset = `asset->{url, "width": metadata.dimensions.width, "height": metadata.dimensions.height}`;
 const image = `{alt, illustrative, ${asset}}`;
@@ -12,10 +12,18 @@ const sections = `sections[]{
   _type == "heroSheet" => { ..., ctas[]{_key, ...${cta}}, "illustration": illustration${image} },
   _type == "serviceNetworks" => {
     ...,
-    "services": coalesce(services[]->, *[_type == "service"] | order(order asc))[]{
+    "services": coalesce(services[]->, *[_type == "service"] | order(order asc))[visible != false]{
       _id, _type, code, network, title, slug, cardTitle, cardText, cardLinkLabel
     }
   },
+  _type == "packages" => {
+    ...,
+    "taxNote": *[_id == "launchSettings"][0].taxNote,
+    "packages": *[_type == "package" && visible != false && defined(service) && service->visible != false && (!defined(^.service) || service._ref == ^.service._ref)] | order(order asc){
+      _id, code, title, priceMode, price, scope, leadTimeDays, inclusions, highlighted, visible, order, "service": service->{_id, visible}
+    }
+  },
+  _type == "conditions" => { ..., "launch": *[_id == "launchSettings"][0]{deadline, creditText, conditions, professionalNote} },
   _type == "deliverables" => { ..., items[]{..., "image": image${image}} },
   _type == "imageFigure" => { ..., "image": image${image} },
   _type == "quoteCta" => { ..., "button": button${cta} },
@@ -35,9 +43,9 @@ export const SHELL_QUERY = defineQuery(`{
   },
   "footer": *[_id == "footer"][0]{ blurb, copyright, columns[]{_key, title, links[]{_key, ...${cta}}} },
   "ui": *[_id == "uiStrings"][0],
-  "services": *[_type == "service"] | order(order asc){_id, _type, code, network, title, slug, cardTitle},
+  "services": *[_type == "service" && visible != false] | order(order asc){_id, _type, code, network, title, slug, cardTitle},
   "quotePage": *[_type == "page" && kind == "quote"][0]{_type, kind, slug},
-  "routes": *[_type in ["page", "service"] && (defined(slug.fr) || kind == "home")]{_type, kind, slug, "noIndex": seo.noIndex, _updatedAt}
+  "routes": *[_type in ["page", "service"] && visible != false && (defined(slug.fr) || kind == "home")]{_type, kind, slug, "noIndex": seo.noIndex, _updatedAt}
 }`);
 
 export const HOME_QUERY = defineQuery(`*[_type == "page" && kind == "home"][0]{
@@ -49,7 +57,7 @@ export const NOT_FOUND_QUERY = defineQuery(`*[_type == "page" && kind == "notFou
 }`);
 
 // Une page ou un service selon son adresse dans la langue demandée (ex. « services/prefabrication-mep »).
-export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"] && slug[$locale] == $slug][0]{
+export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"] && visible != false && slug[$locale] == $slug][0]{
   _id, _type, kind, title, slug, titleBlock, updatedLabel, ${seo},
   _type == "page" => { ${sections} },
   _type == "service" => {
@@ -64,10 +72,10 @@ export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"
 export const QUOTE_FORM_QUERY = defineQuery(`{
   "form": *[_id == "formSettings"][0],
   "emails": *[_id == "emailTemplates"][0],
-  "services": *[_type == "service"] | order(order asc){_id, title, code, network},
+  "services": *[_type == "service" && visible != false] | order(order asc){_id, title, code, network},
   "privacyPage": *[_type == "page" && kind == "privacy"][0]{_type, kind, slug},
   "fromEmail": *[_id == "settings"][0].email
 }`);
 
 // Adresses à pré-générer : une entrée par document et par langue disponible.
-export const SLUGS_QUERY = defineQuery(`*[_type in ["page", "service"] && defined(slug.fr)]{ "fr": slug.fr, "en": slug.en }`);
+export const SLUGS_QUERY = defineQuery(`*[_type in ["page", "service"] && visible != false && defined(slug.fr)]{ "fr": slug.fr, "en": slug.en }`);

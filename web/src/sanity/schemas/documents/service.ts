@@ -14,7 +14,7 @@ const titledText = (name: string) =>
 
 export const service = defineType({
   name: "service",
-  title: "Service",
+  title: "Offre",
   type: "document",
   groups: [
     { name: "card", title: "Carte et réseau", default: true },
@@ -23,6 +23,8 @@ export const service = defineType({
   ],
   orderings: [{ title: "Ordre d'affichage", name: "order", by: [{ field: "order", direction: "asc" }] }],
   fields: [
+    // decision: ADR-006 n° 4 — masquer une offre sans la supprimer (menu, accueil, plan du site, adresse en 404).
+    defineField({ name: "visible", title: "Affichée sur le site", type: "boolean", group: "card", initialValue: true, description: "Décochée : l'offre disparaît du menu, de l'accueil et du plan du site, et son adresse n'existe plus. Le contenu est conservé." }),
     defineField({ name: "title", title: "Nom du service", type: "localeString", group: "card", validation: requireFr }),
     defineField({ name: "slug", title: "Adresse", type: "localeSlug", group: "card", validation: requireFr }),
     defineField({ name: "code", title: "Code de réseau", type: "string", group: "card", description: "Ex. : P-01. Affiché sur l'isométrique.", validation: (r) => r.required().max(6) }),
@@ -33,6 +35,8 @@ export const service = defineType({
     defineField({ name: "cardLinkLabel", title: "Libellé du lien", type: "localeString", group: "card" }),
 
     defineField({ name: "heroHeading", title: "Titre principal (H1)", type: "localeString", group: "page", validation: requireFr }),
+    defineField({ name: "audience", title: "Pour qui", type: "localeText", group: "page", description: "À qui s'adresse cette offre." }),
+    defineField({ name: "responsibilityNote", title: "Qui signe", type: "localeText", group: "page", description: "Conception, calculs, approbation, signature et sceau restent à l'ingénieur ou à l'entrepreneur." }),
     defineField({ name: "heroIntro", title: "Introduction", type: "localeText", group: "page" }),
     defineField({ name: "heroCta", title: "Bouton du haut", type: "cta", group: "page" }),
     defineField({ name: "heroImage", title: "Image ou extrait de modèle", type: "imageWithAlt", group: "page" }),
@@ -53,5 +57,8 @@ export const service = defineType({
 
     defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),
   ],
-  preview: { select: { title: "title.fr", subtitle: "code" } },
+  preview: {
+    select: { title: "title.fr", code: "code", visible: "visible" },
+    prepare: ({ title, code, visible }: { title?: string; code?: string; visible?: boolean }) => ({ title, subtitle: [code, visible === false ? "masquée" : null].filter(Boolean).join(" · ") }),
+  },
 });
