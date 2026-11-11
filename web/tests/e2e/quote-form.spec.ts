@@ -81,7 +81,7 @@ test("demande complète : enregistrée, référence affichée, 2 courriels dans 
   // ne bloque pas les exécutions répétées. Sur Netlify, seul l'en-tête de Netlify compte.
   await page.setExtraHTTPHeaders({ "x-forwarded-for": `10.0.${Date.now() % 250}.${Math.floor(Math.random() * 250)}` });
 
-  await page.goto("/soumission?service=service-tqc");
+  await page.goto("/soumission?service=service-gicleurs");
   // Le clic peut précéder l'hydratation : on réessaie jusqu'à l'ouverture des champs de précision.
   await expect(async () => {
     // On alterne les deux choix : un clic arrivé avant l'hydratation est perdu, le suivant sera pris en compte.
@@ -94,7 +94,7 @@ test("demande complète : enregistrée, référence affichée, 2 courriels dans 
   await page.locator("#email").fill(email);
   await page.locator("#region").selectOption("montreal");
   await page.getByLabel("Revit").check();
-  await page.locator("#description").fill("Demande de test automatisée : mise à jour TQC.");
+  await page.locator("#description").fill("Demande de test automatisée : dessins de gicleurs.");
   await page.locator('input[name="consent"]').check();
   // Clé de test Turnstile : le jeton factice arrive en quelques instants.
   await expect(page.locator('input[name="cf-turnstile-response"]')).not.toHaveValue("", { timeout: 15_000 });

@@ -1,7 +1,7 @@
 import { internalCta, keyed, l, ref } from "./helpers.mts";
 import { uiStringsN3 } from "./ui-strings-n3.mts";
 
-// Valeurs génériques marquées « (exemple) » ou 555 : à remplacer dans Studio (decision: D12).
+// N4 — coordonnées : ADR-006 n° 14 à 18 (courriel réel ; téléphone, NEQ et nom légal non saisis : le site n'affiche rien).
 const settings = {
   _id: "settings",
   _type: "settings",
@@ -9,19 +9,16 @@ const settings = {
   wordmark: "bimurix",
   logoAlt: l("Bimurix", "Bimurix"),
   tagline: l("Structure. Numérisez. Avancez.", "Structure. Digitalize. Advance."),
-  descriptor: l("Services BIM et construction numérique pour l'industrie de la construction.", "BIM and digital construction services for the construction industry."),
+  descriptor: l("Préfabrication MEP et données BIM 7D pour les entrepreneurs du Grand Montréal.", "MEP prefabrication and BIM 7D data for contractors in Greater Montreal."),
   email: "contact@bimurix.com",
-  phone: "514 555-0100",
-  serviceArea: l("Québec (exemple)", "Quebec (example)"),
-  neq: "1234567890",
-  legalName: "Bimurix inc. (exemple)",
-  privacyOfficer: "Direction générale (exemple)",
+  serviceArea: l("Grand Montréal", "Greater Montreal"),
+  privacyOfficer: "Fondateur de Bimurix",
   privacyEmail: "contact@bimurix.com",
   retentionMonths: 24,
   titleTemplate: l("%s | Bimurix", "%s | Bimurix"),
   defaultSeo: {
-    title: l("Services BIM au Québec | Bimurix", "BIM services in Quebec | Bimurix"),
-    description: l("Modélisation, coordination, préfabrication MEP, BIM 7D et TQC pour les équipes de construction au Québec.", "Modelling, coordination, MEP prefabrication, BIM 7D and as-built for construction teams in Quebec."),
+    title: l("Préfabrication de tuyauterie et de gicleurs, BIM 7D | Bimurix", "Piping and sprinkler prefabrication, BIM 7D | Bimurix"),
+    description: l("Forfaits à prix fixe pour préfabriquer votre tuyauterie et vos gicleurs en atelier, et pour auditer les données de votre modèle BIM 7D. Grand Montréal.", "Fixed-price packages to prefabricate your piping and sprinklers in the shop and to audit your BIM 7D model data. Greater Montreal."),
   },
 };
 
@@ -29,11 +26,12 @@ const navigation = {
   _id: "navigation",
   _type: "navigation",
   items: keyed([
-    { label: l("Services", "Services"), listServices: true, link: { kind: "external", external: "/#services" } },
+    { label: l("Offres", "Offers"), listServices: true, link: { kind: "external", external: "/#services" } },
+    { label: l("Forfaits", "Packages"), link: { kind: "external", external: "/#forfaits" } },
     { label: l("À propos", "About"), link: { kind: "internal", internal: ref("page-about") } },
     { label: l("Contact", "Contact"), link: { kind: "internal", internal: ref("page-quote") } },
   ]),
-  cta: internalCta(l("Demander une soumission", "Request a quote"), "page-quote"),
+  cta: internalCta(l("Réserver un appel", "Book a call"), "page-quote"),
   languageLabel: l("English", "Français"),
 };
 
@@ -41,8 +39,8 @@ const footer = {
   _id: "footer",
   _type: "footer",
   blurb: l(
-    "Services BIM et construction numérique pour la modélisation, la coordination, la préfabrication MEP, les données d'actifs et la documentation TQC.",
-    "BIM and digital construction services for modelling, coordination, MEP prefabrication, asset data and as-built documentation.",
+    "Préfabrication de tuyauterie et de gicleurs, coordination et données BIM 7D pour les entrepreneurs du Grand Montréal.",
+    "Piping and sprinkler prefabrication, coordination and BIM 7D data for contractors in Greater Montreal.",
   ),
   columns: keyed([
     {
@@ -50,7 +48,16 @@ const footer = {
       links: keyed([
         internalCta(l("Accueil", "Home"), "page-home", "secondary"),
         internalCta(l("À propos", "About"), "page-about", "secondary"),
-        internalCta(l("Demander une soumission", "Request a quote"), "page-quote", "secondary"),
+        internalCta(l("Réserver un appel", "Book a call"), "page-quote", "secondary"),
+      ]),
+    },
+    {
+      title: l("Offres", "Offers"),
+      links: keyed([
+        internalCta(l("Tuyauterie mécanique", "Mechanical piping"), "service-prefabrication", "secondary"),
+        internalCta(l("Gicleurs", "Sprinklers"), "service-gicleurs", "secondary"),
+        internalCta(l("Tuyauterie et gicleurs", "Piping and sprinklers"), "service-combinee", "secondary"),
+        internalCta(l("BIM 7D", "BIM 7D"), "service-bim-7d", "secondary"),
       ]),
     },
     {
@@ -68,13 +75,13 @@ const uiStrings = {
   _id: "uiStrings",
   _type: "uiStrings",
   requestQuote: l("Demander une soumission", "Request a quote"),
-  discoverServices: l("Découvrir nos services", "Explore our services"),
+  discoverServices: l("Voir les forfaits", "See the packages"),
   learnMore: l("En savoir plus", "Learn more"),
   menu: l("Menu", "Menu"),
   closeMenu: l("Fermer le menu", "Close menu"),
-  services: l("Services", "Services"),
+  services: l("Offres", "Offers"),
   skipToContent: l("Aller au contenu", "Skip to content"),
-  networkHint: l("Choisissez un réseau pour demander une soumission sur ce service.", "Pick a network to request a quote for that service."),
+  networkHint: l("Choisissez une offre pour réserver un appel.", "Pick an offer to book a call."),
   illustrativeExample: l("Exemple illustratif", "Illustrative example"),
   sheet: l("Feuille", "Sheet"),
   revision: l("Révision", "Revision"),

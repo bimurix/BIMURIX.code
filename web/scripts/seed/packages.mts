@@ -4,9 +4,11 @@ import { keyed, l, ref } from "./helpers.mts";
 // decision: ADR-006 n° 2 — seuls les 5 forfaits d'entrée à prix confirmé sont saisis comme forfaits.
 // decision: ADR-006 n° 3 — « hypothèse à valider » (60 $/spool, implantation, rack multi-métiers, conformité 7D,
 // tarifs réguliers, garantie) : aucun forfait, aucun montant dans les conditions.
-// Rattachement provisoire aux offres existantes ; l'étape N4 crée les 4 offres définitives et rattache les forfaits.
+// N4 : chaque forfait est rattaché à son offre ; un seul forfait mis en avant (l'offre combinée).
 
 const prefab = "service-prefabrication";
+const sprinkler = "service-gicleurs";
+const combined = "service-combinee";
 const sevenD = "service-bim-7d";
 
 const pkg = (n: number, fields: Record<string, unknown>) => ({
@@ -27,7 +29,6 @@ export const packageDocs = [
     price: 1800,
     scope: l("Jusqu'à 30 spools ou 150 m (500 pi) de tuyauterie d'une discipline", "Up to 30 spools or 150 m (500 ft) of piping, one discipline"),
     leadTimeDays: 5,
-    highlighted: true,
     inclusions: keyed([
       l("Modélisation en LOD 400", "LOD 400 modelling"),
       l("Dessins de spool", "Spool drawings"),
@@ -49,7 +50,7 @@ export const packageDocs = [
   }),
   pkg(3, {
     title: l("Un étage de gicleurs", "One floor of sprinklers"),
-    service: ref(prefab),
+    service: ref(sprinkler),
     price: 1500,
     scope: l("Un étage jusqu'à 10 000 pi²", "One floor up to 10,000 sq. ft"),
     leadTimeDays: 5,
@@ -61,10 +62,11 @@ export const packageDocs = [
   }),
   pkg(4, {
     title: l("Tuyauterie et gicleurs coordonnés", "Coordinated piping and sprinklers"),
-    service: ref(prefab),
+    service: ref(combined),
     price: 2800,
     scope: l("Une zone modélisée dans les deux disciplines", "One zone modelled in both disciplines"),
     leadTimeDays: 7,
+    highlighted: true,
     inclusions: keyed([
       l("Conflits réglés avant la fabrication", "Clashes resolved before fabrication"),
       l("Dessins d'atelier des deux disciplines", "Shop drawings for both disciplines"),
@@ -82,12 +84,12 @@ export const packageDocs = [
   }),
 ];
 
-// Valeurs manquantes marquées « (exemple) » : date limite et texte du bandeau, à confirmer par le client.
+// ADR-006 n° 13 : aucune date limite pour l'instant (champ `deadline` absent, aucune date affichée).
 export const launchSettingsDoc = {
   _id: "launchSettings",
   _type: "launchSettings",
-  bannerEnabled: false,
-  bannerText: l("Forfaits de lancement pendant 60 jours (exemple)", "Launch packages for 60 days (example)"),
+  bannerEnabled: true,
+  bannerText: l("Forfaits de lancement à prix fixe", "Fixed-price launch packages"),
   taxNote: l("Prix en dollars canadiens, avant TPS et TVQ.", "Prices in Canadian dollars, before GST and QST."),
   creditText: l(
     "Le montant du forfait est déduit si vous commandez le reste du projet dans les 60 jours (exemple : 12 000 $ − 1 800 $ = 10 200 $).",
@@ -98,7 +100,7 @@ export const launchSettingsDoc = {
     { title: l("Portée gicleurs", "Sprinkler scope"), text: l("Un étage jusqu'à 10 000 pi². Au-delà : au nombre de têtes, sur soumission.", "One floor up to 10,000 sq. ft. Beyond that: by head count, on quote.") },
     { title: l("Crédit", "Credit"), text: l("Une seule fois, même client, nouvelle commande supérieure au montant du forfait. Non remboursable, non transférable.", "One time only, same client, for a new order larger than the package price. Non-refundable and non-transferable.") },
     { title: l("Documents requis", "Required documents"), text: l("Dessins d'atelier approuvés, modèle de l'ingénieur ou plans, fabricants retenus (raccords, vannes, supports) et standards de l'atelier. Pour la 7D : modèle, convention de codification et livrables de dessins d'atelier.", "Approved shop drawings, the engineer's model or drawings, selected manufacturers (fittings, valves, hangers) and shop standards. For 7D: the model, the coding convention and the shop drawing deliverables.") },
-    { title: l("Délai", "Lead time"), text: l("5 jours ouvrables pour la zone pilote, le skid standard et les gicleurs, 7 pour l'offre combinée, à partir de documents complets.", "5 business days for the pilot zone, standard skid and sprinklers, 7 for the combined offer, from complete documents.") },
+    { title: l("Délai", "Lead time"), text: l("5 jours ouvrables pour la zone pilote, le skid standard et les gicleurs, 7 pour l'offre combinée, 3 pour l'audit 7D, à partir de documents complets.", "5 business days for the pilot zone, standard skid and sprinklers, 7 for the combined offer, 3 for the 7D audit, from complete documents.") },
     { title: l("Révisions", "Revisions"), text: l("Une ronde de commentaires incluse. Modifications après approbation : 100 $/h, sur accord préalable.", "One round of comments included. Changes after approval: $100/h, by prior agreement.") },
     { title: l("Paiement", "Payment"), text: l("50 % à la commande, 50 % à la livraison, net 15 jours.", "50% at order, 50% on delivery, net 15 days.") },
     { title: l("Exclusions", "Exclusions"), text: l("Conception et calculs d'ingénierie (y compris parasismique), approbation, signature et sceau des dessins.", "Engineering design and calculations (including seismic), approval, signature and seal of the drawings.") },

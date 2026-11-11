@@ -9,13 +9,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createClient, type IdentifiedSanityDocumentStub } from "@sanity/client";
-import { formAndEmails } from "./seed/form-and-emails.mts";
-import { legalPages } from "./seed/legal.mts";
-import { launchSettingsDoc, packageDocs } from "./seed/packages.mts";
-import { pages } from "./seed/pages.mts";
-import { services1 } from "./seed/services-1.mts";
-import { services2 } from "./seed/services-2.mts";
-import { singletons } from "./seed/singletons.mts";
+import { seedDocuments } from "./seed/documents.mts";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "49ul0nhr";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
@@ -43,7 +37,7 @@ async function getClient() {
 }
 
 const client = await getClient();
-const documents: IdentifiedSanityDocumentStub[] = [...singletons, ...formAndEmails, ...services1, ...services2, ...packageDocs, launchSettingsDoc, ...pages, ...legalPages];
+const documents: IdentifiedSanityDocumentStub[] = seedDocuments;
 
 // Cible réelle du client (pas seulement la variable d'environnement) : on n'écrit jamais ailleurs que prévu.
 const target = client.config();

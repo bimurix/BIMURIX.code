@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 // Accessibilité automatique (WCAG 2.1 A/AA) sur chaque gabarit, mobile et bureau.
 // axe ne remplace pas un test au lecteur d'écran, mais bloque les régressions mesurables.
-const pages = ["/", "/en", "/a-propos", "/soumission", "/services/prefabrication-mep", "/en/services/as-built-quality-control", "/confidentialite", "/page-inexistante", "/admin/connexion"];
+const pages = ["/", "/en", "/en/about", "/a-propos", "/soumission", "/services/prefabrication-tuyauterie", "/en/services/coordinated-piping-sprinklers", "/services/bim-7d-donnees-actifs", "/confidentialite", "/page-inexistante", "/admin/connexion"];
 
 for (const path of pages) {
   test(`axe WCAG AA : ${path}`, async ({ page }) => {

@@ -6,7 +6,7 @@ import { block, l, pt } from "./helpers.mts";
 const privacyFr = pt([
   ["normal", "Ce texte est un modèle de départ à faire valider avant la mise en ligne."],
   ["h2", "1. Responsable"],
-  ["normal", "Bimurix est responsable des renseignements personnels recueillis par ce site. Responsable de la protection des renseignements personnels : Direction générale (exemple), contact@bimurix.com."],
+  ["normal", "Bimurix est responsable des renseignements personnels recueillis par ce site. Responsable de la protection des renseignements personnels : Fondateur de Bimurix, contact@bimurix.com."],
   ["h2", "2. Renseignements recueillis"],
   ["normal", "Par le formulaire de soumission : nom, entreprise, courriel professionnel, téléphone (facultatif), langue de communication et informations sur votre projet. Nous ne demandons que ce qui est nécessaire au traitement de votre demande."],
   ["h2", "3. Finalités"],
@@ -32,7 +32,7 @@ const privacyFr = pt([
 const privacyEn = pt([
   ["normal", "This text is a starting template to be validated before launch."],
   ["h2", "1. Responsible party"],
-  ["normal", "Bimurix is responsible for the personal information collected through this site. Person in charge of personal information protection: General management (example), contact@bimurix.com."],
+  ["normal", "Bimurix is responsible for the personal information collected through this site. Person in charge of personal information protection: Founder of Bimurix, contact@bimurix.com."],
   ["h2", "2. Information collected"],
   ["normal", "Through the quote form: name, company, business email, phone (optional), preferred language and information about your project. We only ask for what is needed to handle your request."],
   ["h2", "3. Purposes"],

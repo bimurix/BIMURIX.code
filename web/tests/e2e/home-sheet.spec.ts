@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// Ces tests lisent le contenu publié dans Sanity (dataset production, contenu de départ).
+// Ces tests lisent le contenu de départ (N4) du dataset Sanity de développement.
 
 test("un seul H1 et les 4 services listés", async ({ page }) => {
   await page.goto("/");
@@ -11,13 +11,13 @@ test("un seul H1 et les 4 services listés", async ({ page }) => {
 test("un réseau de la légende ouvre la soumission avec le service choisi", async ({ page }) => {
   await page.goto("/");
   const link = page.locator('a[data-net-i="1"]').filter({ visible: true }).first();
-  await expect(link).toHaveAttribute("href", "/soumission?service=service-prefabrication");
+  await expect(link).toHaveAttribute("href", "/soumission?service=service-gicleurs");
 });
 
 test("version anglaise : adresses anglaises", async ({ page }) => {
   await page.goto("/en");
-  await expect(page.locator('a[data-net-i="0"]').filter({ visible: true }).first()).toHaveAttribute("href", "/en/quote?service=service-modelisation");
-  await expect(page.locator("#services a").first()).toHaveAttribute("href", "/en/services/bim-modeling-coordination");
+  await expect(page.locator('a[data-net-i="0"]').filter({ visible: true }).first()).toHaveAttribute("href", "/en/quote?service=service-prefabrication");
+  await expect(page.locator("#services a").first()).toHaveAttribute("href", "/en/services/piping-prefabrication");
 });
 
 test("menu mobile : s'ouvre et se ferme avec Échap", async ({ page, isMobile }) => {

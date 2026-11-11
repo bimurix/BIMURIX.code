@@ -1,15 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { schemaTypes, singletonTypes } from "@/sanity/schemas";
-import { formAndEmails } from "../../scripts/seed/form-and-emails.mts";
-import { legalPages } from "../../scripts/seed/legal.mts";
+import { seedDocuments } from "../../scripts/seed/documents.mts";
 import { launchSettingsDoc, packageDocs } from "../../scripts/seed/packages.mts";
-import { pages } from "../../scripts/seed/pages.mts";
-import { services1 } from "../../scripts/seed/services-1.mts";
-import { services2 } from "../../scripts/seed/services-2.mts";
-import { singletons } from "../../scripts/seed/singletons.mts";
 
 type Doc = { _id: string; _type: string } & Record<string, unknown>;
-const docs = [...singletons, ...formAndEmails, ...services1, ...services2, ...packageDocs, launchSettingsDoc, ...pages, ...legalPages] as Doc[];
+const docs = seedDocuments as unknown as Doc[];
 const ids = new Set(docs.map((d) => d._id));
 
 function collectRefs(value: unknown, out: string[] = []): string[] {
@@ -73,9 +68,54 @@ describe("contenu de départ Sanity", () => {
     expect(pkgs.filter((p) => p.highlighted)).toHaveLength(1);
   });
 
+  it("rattache chaque forfait à la bonne offre et ne met en avant que l'offre combinée", () => {
+    const byCode = (c: string) => docs.find((d) => d._type === "package" && d.code === c) as Doc;
+    const svc = (c: string) => (byCode(c).service as { _ref: string })._ref;
+    expect([svc("F-01"), svc("F-02"), svc("F-03"), svc("F-04"), svc("F-05")]).toEqual(["service-prefabrication", "service-prefabrication", "service-gicleurs", "service-combinee", "service-bim-7d"]);
+    expect(byCode("F-04").leadTimeDays).toBe(7);
+    expect(docs.filter((d) => d._type === "package" && d.highlighted).map((d) => d.code)).toEqual(["F-04"]);
+  });
+
+  it("affiche 4 offres complètes en FR et EN et masque les 2 anciennes", () => {
+    const services = docs.filter((d) => d._type === "service");
+    const shown = services.filter((d) => d.visible !== false);
+    expect(shown.map((d) => d._id)).toEqual(["service-prefabrication", "service-gicleurs", "service-combinee", "service-bim-7d"]);
+    expect(services.filter((d) => d.visible === false).map((d) => d._id).sort()).toEqual(["service-modelisation", "service-tqc"]);
+    const pair = (v: unknown) => (v as { fr?: string; en?: string } | undefined);
+    for (const d of shown) {
+      for (const f of ["title", "slug", "heroHeading", "heroIntro", "audience", "responsibilityNote", "ctaHeading", "ctaText"]) expect(pair(d[f])?.fr && pair(d[f])?.en, `${d._id}.${f}`).toBeTruthy();
+      expect(/seo/.test(JSON.stringify(Object.keys(d))), d._id).toBe(true);
+      expect(JSON.stringify(d.responsibilityNote), d._id).toMatch(/ing[ée]nieur|engineer/);
+    }
+    expect(new Set(shown.map((d) => (d.slug as { fr: string }).fr)).size).toBe(4);
+  });
+
+  it("accueil : sections dans l'ordre, preuve limitée aux 2 chiffres sourcés (ADR-006 n° 21)", () => {
+    const home = docs.find((d) => d.kind === "home") as unknown as { sections: Array<{ _type: string } & Record<string, unknown>> };
+    const types = home.sections.map((x) => x._type).filter((t) => t !== "serviceNetworks");
+    expect(types).toEqual(["heroSheet", "proof", "packages", "conditions", "pointsList", "method", "faq", "quoteCta"]);
+    const proof = home.sections.find((x) => x._type === "proof") as Record<string, unknown>;
+    expect((proof.figures as Array<{ value: string }>).map((f) => f.value)).toEqual(["≈ 90 %", "≈ 15 %"]);
+    expect(proof.sourceUrl).toBe("https://www.casestudies.com/company/trimble-mep/case-study/15-cost-savings-with-streamlined-bim-workflow");
+    expect(JSON.stringify(home)).not.toMatch(/718|même méthode|same method/);
+  });
+
+  it("coordonnées et lancement (ADR-006 n° 13 à 18)", () => {
+    const settings = docs.find((d) => d._id === "settings") as Record<string, unknown>;
+    expect(settings.email).toBe("contact@bimurix.com");
+    for (const k of ["phone", "neq", "legalName"]) expect(settings[k], k).toBeUndefined();
+    expect(settings.serviceArea).toEqual({ fr: "Grand Montréal", en: "Greater Montreal" });
+    expect(settings.privacyOfficer).toBe("Fondateur de Bimurix");
+    expect(launchSettingsDoc.bannerEnabled).toBe(true);
+    expect(launchSettingsDoc.bannerText).toEqual({ fr: "Forfaits de lancement à prix fixe", en: "Fixed-price launch packages" });
+    expect("deadline" in launchSettingsDoc).toBe(false);
+  });
+
   it("n'inclut aucun élément « hypothèse à valider » (ADR-006 n° 3)", () => {
-    const text = JSON.stringify([...packageDocs, launchSettingsDoc]);
-    for (const banned of ["60 $", "$60", "300 $", "3 900", "2 500", "Rack", "Implantation"]) expect(text, banned).not.toContain(banned);
+    const hidden = ["service-modelisation", "service-tqc", "page-terms", "page-privacy"];
+    const text = JSON.stringify(docs.filter((d) => d._type !== "redirect" && !hidden.includes(d._id)));
+    const banned = [/60 \$/, /\$60/, /300 \$/, /3 900/, /2 500/, /3 300/, /\brack/i, /implantation/i, /garantie|guarantee/i, /\$ par spool|\$ per spool|\$\/spool/i];
+    for (const re of banned) expect(text, String(re)).not.toMatch(re);
   });
 
   it("donne un texte FR et EN à chaque forfait et à chaque condition", () => {

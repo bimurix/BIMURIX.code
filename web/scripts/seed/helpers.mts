@@ -35,5 +35,9 @@ export const internalCta = (label: { fr: string; en: string }, pageId: string, s
   link: { kind: "internal", internal: ref(pageId), ...(serviceId ? { service: ref(serviceId) } : {}) },
 });
 
+/** Bouton principal du site (ADR-006 n° 7) : appel de 20 minutes, par la page de soumission. */
+export const callLabel = l("Réserver un appel de 20 minutes", "Book a 20-minute call");
+export const callCta = (serviceId?: string) => internalCta(callLabel, "page-quote", "primary", serviceId);
+
 // Valeurs génériques à remplacer avant la mise en ligne (decision: D12, PLAN.md §1).
 export const PLACEHOLDER_MARKERS = ["555-01", "1234567890", "(exemple)", "(example)"];
