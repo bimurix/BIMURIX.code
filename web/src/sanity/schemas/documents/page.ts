@@ -66,7 +66,7 @@ export const redirect = defineType({
   type: "document",
   fields: [
     defineField({ name: "from", title: "Ancienne adresse", type: "string", description: "Ex. : /services/ancien-nom", validation: (r) => r.required().regex(/^\//) }),
-    defineField({ name: "to", title: "Nouvelle adresse", type: "string", validation: (r) => r.required().regex(/^\/|^https:\/\//) }),
+    defineField({ name: "to", title: "Nouvelle adresse", type: "string", description: "Adresse du site seulement (commence par /). Une adresse vers un autre site est refusée.", validation: (r) => r.required().regex(/^\/(?!\/)[^\\]*$/, { name: "adresse interne" }) }),
     defineField({ name: "permanent", title: "Permanente (308)", type: "boolean", initialValue: true }),
   ],
   preview: { select: { title: "from", subtitle: "to" } },
