@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// N4 : l'accueil affiche les 5 forfaits d'entrée avec leurs prix, en FR et en EN, et « Choisir ce forfait »
+// N4, ADR-007 : l'accueil (contenu d'origine restauré + forfaits) affiche les 5 forfaits d'entrée avec leurs prix, en FR et en EN, et « Choisir ce forfait »
 // mène au formulaire avec le forfait pré-sélectionné (contenu du dataset Sanity de développement).
 const packages = [
   { code: "F-01", fr: "1 800 $", en: "$1,800" },

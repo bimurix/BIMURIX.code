@@ -71,7 +71,7 @@ export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"
   _type == "service" => {
     code, network, heroHeading, heroIntro, "heroCta": heroCta${cta}, "heroImage": heroImage${image},
     offeringsHeading, offerings, deliverablesHeading, deliverables, deliverablesNote,
-    methodHeading, methodSteps, extraHeading, extraItems, extraNote,
+    methodHeading, methodSteps, extraHeading, extraItems, extraNote, moreHeading, moreItems, moreNote,
     audience, responsibilityNote,
     ctaHeading, ctaText, "ctaButton": ctaButton${cta},
     "taxNote": *[_id == "launchSettings"][0].taxNote,

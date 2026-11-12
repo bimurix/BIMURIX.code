@@ -76,24 +76,59 @@ describe("contenu de départ Sanity", () => {
     expect(docs.filter((d) => d._type === "package" && d.highlighted).map((d) => d.code)).toEqual(["F-04"]);
   });
 
-  it("affiche 4 offres complètes en FR et EN et masque les 2 anciennes", () => {
+  it("affiche 6 services complets en FR et EN, dans l'ordre d'affichage (ADR-007)", () => {
     const services = docs.filter((d) => d._type === "service");
-    const shown = services.filter((d) => d.visible !== false);
-    expect(shown.map((d) => d._id)).toEqual(["service-prefabrication", "service-gicleurs", "service-combinee", "service-bim-7d"]);
-    expect(services.filter((d) => d.visible === false).map((d) => d._id).sort()).toEqual(["service-modelisation", "service-tqc"]);
+    const shown = services.filter((d) => d.visible !== false).sort((a, b) => (a.order as number) - (b.order as number));
+    expect(shown.map((d) => d._id)).toEqual(["service-modelisation", "service-prefabrication", "service-gicleurs", "service-combinee", "service-bim-7d", "service-tqc"]);
+    expect(services.filter((d) => d.visible === false)).toEqual([]);
+    expect(new Set(shown.map((d) => d.order)).size).toBe(6);
+    expect(new Set(shown.map((d) => d.code)).size).toBe(6);
+    expect(shown.map((d) => d.code)).toEqual(["P-01", "H-02", "G-03", "C-04", "D-05", "Q-06"]);
+    // Adresses d'origine conservées pour les services d'origine.
+    const slug = (id: string) => (shown.find((d) => d._id === id)?.slug as { fr: string; en: string });
+    expect(slug("service-modelisation")).toEqual({ fr: "services/modelisation-bim-coordination", en: "services/bim-modeling-coordination" });
+    expect(slug("service-tqc")).toEqual({ fr: "services/tqc-controle-qualite", en: "services/as-built-quality-control" });
+    expect(slug("service-bim-7d")).toEqual({ fr: "services/bim-7d-donnees-actifs", en: "services/bim-7d-asset-data" });
     const pair = (v: unknown) => (v as { fr?: string; en?: string } | undefined);
     for (const d of shown) {
       for (const f of ["title", "slug", "heroHeading", "heroIntro", "audience", "responsibilityNote", "ctaHeading", "ctaText"]) expect(pair(d[f])?.fr && pair(d[f])?.en, `${d._id}.${f}`).toBeTruthy();
       expect(/seo/.test(JSON.stringify(Object.keys(d))), d._id).toBe(true);
       expect(JSON.stringify(d.responsibilityNote), d._id).toMatch(/ing[ée]nieur|engineer/);
     }
-    expect(new Set(shown.map((d) => (d.slug as { fr: string }).fr)).size).toBe(4);
+    expect(new Set(shown.map((d) => (d.slug as { fr: string }).fr)).size).toBe(6);
   });
 
-  it("accueil : sections dans l'ordre, preuve limitée aux 2 chiffres sourcés (ADR-006 n° 21)", () => {
+  it("n'attache aucun forfait à la modélisation ni au TQC (aucun n'existe pour ces services)", () => {
+    const pkgs = docs.filter((d) => d._type === "package").map((p) => (p.service as { _ref: string })._ref);
+    expect(pkgs).not.toContain("service-modelisation");
+    expect(pkgs).not.toContain("service-tqc");
+  });
+
+  it("le BIM 7D garde son contenu d'origine et y ajoute les éléments du v3.1", () => {
+    const d = docs.find((x) => x._id === "service-bim-7d") as Doc;
+    const titles = (d.offerings as Array<{ title: { fr: string } }>).map((o) => o.title.fr);
+    for (const t of ["Structuration des paramètres", "Contrôle de complétude", "Préparation à l'exploitation-maintenance", "Audit des données", "Codification des équipements", "Numérotation des robinets", "Fonction et position des robinets", "Lien avec les dessins d'atelier", "Local de chaque élément"]) {
+      expect(titles, t).toContain(t);
+    }
+    expect((d.heroHeading as { fr: string }).fr).toBe("Des données BIM organisées pour faciliter la livraison du bâtiment.");
+  });
+
+  it("aucune mention d'un appel de 20 minutes dans le contenu du site (ADR-007)", () => {
+    const reserved = ["formSettings", "emailTemplates"]; // appartiennent à la révision du formulaire (R2)
+    const text = JSON.stringify(docs.filter((d) => !reserved.includes(d._id)));
+    expect(text).not.toMatch(/20 minutes|20-minute|appel de 20|book a (20-minute )?call|réserver un appel|réservez un appel/i);
+  });
+
+  it("accueil : sections d'origine dans leur ordre, ajouts intégrés, preuve limitée aux 2 chiffres sourcés (ADR-006 n° 21)", () => {
     const home = docs.find((d) => d.kind === "home") as unknown as { sections: Array<{ _type: string } & Record<string, unknown>> };
     const types = home.sections.map((x) => x._type).filter((t) => t !== "serviceNetworks");
-    expect(types).toEqual(["heroSheet", "proof", "packages", "conditions", "pointsList", "method", "faq", "quoteCta"]);
+    expect(types).toEqual(["heroSheet", "richText", "packages", "conditions", "proof", "pointsList", "method", "pointsList", "pointsList", "faq", "quoteCta", "quoteCta"]);
+    // Les sections d'origine restent dans l'ordre d'origine (production).
+    const heading = (s: Record<string, unknown>) => (s.heading as { fr?: string } | undefined)?.fr;
+    expect(home.sections.map((s) => heading(s)).filter((h) => h && !/forfait|Conditions|selon un entrepreneur|Inclus pour|Questions fréquentes|Commencez/.test(h))).toEqual([
+      "Des modèles BIM fiables. Une construction mieux préparée.", "Le BIM doit servir le chantier, pas seulement le modèle.", "Nos services", "Une méthode claire, du besoin au livrable.",
+      "Une approche axée sur la qualité des livrables.", "Un soutien BIM adapté aux équipes de construction.", "Une expertise BIM orientée vers les besoins réels du projet.", "Parlons de votre prochain projet.",
+    ]);
     const proof = home.sections.find((x) => x._type === "proof") as Record<string, unknown>;
     expect((proof.figures as Array<{ value: string }>).map((f) => f.value)).toEqual(["≈ 90 %", "≈ 15 %"]);
     expect(proof.sourceUrl).toBe("https://www.casestudies.com/company/trimble-mep/case-study/15-cost-savings-with-streamlined-bim-workflow");
@@ -112,9 +147,9 @@ describe("contenu de départ Sanity", () => {
   });
 
   it("n'inclut aucun élément « hypothèse à valider » (ADR-006 n° 3)", () => {
-    const hidden = ["service-modelisation", "service-tqc", "page-terms", "page-privacy"];
+    const hidden = ["page-terms", "page-privacy"];
     const text = JSON.stringify(docs.filter((d) => d._type !== "redirect" && !hidden.includes(d._id)));
-    const banned = [/60 \$/, /\$60/, /300 \$/, /3 900/, /2 500/, /3 300/, /\brack/i, /implantation/i, /garantie|guarantee/i, /\$ par spool|\$ per spool|\$\/spool/i];
+    const banned = [/60 \$/, /\$60/, /300 \$/, /3 900/, /2 500/, /3 300/, /\brack/i, /implantation/i, /garantie de correction|correction guarantee|free correction/i, /\$ par spool|\$ per spool|\$\/spool/i];
     for (const re of banned) expect(text, String(re)).not.toMatch(re);
   });
 

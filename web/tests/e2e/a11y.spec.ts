@@ -7,6 +7,7 @@ const pages = [
   "/", "/en", "/a-propos", "/en/about", "/soumission", "/en/quote", "/confidentialite", "/en/privacy", "/conditions", "/en/terms",
   "/services/prefabrication-tuyauterie", "/en/services/piping-prefabrication", "/services/prefabrication-gicleurs", "/en/services/sprinkler-prefabrication",
   "/services/tuyauterie-gicleurs-coordonnes", "/en/services/coordinated-piping-sprinklers", "/services/bim-7d-donnees-actifs", "/en/services/bim-7d-asset-data",
+  "/services/modelisation-bim-coordination", "/en/services/bim-modeling-coordination", "/services/tqc-controle-qualite", "/en/services/as-built-quality-control",
   "/soumission?forfait=F-01", "/page-inexistante", "/en/page-inexistante", "/admin/connexion",
 ];
 

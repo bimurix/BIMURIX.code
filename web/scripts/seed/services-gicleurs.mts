@@ -1,13 +1,13 @@
-import { callCta, keyed, l, titled } from "./helpers.mts";
+import { quoteCta, keyed, l, titled } from "./helpers.mts";
 
 // N4 — offre 2. Source : offres-bim-v3-1.md §2 (ADR-006). EN : traduction à relire. Aucun tarif « à la tête » (ADR-006 n° 3).
 export const serviceGicleurs = {
   _id: "service-gicleurs",
   _type: "service",
   visible: true,
-  order: 20,
-  code: "G-02",
-  network: "heat",
+  order: 30,
+  code: "G-03",
+  network: "plumb",
   title: l("Préfabrication de gicleurs", "Sprinkler prefabrication"),
   slug: l("services/prefabrication-gicleurs", "services/sprinkler-prefabrication"),
   cardTitle: l("Des dessins de gicleurs quand vos dessinateurs manquent", "Sprinkler drawings when your drafters are stretched"),
@@ -29,7 +29,7 @@ export const serviceGicleurs = {
     "Bimurix produit les dessins. L'approbation et la signature restent à l'entrepreneur ou à son ingénieur, de même que la conception, les calculs (y compris parasismique) et le sceau.",
     "Bimurix produces the drawings. Approval and signature remain with the contractor or its engineer, as do design, calculations (including seismic) and the seal.",
   ),
-  heroCta: callCta("service-gicleurs"),
+  heroCta: quoteCta("service-gicleurs"),
   offeringsHeading: l("Ce que couvre l'offre", "What the offer covers"),
   offerings: keyed([
     titled(l("Dessins d'atelier", "Shop drawings"), l("Dessins d'atelier de gicleurs dans AutoSPRINK, étage par étage.", "Sprinkler shop drawings in AutoSPRINK, floor by floor.")),
@@ -47,14 +47,14 @@ export const serviceGicleurs = {
   ]),
   methodHeading: l("Comment ça marche", "How it works"),
   methodSteps: keyed([
-    l("Appel de 20 minutes : on choisit l'étage et le délai.", "20-minute call: we pick the floor and the lead time."),
+    l("Vous demandez une soumission : étage à dessiner et délai souhaité.", "You request a quote: the floor to draw and the lead time you need."),
     l("Vous envoyez les plans ou le modèle de l'ingénieur et vos standards.", "You send the drawings or the engineer's model and your standards."),
     l("Vous recevez les dessins d'atelier en 5 jours ouvrables à partir de documents complets.", "You receive the shop drawings in 5 business days from complete documents."),
   ]),
   ctaHeading: l("Un étage à dessiner cette semaine ?", "A floor to draw this week?"),
-  ctaText: l("Réservez un appel de 20 minutes : on choisit l'étage et le délai.", "Book a 20-minute call: we pick the floor and the lead time."),
-  ctaButton: callCta("service-gicleurs"),
-  titleBlock: { sheet: "S-02", revision: "0", date: "2026-11" },
+  ctaText: l("Dites-nous l'étage à dessiner et le délai souhaité.", "Tell us the floor to draw and the lead time you need."),
+  ctaButton: quoteCta("service-gicleurs"),
+  titleBlock: { sheet: "S-03", revision: "0", date: "2026-11" },
   seo: {
     title: l("Dessins d'atelier de gicleurs AutoSPRINK | Bimurix", "AutoSPRINK sprinkler shop drawings | Bimurix"),
     description: l(

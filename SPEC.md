@@ -1,19 +1,19 @@
-# SPEC — Site BIMURIX v1.1 (offres à forfaits, ADR-006)
+# SPEC — Site BIMURIX v1.2 (6 services dont 4 à forfaits, ADR-006 et ADR-007)
 
 ## Objectif
-Présenter les **4 offres à forfaits** de Bimurix (préfabrication tuyauterie, préfabrication gicleurs,
-tuyauterie + gicleurs, BIM 7D) aux entrepreneurs en mécanique du bâtiment, en plomberie et en gicleurs,
+Présenter les **6 services** de Bimurix (modélisation BIM et coordination, préfabrication tuyauterie,
+préfabrication gicleurs, tuyauterie + gicleurs, BIM 7D, TQC et contrôle qualité), dont 4 avec des forfaits à prix fixe, aux entrepreneurs en mécanique du bâtiment, en plomberie et en gicleurs,
 aux constructeurs modulaires et aux propriétaires du Grand Montréal, et transformer les visites en
-**demandes d'appel de 20 minutes ou de soumission**, suivies dans un **tableau de bord privé**.
+**demandes de soumission**, suivies dans un **tableau de bord privé**.
 
 Réussite :
-- un visiteur voit les forfaits, leurs prix et leurs conditions, et réserve un appel en moins de 2 minutes, sur mobile ;
+- un visiteur voit les forfaits, leurs prix et leurs conditions, et demande une soumission en moins de 2 minutes, sur mobile ;
 - chaque demande arrive en base, déclenche une notification, et Bimurix y répond depuis `/admin` ;
 - Bimurix modifie seul tout le contenu public dans Sanity Studio, sans développeur : textes, **prix, délais,
   conditions, date limite**, et peut **masquer un forfait ou une offre** en un clic.
 
 ## Périmètre
-**Inclus** : 9 pages FR/EN (accueil, 4 services, à propos, soumission, confidentialité, conditions) + 404,
+**Inclus** : 11 pages FR/EN (accueil, 6 services, à propos, soumission, confidentialité, conditions) + 404,
 formulaire avec antispam, courriels transactionnels, dashboard (liste, fiche, statuts, notes, réponse,
 indicateurs, anonymisation), Studio intégré avec édition visuelle, SEO.
 **Exclus (v1)** : espace client, paiement, CRM complet, blog, fichiers joints (v1.1), réponses

@@ -9,10 +9,10 @@
 3. Tâche touchant plusieurs fichiers : annoncer le plan (fichiers, tests, risques) avant de coder.
 
 ## 1. Produit
-Entreprise de services BIM au **Québec**, spécialisée en préfabrication MEP. Vitrine de **4 offres à forfaits**
-(ADR-006) : préfabrication tuyauterie (SysQue), préfabrication gicleurs (AutoSPRINK), tuyauterie + gicleurs,
-BIM 7D. Site **FR par défaut** (`/`), **EN** sous `/en`.
-Objectif : demande d'appel ou de soumission → Supabase → tableau de bord `/admin` → réponse par courriel.
+Entreprise de services BIM au **Québec**, spécialisée en préfabrication MEP. Vitrine de **6 services** (ADR-007) : modélisation BIM et coordination, préfabrication tuyauterie (SysQue),
+préfabrication gicleurs (AutoSPRINK), tuyauterie + gicleurs, BIM 7D, TQC et contrôle qualité ; les 4 préfabrications
+et le 7D ont des forfaits à prix fixe (ADR-006). Règle : on intègre les offres au site existant, on ne le remplace pas. Site **FR par défaut** (`/`), **EN** sous `/en`.
+Objectif : demande de soumission → Supabase → tableau de bord `/admin` → réponse par courriel.
 
 ## 2. Stack
 Next.js 16 (App Router, Server Components par défaut) · TypeScript strict · Tailwind 4 ·

@@ -4,8 +4,9 @@ import { networkVar } from "@/ui/components/NetworkSwatch";
 export type IsoRun = { id: string; code: string; label: string; network: NetworkColor; href: string };
 
 // Tracés isométriques (axes à 30°), un par service, dans l'ordre des services de Sanity :
-// quatre réseaux parallèles sur un même support, chacun monte à sa colonne puis repart vers l'avant
-// et croise le réseau voisin ; le tuyau de devant coupe celui de derrière, comme dans le logo L-01.
+// 4 à 6 réseaux parallèles sur un même support (ADR-007 : six services), chacun monte à sa colonne puis repart
+// vers l'avant et croise le réseau voisin ; le tuyau de devant coupe celui de derrière, comme dans le logo L-01.
+// Avec 4 réseaux le tracé est celui d'origine ; avec plus, l'écart est resserré pour rester dans le cadre.
 const A: [number, number] = [0.866, -0.5]; // vers la droite, en profondeur
 const B: [number, number] = [0.866, 0.5]; // vers la droite, vers l'avant
 const step = ([x, y]: [number, number], [dx, dy]: [number, number], n: number): [number, number] => [
@@ -13,7 +14,10 @@ const step = ([x, y]: [number, number], [dx, dy]: [number, number], n: number): 
   Math.round((y + dy * n) * 10) / 10,
 ];
 
-function rack(k: number): Array<[number, number]> {
+const MAX_RUNS = 6;
+
+function rack(index: number, count: number): Array<[number, number]> {
+  const k = (index * 3) / (Math.max(count, 4) - 1);
   const start = step([62, 262], B, 26 * k);
   const station = step(start, A, 120 + 40 * k);
   const riser: [number, number] = [station[0], station[1] - (78 - 16 * k)];
@@ -21,13 +25,14 @@ function rack(k: number): Array<[number, number]> {
   return [start, station, riser, top, step(top, B, 58)];
 }
 
-const PATHS = [0, 1, 2, 3].map(rack);
+const pathsFor = (count: number) => Array.from({ length: count }, (_, i) => rack(i, count));
 
 const d = (pts: Array<[number, number]>) => pts.map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join(" ");
 
 /** Isométrique des réseaux : chaque tracé est un lien vers la demande de soumission du service. */
 export function IsoNetworks({ runs, title }: { runs: IsoRun[]; title: string }) {
-  const shown = runs.slice(0, PATHS.length);
+  const shown = runs.slice(0, MAX_RUNS);
+  const PATHS = pathsFor(shown.length);
   return (
     <svg viewBox="0 14 548 306" role="group" aria-label={title} className="h-auto w-full overflow-visible">
       {shown.map((run, i) => {

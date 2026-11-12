@@ -1,13 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-// Contenu de départ (N4) lu dans le dataset Sanity de développement : une adresse FR et son équivalent EN.
+// Contenu de départ (ADR-007 : 6 services) lu dans le dataset Sanity de développement : une adresse FR et son équivalent EN.
 const pages = [
   { fr: "/a-propos", en: "/en/about" },
   { fr: "/soumission", en: "/en/quote" },
+  { fr: "/services/modelisation-bim-coordination", en: "/en/services/bim-modeling-coordination" },
   { fr: "/services/prefabrication-tuyauterie", en: "/en/services/piping-prefabrication" },
   { fr: "/services/prefabrication-gicleurs", en: "/en/services/sprinkler-prefabrication" },
   { fr: "/services/tuyauterie-gicleurs-coordonnes", en: "/en/services/coordinated-piping-sprinklers" },
   { fr: "/services/bim-7d-donnees-actifs", en: "/en/services/bim-7d-asset-data" },
+  { fr: "/services/tqc-controle-qualite", en: "/en/services/as-built-quality-control" },
   { fr: "/confidentialite", en: "/en/privacy" },
   { fr: "/conditions", en: "/en/terms" },
 ];
@@ -42,14 +44,16 @@ test("sitemap et robots", async ({ request }) => {
   expect(sitemap.status()).toBe(200);
   const xml = await sitemap.text();
   expect(xml).toContain("/en/services/piping-prefabrication");
-  expect(xml).not.toContain("tqc-controle-qualite");
+  for (const slug of ["modelisation-bim-coordination", "prefabrication-tuyauterie", "prefabrication-gicleurs", "tuyauterie-gicleurs-coordonnes", "bim-7d-donnees-actifs", "tqc-controle-qualite"]) {
+    expect(xml, slug).toContain(slug);
+  }
   const robots = await (await request.get("/robots.txt")).text();
   expect(robots).toContain("Disallow: /studio");
 });
 
-test("les anciennes offres masquées répondent 404", async ({ request }) => {
-  for (const path of ["/services/modelisation-bim-coordination", "/en/services/as-built-quality-control"]) {
-    expect((await request.get(path)).status(), path).toBe(404);
+test("les six services répondent 200 en FR et en EN (adresses d'origine conservées)", async ({ request }) => {
+  for (const path of ["/services/modelisation-bim-coordination", "/en/services/as-built-quality-control", "/services/tqc-controle-qualite", "/en/services/bim-modeling-coordination"]) {
+    expect((await request.get(path)).status(), path).toBe(200);
   }
 });
 
@@ -62,8 +66,11 @@ test("l'ancienne adresse « préfabrication MEP » redirige vers la nouvelle", a
   expect(en.headers().location).toContain("/en/services/piping-prefabrication");
 });
 
-test("chaque page d'offre affiche pour qui, ses forfaits et qui fait quoi", async ({ page }) => {
+test("chaque page de service affiche pour qui, ses forfaits et qui fait quoi", async ({ page }) => {
+  // Modélisation et TQC n'ont aucun forfait : la section des forfaits n'apparaît pas.
   const expected: Record<string, string[]> = {
+    "/services/modelisation-bim-coordination": [],
+    "/services/tqc-controle-qualite": [],
     "/services/prefabrication-tuyauterie": ["F-01", "F-02"],
     "/services/prefabrication-gicleurs": ["F-03"],
     "/services/tuyauterie-gicleurs-coordonnes": ["F-04"],
@@ -73,7 +80,8 @@ test("chaque page d'offre affiche pour qui, ses forfaits et qui fait quoi", asyn
     await page.goto(path);
     await expect(page.getByRole("heading", { name: "Pour qui", level: 2 })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Qui fait quoi", level: 2 })).toBeVisible();
-    await expect(page.locator("#forfaits")).toBeVisible();
+    if (codes.length === 0) await expect(page.locator("#forfaits")).toHaveCount(0);
+    else await expect(page.locator("#forfaits")).toBeVisible();
     for (const code of codes) await expect(page.locator("#forfaits tbody tr").filter({ hasText: code })).toHaveCount(1);
     await expect(page.locator("#contenu")).toContainText(/ing[ée]nieur/);
   }

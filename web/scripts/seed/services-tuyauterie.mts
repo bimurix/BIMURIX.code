@@ -1,4 +1,4 @@
-import { callCta, keyed, l, titled } from "./helpers.mts";
+import { quoteCta, keyed, l, titled } from "./helpers.mts";
 
 // N4 — offre 1. Source : docs/source/2026-11-04_offres-v3-1/offres-bim-v3-1.md §1 (ADR-006). EN : traduction à relire.
 // Aucun élément « hypothèse à valider » (60 $/spool, implantation, tarif régulier) : ADR-006 n° 3.
@@ -6,9 +6,9 @@ export const serviceTuyauterie = {
   _id: "service-prefabrication",
   _type: "service",
   visible: true,
-  order: 10,
-  code: "P-01",
-  network: "plumb",
+  order: 20,
+  code: "H-02",
+  network: "heat",
   title: l("Préfabrication de tuyauterie mécanique", "Mechanical piping prefabrication"),
   slug: l("services/prefabrication-tuyauterie", "services/piping-prefabrication"),
   cardTitle: l("Votre tuyauterie, prête à fabriquer en atelier", "Your piping, ready to build in the shop"),
@@ -30,7 +30,7 @@ export const serviceTuyauterie = {
     "Bimurix modélise et coordonne selon les dessins et les calculs approuvés. La conception, les calculs (y compris parasismique), l'approbation, la signature et le sceau restent à l'ingénieur ou à l'entrepreneur.",
     "Bimurix models and coordinates from the approved drawings and calculations. Design, calculations (including seismic), approval, and the signature and seal remain with the engineer or the contractor.",
   ),
-  heroCta: callCta("service-prefabrication"),
+  heroCta: quoteCta("service-prefabrication"),
   offeringsHeading: l("Ce que couvre l'offre", "What the offer covers"),
   offerings: keyed([
     titled(l("Skids d'alimentation en eau", "Water supply skids"), l("Pompes, collecteurs d'aspiration et de refoulement, avec un cadre selon le dessin du fabricant ou de l'ingénieur.", "Pumps, suction and discharge headers, with a frame per the manufacturer's or engineer's drawing.")),
@@ -51,13 +51,14 @@ export const serviceTuyauterie = {
     l("Plans couleur par système et par spool, lisibles sur tablette", "Colour drawings by system and spool, readable on a tablet"),
     l("Hauteurs de tiges calculées", "Calculated rod heights"),
   ]),
+  // La 2e phrase est tirée de la page d'origine « Préfabrication MEP » (production) : ADR-007.
   deliverablesNote: l(
-    "À la fin d'une zone pilote, vous recevez un bilan d'une page : pourcentage préfabriqué, nombre de spools et heures de modélisation.",
-    "At the end of a pilot zone, you receive a one-page summary: prefabricated percentage, number of spools and modelling hours.",
+    "À la fin d'une zone pilote, vous recevez un bilan d'une page : pourcentage préfabriqué, nombre de spools et heures de modélisation. Les livrables dépendent des outils utilisés, des informations reçues et du processus de fabrication du client.",
+    "At the end of a pilot zone, you receive a one-page summary: prefabricated percentage, number of spools and modelling hours. Deliverables depend on the tools used, the information received and the client's fabrication process.",
   ),
   methodHeading: l("Comment ça marche", "How it works"),
   methodSteps: keyed([
-    l("Appel de 20 minutes : on choisit la zone pilote, vos fabricants et le délai.", "20-minute call: we pick the pilot zone, your manufacturers and the lead time."),
+    l("Vous demandez une soumission : zone pilote, fabricants retenus et délai souhaité.", "You request a quote: pilot zone, selected manufacturers and the lead time you need."),
     l("Vous envoyez les dessins d'atelier approuvés ou le modèle de l'ingénieur.", "You send the approved shop drawings or the engineer's model."),
     l("Vous recevez le paquet d'atelier en 5 jours ouvrables à partir de documents complets.", "You receive the shop package in 5 business days from complete documents."),
   ]),
@@ -68,10 +69,19 @@ export const serviceTuyauterie = {
     l("Les fabricants retenus (raccords, vannes, supports)", "The selected manufacturers (fittings, valves, hangers)"),
     l("Les standards de votre atelier", "Your shop standards"),
   ]),
+  // Texte d'origine de la page « Préfabrication MEP » (production), repris ici : ADR-007.
+  moreHeading: l("Pourquoi préparer la préfabrication avec une approche BIM ?", "Why prepare prefabrication with a BIM approach?"),
+  moreItems: keyed([
+    l("Clarifier les parcours et les interfaces avant la fabrication", "Clarify routing and interfaces before fabrication"),
+    l("Structurer les informations nécessaires aux équipes d'atelier", "Structure the information shop teams need"),
+    l("Faciliter la coordination avec les autres disciplines", "Ease coordination with other disciplines"),
+    l("Identifier les informations manquantes avant la livraison des documents", "Identify missing information before documents are issued"),
+    l("Maintenir une meilleure cohérence entre les modèles et les documents convenus", "Keep models and agreed documents consistent"),
+  ]),
   ctaHeading: l("Prêt à essayer sur une zone ?", "Ready to try it on one zone?"),
-  ctaText: l("Réservez un appel de 20 minutes : on choisit la zone, vos fabricants et le délai.", "Book a 20-minute call: we pick the zone, your manufacturers and the lead time."),
-  ctaButton: callCta("service-prefabrication"),
-  titleBlock: { sheet: "S-01", revision: "0", date: "2026-11" },
+  ctaText: l("Dites-nous la zone à préfabriquer, vos fabricants et le délai souhaité.", "Tell us the zone to prefabricate, your manufacturers and the lead time you need."),
+  ctaButton: quoteCta("service-prefabrication"),
+  titleBlock: { sheet: "S-02", revision: "0", date: "2026-11" },
   seo: {
     title: l("Préfabrication de tuyauterie SysQue | Bimurix", "SysQue piping prefabrication | Bimurix"),
     description: l(

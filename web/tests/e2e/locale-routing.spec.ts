@@ -36,3 +36,14 @@ test("le lien de langue mène à l'autre version", async ({ page }) => {
   await expect(page).toHaveURL("/en", { timeout: 15_000 });
   await expect(page.locator("html")).toHaveAttribute("lang", "en-CA");
 });
+
+// ADR-007 : plus d'appel de 20 minutes ; le bouton du menu redevient « Demander une soumission » dans les deux langues.
+for (const { path, cta } of [{ path: "/", cta: "Demander une soumission" }, { path: "/en", cta: "Request a quote" }]) {
+  test(`${path} : bouton « ${cta} » et aucune mention d'un appel de 20 minutes`, async ({ page, isMobile }) => {
+    await page.goto(path);
+    if (!isMobile) await expect(page.locator("header").getByRole("link", { name: cta }).first()).toBeVisible();
+    const text = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+    expect(text).toContain(cta);
+    expect(text).not.toMatch(/20 minutes|20-minute|appel de 20|book a call|réserver un appel/i);
+  });
+}

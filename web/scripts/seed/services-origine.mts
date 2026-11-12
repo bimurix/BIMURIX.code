@@ -1,15 +1,15 @@
 import { internalCta, keyed, l, titled } from "./helpers.mts";
 
-// ADR-006 n° 1 : modélisation générale et TQC passent en phase 2, masquées (rien n'est supprimé).
+// ADR-007 : modélisation et TQC reviennent en vitrine, contenu d'origine (production) intact ; seuls le code, l'ordre, la feuille, `audience` et `responsibilityNote` sont ajoutés.
 const quote = "page-quote";
 
-export const servicesHidden = [
+export const servicesOrigine = [
   {
     _id: "service-modelisation",
     _type: "service",
-    visible: false,
-    order: 50,
-    code: "X-05",
+    visible: true,
+    order: 10,
+    code: "P-01",
     network: "plumb",
     title: l("Modélisation BIM et coordination", "BIM modelling and coordination"),
     slug: l("services/modelisation-bim-coordination", "services/bim-modeling-coordination"),
@@ -23,6 +23,15 @@ export const servicesHidden = [
     heroIntro: l(
       "Bimurix soutient les équipes de construction dans la production, la coordination et la vérification des modèles BIM en architecture, structure et mécanique, selon le périmètre et les exigences définis pour chaque mandat.",
       "Bimurix supports construction teams in producing, coordinating and checking BIM models in architecture, structure and mechanical, within the scope and requirements set for each mandate.",
+    ),
+    // Pour qui : les clientèles de la section « Un soutien BIM adapté aux équipes de construction » de l'accueil d'origine.
+    audience: l(
+      "Entrepreneurs généraux, entrepreneurs MEP et firmes de génie-conseil qui ont besoin de modèles BIM structurés, coordonnés et vérifiés selon le périmètre du mandat.",
+      "General contractors, MEP contractors and engineering firms that need structured, coordinated and checked BIM models within the mandate's scope.",
+    ),
+    responsibilityNote: l(
+      "Bimurix produit, coordonne et vérifie les modèles selon le périmètre convenu. La conception, les calculs, l'approbation, la signature et le sceau restent à l'ingénieur ou à l'entrepreneur.",
+      "Bimurix produces, coordinates and checks the models within the agreed scope. Design, calculations, approval, and the signature and seal remain with the engineer or the contractor.",
     ),
     heroCta: internalCta(l("Discuter de votre projet BIM", "Discuss your BIM project"), quote, "primary", "service-modelisation"),
     offeringsHeading: l("Nos services", "Our services"),
@@ -54,7 +63,7 @@ export const servicesHidden = [
     ctaHeading: l("Votre équipe a besoin de soutien BIM ?", "Does your team need BIM support?"),
     ctaText: l("Présentez-nous les disciplines concernées, l'état d'avancement du projet et les livrables attendus.", "Tell us the disciplines involved, the project's progress and the expected deliverables."),
     ctaButton: internalCta(l("Demander une soumission BIM", "Request a BIM quote"), quote, "primary", "service-modelisation"),
-    titleBlock: { sheet: "S-05", revision: "0", date: "2026-11" },
+    titleBlock: { sheet: "S-01", revision: "0", date: "2026-11" },
     seo: {
       title: l("Modélisation BIM et coordination | Bimurix Québec", "BIM modelling and coordination | Bimurix Quebec"),
       description: l("Services de modélisation BIM en architecture, structure et MEP, coordination interdisciplinaire et contrôle qualité des modèles selon les exigences du projet.", "BIM modelling services in architecture, structure and MEP, interdisciplinary coordination and model quality control to project requirements."),
@@ -63,9 +72,9 @@ export const servicesHidden = [
   {
     _id: "service-tqc",
     _type: "service",
-    visible: false,
+    visible: true,
     order: 60,
-    code: "Q-04",
+    code: "Q-06",
     network: "tqc",
     title: l("TQC et contrôle qualité", "As-built and quality control"),
     slug: l("services/tqc-controle-qualite", "services/as-built-quality-control"),
@@ -79,6 +88,15 @@ export const servicesHidden = [
     heroIntro: l(
       "Bimurix soutient la préparation des documents et modèles tel que construit à partir des relevés, annotations, changements approuvés et informations transmis par les équipes responsables du projet.",
       "Bimurix supports the preparation of as-built documents and models from surveys, mark-ups, approved changes and information provided by the project's responsible teams.",
+    ),
+    // Pour qui : document v3.1 §4 (entrepreneurs qui livrent un modèle tel que construit) et clientèles de l'accueil d'origine.
+    audience: l(
+      "Entrepreneurs généraux et entrepreneurs mécaniques qui livrent un modèle tel que construit, firmes de génie-conseil et propriétaires qui préparent la remise finale d'un projet.",
+      "General contractors and mechanical contractors who deliver an as-built model, engineering firms and owners preparing a project's final handover.",
+    ),
+    responsibilityNote: l(
+      "Bimurix prépare les documents et modèles tel que construit à partir des informations reçues. La conception, les calculs, l'approbation, la signature et le sceau restent à l'ingénieur ou à l'entrepreneur.",
+      "Bimurix prepares the as-built documents and models from the information received. Design, calculations, approval, and the signature and seal remain with the engineer or the contractor.",
     ),
     heroCta: internalCta(l("Discuter de vos livrables TQC", "Discuss your as-built deliverables"), quote, "primary", "service-tqc"),
     offeringsHeading: l("Services", "Services"),

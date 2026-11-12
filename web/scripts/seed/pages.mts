@@ -1,7 +1,8 @@
-import { block, callCta, internalCta, keyed, l, pt, titled } from "./helpers.mts";
+import { block, internalCta, keyed, l, pt, titled } from "./helpers.mts";
 import { home } from "./pages-home.mts";
 
-// N4 — À propos et soumission : positionnement du document v3.1 (EN : traduction à relire).
+// ADR-007 — À propos : contenu d'ORIGINE restauré (production, mot pour mot) ; on y ajoute seulement le positionnement
+// en préfabrication du document v3.1 (SysQue, AutoSPRINK, Dynamo et pyRevit, bilingue). La page Soumission reprend ses textes d'origine.
 // Aucun membre d'équipe, client, certification ni affiliation (CLAUDE.md §4, ADR-006 n° 12).
 const tb = (sheet: string) => ({ sheet, revision: "0", date: "2026-11" });
 
@@ -13,48 +14,58 @@ const about = {
   slug: l("a-propos", "about"),
   titleBlock: tb("A-100"),
   seo: {
-    title: l("À propos de Bimurix | Préfabrication MEP et BIM", "About Bimurix | MEP prefabrication and BIM"),
-    description: l(
-      "Bimurix est un spécialiste BIM MEP et préfabrication, bilingue, avec une expérience en construction modulaire et un interlocuteur local dans le Grand Montréal.",
-      "Bimurix is a bilingual BIM MEP and prefabrication specialist with modular construction experience and a local contact in Greater Montreal.",
-    ),
+    title: l("À propos de Bimurix | Expertise BIM au Québec", "About Bimurix | BIM expertise in Quebec"),
+    description: l("Découvrez l'approche de Bimurix en modélisation BIM, coordination, préfabrication MEP, données d'actifs et qualité des livrables.", "Learn about Bimurix's approach to BIM modelling, coordination, MEP prefabrication, asset data and deliverable quality."),
   },
   sections: [
     block("heroSheet", {
-      heading: l("Un spécialiste BIM MEP et préfabrication, ici, en français et en anglais.", "A BIM MEP and prefabrication specialist, right here, in French and English."),
+      heading: l("Le BIM au service de la qualité et de la coordination.", "BIM in the service of quality and coordination."),
       intro: l(
-        "Bimurix prépare votre tuyauterie et vos gicleurs pour la fabrication en atelier, et vérifie les données de vos modèles pour l'exploitation. Notre expérience en construction modulaire guide notre façon de coordonner : ce qui est dessiné doit pouvoir se fabriquer.",
-        "Bimurix prepares your piping and sprinklers for shop fabrication, and checks your model data for operations. Our modular construction experience shapes how we coordinate: what is drawn must be buildable.",
+        "Bimurix est une entreprise de services BIM et de construction numérique qui accompagne les équipes de projet dans la production, la coordination et la structuration des informations du bâtiment.",
+        "Bimurix is a BIM and digital construction services company supporting project teams in producing, coordinating and structuring building information.",
       ),
     }),
     block("richText", {
-      heading: l("Ce que nous faisons", "What we do"),
+      heading: l("Rendre l'information BIM plus utile aux équipes de construction.", "Making BIM information more useful to construction teams."),
       body: {
         fr: pt([
-          ["normal", "Quatre offres, chacune avec un forfait d'entrée à prix fixe, un livrable clair et un délai. Vous achetez un résultat, pas des heures."],
-          ["bullet", "Préfabrication de tuyauterie mécanique, avec SysQue"],
-          ["bullet", "Préfabrication de gicleurs, avec AutoSPRINK"],
-          ["bullet", "Tuyauterie et gicleurs coordonnés"],
-          ["bullet", "BIM 7D : données d'exploitation et de maintenance"],
-          ["h3", "Ce qui nous distingue"],
+          ["normal", "Nous cherchons à fournir des livrables structurés, compréhensibles et adaptés au périmètre convenu, afin de faciliter la coordination entre les intervenants et de soutenir les étapes de construction et de livraison."],
+          ["h3", "Nos domaines d'intervention"],
+          ["bullet", "Modélisation BIM en architecture, structure et MEP"],
+          ["bullet", "Coordination multidisciplinaire"],
+          ["bullet", "Préparation à la préfabrication des réseaux mécaniques"],
+          ["bullet", "Structuration et contrôle des données d'actifs"],
+          ["bullet", "Documentation tel que construit"],
+          ["bullet", "Contrôle qualité des modèles et livrables"],
+          // Ajout (document v3.1) : positionnement en préfabrication.
+          ["h3", "Notre positionnement en préfabrication"],
+          ["normal", "Bimurix est un spécialiste BIM MEP et préfabrication. Notre expérience en construction modulaire guide notre façon de coordonner : ce qui est dessiné doit pouvoir se fabriquer."],
+          ["bullet", "Préfabrication de tuyauterie avec SysQue et de gicleurs avec AutoSPRINK"],
           ["bullet", "Une automatisation maison avec Dynamo et pyRevit, pour livrer plus vite"],
           ["bullet", "Un service bilingue, en français et en anglais"],
           ["bullet", "Un interlocuteur local, dans le Grand Montréal"],
-          ["h3", "Ce qui reste à d'autres"],
           ["normal", "La conception, les calculs d'ingénierie (y compris parasismique), l'approbation, la signature et le sceau des dessins restent à l'ingénieur ou à l'entrepreneur."],
+          ["h3", "Engagement"],
+          ["normal", "Nous privilégions la clarté du périmètre, la transparence sur les informations disponibles et la traçabilité des livrables convenus. Chaque mandat est défini selon les besoins du client, les responsabilités des intervenants et les critères d'acceptation du projet."],
         ]),
         en: pt([
-          ["normal", "Four offers, each with a fixed-price entry package, a clear deliverable and a lead time. You buy a result, not hours."],
-          ["bullet", "Mechanical piping prefabrication, with SysQue"],
-          ["bullet", "Sprinkler prefabrication, with AutoSPRINK"],
-          ["bullet", "Coordinated piping and sprinklers"],
-          ["bullet", "BIM 7D: operations and maintenance data"],
-          ["h3", "What sets us apart"],
+          ["normal", "We aim to provide structured, understandable deliverables suited to the agreed scope, to ease coordination between stakeholders and support construction and handover."],
+          ["h3", "What we work on"],
+          ["bullet", "BIM modelling in architecture, structure and MEP"],
+          ["bullet", "Multidisciplinary coordination"],
+          ["bullet", "Prefabrication readiness for mechanical networks"],
+          ["bullet", "Asset data structuring and checks"],
+          ["bullet", "As-built documentation"],
+          ["bullet", "Quality control of models and deliverables"],
+          ["h3", "Our prefabrication positioning"],
+          ["normal", "Bimurix is a BIM MEP and prefabrication specialist. Our modular construction experience shapes how we coordinate: what is drawn must be buildable."],
+          ["bullet", "Piping prefabrication with SysQue and sprinkler prefabrication with AutoSPRINK"],
           ["bullet", "In-house automation with Dynamo and pyRevit, to deliver faster"],
           ["bullet", "Bilingual service, in French and in English"],
           ["bullet", "A local contact in Greater Montreal"],
-          ["h3", "What stays with others"],
           ["normal", "Design, engineering calculations (including seismic), approval, and the signature and seal of the drawings remain with the engineer or the contractor."],
+          ["h3", "Commitment"],
+          ["normal", "We favour a clear scope, transparency about available information and traceable agreed deliverables. Each mandate is defined by the client's needs, stakeholder responsibilities and the project's acceptance criteria."],
         ]),
       },
     }),
@@ -62,13 +73,13 @@ const about = {
       heading: l("Notre approche", "Our approach"),
       layout: "columns",
       items: keyed([
-        titled(l("Un forfait, un livrable, un délai", "One package, one deliverable, one lead time"), l("Le prix d'entrée est fixe et le délai est annoncé avant de commencer.", "The entry price is fixed and the lead time is stated before we start.")),
-        titled(l("Ce qui est dessiné se fabrique", "What is drawn can be built"), l("Pièces réelles du fabricant, longueurs exactes et numéros de pièces pour l'approvisionnement.", "The manufacturer's real parts, exact lengths and part numbers for purchasing.")),
-        titled(l("Conflits réglés avant la fabrication", "Clashes resolved before fabrication"), l("La coordination est prise en charge au modèle, pas sur le chantier.", "Coordination is handled in the model, not on site.")),
-        titled(l("Un pilote qui se mesure", "A pilot you can measure"), l("Un bilan d'une page à la fin de la zone pilote : pourcentage préfabriqué, nombre de spools, heures de modélisation.", "A one-page summary at the end of the pilot zone: prefabricated percentage, number of spools, modelling hours.")),
+        titled(l("Comprendre avant de produire", "Understand before producing"), l("Clarifier les objectifs, les exigences, les responsabilités et les formats attendus.", "Clarify objectives, requirements, responsibilities and expected formats.")),
+        titled(l("Structurer l'information", "Structure information"), l("Organiser les modèles, les paramètres et les documents selon les conventions du projet.", "Organise models, parameters and documents to project conventions.")),
+        titled(l("Contrôler les livrables", "Check deliverables"), l("Vérifier les éléments définis dans le périmètre de qualité et signaler les points à confirmer.", "Check the items defined in the quality scope and flag points to confirm.")),
+        titled(l("Collaborer avec les équipes", "Work with the teams"), l("Travailler à partir des informations et des décisions communiquées par les responsables du projet.", "Work from the information and decisions shared by project leads.")),
       ]),
     }),
-    block("quoteCta", { heading: l("Parlons de votre prochaine zone.", "Let's talk about your next zone."), button: callCta() }),
+    block("quoteCta", { heading: l("Parlons de vos besoins BIM.", "Let's talk about your BIM needs."), button: internalCta(l("Nous contacter", "Contact us"), "page-quote") }),
   ],
 };
 
@@ -76,22 +87,19 @@ const quote = {
   _id: "page-quote",
   _type: "page",
   kind: "quote",
-  title: l("Appel ou soumission", "Call or quote"),
+  title: l("Demande de soumission", "Request a quote"),
   slug: l("soumission", "quote"),
   titleBlock: tb("A-900"),
   seo: {
-    title: l("Réserver un appel ou demander une soumission | Bimurix", "Book a call or request a quote | Bimurix"),
-    description: l(
-      "Réservez un appel de 20 minutes ou demandez une soumission pour la préfabrication de tuyauterie, de gicleurs ou l'audit de données BIM 7D. Grand Montréal.",
-      "Book a 20-minute call or request a quote for piping or sprinkler prefabrication or a BIM 7D data audit. Greater Montreal.",
-    ),
+    title: l("Contact et soumission BIM | Bimurix", "Contact and BIM quote | Bimurix"),
+    description: l("Contactez Bimurix pour un mandat de modélisation BIM, coordination MEP, préfabrication, données d'actifs ou documentation TQC au Québec.", "Contact Bimurix for BIM modelling, MEP coordination, prefabrication, asset data or as-built documentation in Quebec."),
   },
   sections: [
     block("heroSheet", {
-      heading: l("Réservez un appel ou demandez une soumission.", "Book a call or request a quote."),
+      heading: l("Parlez-nous de votre projet.", "Tell us about your project."),
       intro: l(
-        "Dites-nous ce que vous voulez préfabriquer ou faire vérifier. Une phrase suffit pour préparer l'appel.",
-        "Tell us what you want prefabricated or checked. One sentence is enough to prepare the call.",
+        "Décrivez votre besoin dans le formulaire ci-dessous. Les informations transmises nous aideront à comprendre votre demande et à déterminer les prochaines étapes.",
+        "Describe your needs in the form below. The information you share helps us understand your request and plan the next steps.",
       ),
     }),
     block("quoteForm", {}),

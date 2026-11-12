@@ -21,6 +21,19 @@
 
 Mettre ce tableau à jour à la fin de chaque étape (✅ + date).
 
+### Révision R (2026-11-12) — « intégrer, ne pas remplacer » (ADR-007)
+
+Le client corrige la refonte : les offres du document v3.1 s'**intègrent** au site d'origine. L'historique N0–N6
+ci-dessus reste valable pour le code ; le contenu est revu.
+
+| Étape | État | Contenu |
+|---|---|---|
+| R1 Contenu | ✅ 2026-11-12 | Contenu d'origine restauré dans `development` + 6 services, forfaits, conditions, preuve intégrés ; plus d'appel de 20 minutes ; `patch-content-r1.mts` ; ADR-007 |
+| R2 Formulaire | en cours (autre session) | Formulaire et courriels sans appel de 20 minutes (réglage Studio `callEnabled`, faux par défaut) |
+| R3 Vérification | à faire | Revue finale, rapport, relecture par le client |
+
+Les sections 3 (pages) et 4 (formulaire) plus bas décrivent l'état N4/N5 ; elles sont remplacées par ADR-007 pour le contenu.
+
 ## 1. Règles de travail (toutes les sessions)
 
 1. Lire `CLAUDE.md`, ce plan, `SPEC.md`, `docs/decisions/` et `docs/ARCHITECTURE.md` avant de coder.

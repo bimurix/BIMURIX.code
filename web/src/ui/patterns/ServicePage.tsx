@@ -32,6 +32,9 @@ export type ServiceDoc = {
   extraHeading?: Localized;
   extraItems?: Array<Keyed<Localized & object>>;
   extraNote?: Localized;
+  moreHeading?: Localized;
+  moreItems?: Array<Keyed<Localized & object>>;
+  moreNote?: Localized;
   ctaHeading?: Localized;
   ctaText?: Localized;
   ctaButton?: Cta;
@@ -73,7 +76,7 @@ function NetworkList({ heading, items, note, network, locale }: { heading?: Loca
   );
 }
 
-/** Gabarit commun des 4 pages de service : même feuille, couleur et code du réseau du service. */
+/** Gabarit commun des 6 pages de service : même feuille, couleur et code du réseau du service. */
 export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: Locale; shell: Shell }) {
   const network = doc.network ?? "tqc";
   const meta = (
@@ -106,6 +109,7 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
         <Method data={{ heading: doc.methodHeading, steps: doc.methodSteps.map((s) => ({ _key: s._key, title: s })) }} locale={locale} />
       ) : null}
       <NetworkList heading={doc.extraHeading} items={doc.extraItems} note={doc.extraNote} network={network} locale={locale} />
+      <NetworkList heading={doc.moreHeading} items={doc.moreItems} note={doc.moreNote} network={network} locale={locale} />
       <Note heading={shell?.ui?.responsibilities} text={doc.responsibilityNote} locale={locale} />
       <QuoteCta data={{ heading: doc.ctaHeading, text: doc.ctaText, button: doc.ctaButton }} locale={locale} />
     </>
