@@ -22,6 +22,7 @@ export type QuoteFormContent = {
     softwareOptions?: FormOption[];
     policyVersion?: string;
     notificationEmail?: string;
+    callEnabled?: boolean;
   }) | null;
   emails?: {
     fromName?: string;
@@ -48,6 +49,9 @@ export function serviceOptions(content: QuoteFormContent): FormOption[] {
 /** Forfaits proposés : visibles et rattachés à une offre visible (même filtre que le site). */
 export const packageChoices = (content: QuoteFormContent) => visiblePackages(content?.packages).filter((p) => p.code);
 
+/** Appel de 20 minutes proposé ? Seule la valeur vraie l'active ; absent ou autre = non (decision: R2). */
+export const callEnabled = (content: QuoteFormContent) => content?.form?.callEnabled === true;
+
 /** Valeurs acceptées par le serveur : exactement celles affichées dans le formulaire. */
 export function allowedOptions(content: QuoteFormContent): AllowedOptions | null {
   if (!content?.form) return null;
@@ -61,5 +65,6 @@ export function allowedOptions(content: QuoteFormContent): AllowedOptions | null
     timelines: values(content.form.timelines),
     budgets: values(content.form.budgets),
     software: values(content.form.softwareOptions),
+    callEnabled: callEnabled(content),
   };
 }

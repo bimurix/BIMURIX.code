@@ -7,6 +7,7 @@ import { startTransition, useActionState, useEffect, useRef, useState, useSyncEx
 import type { Locale } from "@/lib/i18n/locales";
 import { submitQuoteAction } from "@/lib/quote/actions";
 import type { SubmitResult } from "@/lib/quote/schema";
+import { DetailFields } from "./detail-fields";
 import { ChoiceGroup, SelectField, TextArea, TextField } from "./fields";
 import type { FormModel } from "./form-model";
 
@@ -32,7 +33,10 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
   // decision: ADR-006 n° 7 — ?forfait=<code> (lien d'une ligne de forfait) pré-choisit le forfait et son offre.
   const presetCode = params.get("forfait")?.trim().toUpperCase();
   const presetPackage = model.packages.find((p) => p.value === presetCode);
-  const [requestType, setRequestType] = useState<"call" | "quote">("call");
+  // decision: R2 — sans appel activé dans Studio, la demande est toujours une soumission et aucun choix n'est affiché.
+  const { callEnabled } = model;
+  const [chosenType, setRequestType] = useState<"call" | "quote">("call");
+  const requestType = callEnabled ? chosenType : "quote";
   const [service, setService] = useState(() => {
     const fromPackage = presetPackage?.serviceId;
     const wanted = presetService ?? fromPackage;
@@ -41,7 +45,7 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const fields = state && !state.ok ? (state.fields ?? {}) : {};
 
-  // Demande d'appel : les champs de précision se replient (parcours court) ; soumission : toujours ouverts.
+  // Demande d'appel (si activée) : les champs de précision se replient (parcours court) ; soumission : toujours ouverts.
   useEffect(() => {
     if (detailsRef.current) detailsRef.current.open = requestType === "quote";
   }, [requestType]);
@@ -63,8 +67,8 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
     );
   }
 
-  const err = (name: keyof NonNullable<typeof fields>) => {
-    const e = fields[name];
+  const err = (name: string) => {
+    const e = (fields as Record<string, string | undefined>)[name];
     if (!e) return undefined;
     if (e === "required") return t.required;
     return name === "email" ? t.invalidEmail : t.invalid;
@@ -103,7 +107,11 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
         )}
       </div>
 
-      <ChoiceGroup {...common} name="requestType" type="radio" required label={t.requestType} defaultValue="call" onValueChange={(v) => setRequestType(v === "quote" ? "quote" : "call")} options={[{ value: "call", label: t.requestTypeCall }, { value: "quote", label: t.requestTypeQuote }]} error={err("requestType")} />
+      {callEnabled ? (
+        <ChoiceGroup {...common} name="requestType" type="radio" required label={t.requestType} defaultValue="call" onValueChange={(v) => setRequestType(v === "quote" ? "quote" : "call")} options={[{ value: "call", label: t.requestTypeCall }, { value: "quote", label: t.requestTypeQuote }]} error={err("requestType")} />
+      ) : (
+        <input type="hidden" name="requestType" value="quote" />
+      )}
 
       <fieldset className="space-y-5">
         <legend className="font-display mb-4 text-xl font-bold text-ink">{t.contactInfo}</legend>
@@ -123,19 +131,14 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
           if (linked && options.service.some((o) => o.value === linked)) setService(linked);
         }} error={err("packageCode")} />
         <SelectField {...common} name="service" label={t.service} required placeholder={t.choose} options={options.service} value={service} onValueChange={setService} error={err("service")} />
-        <details ref={detailsRef} className={requestType === "quote" ? "[&>summary]:hidden" : ""}>
-          <summary className="inline-flex min-h-11 cursor-pointer items-center text-[15px] font-semibold text-blue underline underline-offset-4">{t.moreDetails} ({t.optional})</summary>
-          <div className="mt-5 space-y-5">
-        <div className="grid gap-5 sm:grid-cols-2">
-          <SelectField {...common} name="projectType" label={t.projectType} placeholder={t.choose} options={options.projectType} error={err("projectType")} />
-          <SelectField {...common} name="region" label={t.region} placeholder={t.choose} options={options.region} error={err("region")} />
-          <SelectField {...common} name="phase" label={t.phase} placeholder={t.choose} options={options.phase} error={err("phase")} />
-          <SelectField {...common} name="timeline" label={t.timeline} placeholder={t.choose} options={options.timeline} error={err("timeline")} />
-          <SelectField {...common} name="budget" label={t.budget} placeholder={t.choose} options={options.budget} error={err("budget")} />
-        </div>
-        <ChoiceGroup {...common} name="software" type="checkbox" label={t.software} options={options.software} error={err("software")} />
-          </div>
-        </details>
+        {callEnabled ? (
+          <details ref={detailsRef} className={requestType === "quote" ? "[&>summary]:hidden" : ""}>
+            <summary className="inline-flex min-h-11 cursor-pointer items-center text-[15px] font-semibold text-blue underline underline-offset-4">{t.moreDetails} ({t.optional})</summary>
+            <div className="mt-5"><DetailFields model={model} err={err} optionalLabel={t.optional} /></div>
+          </details>
+        ) : (
+          <DetailFields model={model} err={err} optionalLabel={t.optional} />
+        )}
         <TextArea {...common} name="description" label={t.description} required maxLength={5000} help={[model.help.description, model.help.files].filter(Boolean).join(" ")} error={err("description")} />
       </fieldset>
 

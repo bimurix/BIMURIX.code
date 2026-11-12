@@ -38,7 +38,7 @@ export default async function RequestPage({ params }: PageProps<"/admin/demandes
     ["Courriel", request.anonymized_at ? "—" : <a href={`mailto:${request.email}`} className="text-blue underline underline-offset-4">{request.email}</a>],
     ["Téléphone", request.phone ? <a href={`tel:${request.phone.replace(/[^\d+]/g, "")}`} className="font-mono">{request.phone}</a> : "—"],
     ["Langue", lang === "fr" ? "Français" : "English"],
-    ["Type de demande", requestTypeLabel[request.request_type] ?? request.request_type],
+    ...(content.callEnabled || request.request_type === "call" ? [["Type de demande", requestTypeLabel[request.request_type] ?? request.request_type] as [string, React.ReactNode]] : []),
     ["Forfait visé", request.package_code ? <span key="p" className="font-mono">{content.packageLabel(request.package_code)}</span> : "—"],
     ["Service", <span key="s" className="inline-flex items-center gap-2">{svc?.network && <NetworkSwatch network={svc.network} />}{svc?.label ?? request.service}</span>],
     ["Type de projet", content.labelFor("projectTypes", request.project_type)],

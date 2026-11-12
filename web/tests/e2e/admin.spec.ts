@@ -130,3 +130,25 @@ test("admin : le type et le forfait se voient dans la liste et la fiche, et le f
   await expect(page.getByText("Type de demande")).toBeVisible();
   await expect(page.getByRole("definition").filter({ hasText: "F-01" })).toBeVisible();
 });
+
+// R2 : appel désactivé, une soumission garde son forfait visé dans la liste et la fiche ; la colonne « Type » ne reste que
+// tant qu'il existe des demandes d'appel en base (règle testée en unitaire : tests/unit/call-setting.test.ts).
+test("admin : une soumission avec forfait affiche le forfait visé dans la liste et la fiche", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "une fois par exécution");
+  const server = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, { auth: { persistSession: false } });
+  const stamp = Date.now().toString(36).slice(-5).toUpperCase();
+  const ref = `BX-F${stamp}`;
+  const { error } = await server.from("quote_requests").insert({
+    reference: ref, locale: "fr", full_name: "Client Forfait", company: "Essai inc.", email: `forfait-${stamp}@example.com`, preferred_language: "fr",
+    service: "service-tqc", request_type: "quote", package_code: "F-01", description: "Demande créée par le test du forfait visé.",
+    consent_at: new Date().toISOString(), consent_policy_version: "2026-11",
+  });
+  expect(error).toBeNull();
+
+  await magicLogin(page, ADMIN);
+  await page.goto(`/admin?q=${ref}`);
+  await expect(page.getByRole("row").filter({ hasText: ref })).toContainText("F-01");
+  await page.getByRole("link", { name: ref }).click();
+  await expect(page.getByRole("heading", { name: "Client Forfait" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("definition").filter({ hasText: "F-01" })).toBeVisible();
+});

@@ -16,12 +16,12 @@ export const emailTemplates = defineType({
     defineField({ name: "fromName", title: "Nom de l'expéditeur", type: "string", initialValue: "Bimurix", group: "ack" }),
     defineField({ name: "ackSubject", title: "Objet", type: "localeString", group: "ack", validation: requireFr, description: variablesHelp }),
     defineField({ name: "ackBody", title: "Message", type: "localeText", group: "ack", validation: requireFr, description: variablesHelp }),
-    defineField({ name: "ackSubjectCall", title: "Objet (demande d’appel)", type: "localeString", group: "ack", description: `Facultatif ; sinon l’objet ci-dessus. ${variablesHelp}` }),
-    defineField({ name: "ackBodyCall", title: "Message (demande d’appel)", type: "localeText", group: "ack", description: `Facultatif ; sinon le message ci-dessus. ${variablesHelp}` }),
+    defineField({ name: "ackSubjectCall", title: "Objet (demande d’appel)", type: "localeString", group: "ack", description: `Utilisé seulement si l’appel est activé. Facultatif ; sinon l’objet ci-dessus. ${variablesHelp}` }),
+    defineField({ name: "ackBodyCall", title: "Message (demande d’appel)", type: "localeText", group: "ack", description: `Utilisé seulement si l’appel est activé. Facultatif ; sinon le message ci-dessus. ${variablesHelp}` }),
     defineField({ name: "signature", title: "Signature", type: "localeText", group: "ack" }),
 
     defineField({ name: "internalSubject", title: "Objet de la notification", type: "string", group: "internal", description: variablesHelp }),
-    defineField({ name: "internalSubjectCall", title: "Objet de la notification (demande d’appel)", type: "string", group: "internal", description: `Facultatif ; sinon l’objet ci-dessus. ${variablesHelp}` }),
+    defineField({ name: "internalSubjectCall", title: "Objet de la notification (demande d’appel)", type: "string", group: "internal", description: `Utilisé seulement si l’appel est activé. Facultatif ; sinon l’objet ci-dessus. ${variablesHelp}` }),
 
     defineField({
       name: "replyTemplates",

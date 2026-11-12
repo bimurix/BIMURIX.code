@@ -12,6 +12,7 @@ const options = {
   software: ["revit", "ifc"],
   // Forfaits visibles publiés dans Sanity (F-09 est masqué : absent de la liste) + « autre ».
   packages: ["F-01", "F-02", "other"],
+  callEnabled: false,
 };
 
 function validForm(extra: Record<string, string | string[]> = {}) {
@@ -58,8 +59,8 @@ describe("submitQuote", () => {
     expect(d.afterInsert).toHaveBeenCalledOnce();
   });
 
-  it("enregistre une demande d'appel avec son forfait", async () => {
-    const d = deps();
+  it("enregistre une demande d'appel avec son forfait (appel activé dans Studio)", async () => {
+    const d = deps({ options: async () => ({ ...options, callEnabled: true }) });
     const res = await submitQuote(validForm({ requestType: "call", packageCode: "F-01" }), d);
     expect(res).toMatchObject({ ok: true });
     expect(d.insert).toHaveBeenCalledWith(expect.objectContaining({ request_type: "call", package_code: "F-01" }));
@@ -96,7 +97,7 @@ describe("submitQuote", () => {
   });
 
   it("refuse un type de demande inconnu", async () => {
-    expect(await submitQuote(validForm({ requestType: "rendez-vous" }), deps())).toMatchObject({ ok: false, fields: { requestType: "invalid" } });
+    expect(await submitQuote(validForm({ requestType: "rendez-vous" }), deps({ options: async () => ({ ...options, callEnabled: true }) }))).toMatchObject({ ok: false, fields: { requestType: "invalid" } });
   });
 
   it("signale les champs requis vides", async () => {

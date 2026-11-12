@@ -25,6 +25,21 @@ const regions = [
   opt("hors-quebec", "Hors Québec", "Outside Quebec"),
 ];
 
+// R2 : l'appel de 20 minutes est désactivé (réglage Studio « callEnabled »). Partagé avec scripts/patch-form-r2.mts.
+// Les textes « appel » (N5) restent dans Studio pour une réactivation ; ces valeurs-ci sont celles de la soumission seule.
+export const formSettingsR2 = {
+  callEnabled: false,
+};
+
+// Accusé et notification de la soumission : le forfait visé y figure ({package}), aucune mention d'appel.
+export const emailTemplatesR2 = {
+  ackBody: l(
+    "Bonjour {name},\n\nMerci d'avoir communiqué avec Bimurix au sujet de « {service} ». Forfait visé : {package}. Nous examinons votre demande de soumission et vous répondrons dans les meilleurs délais.\n\nVotre référence : {reference}.",
+    "Hello {name},\n\nThank you for contacting Bimurix about \"{service}\". Package of interest: {package}. We are reviewing your quote request and will get back to you shortly.\n\nYour reference: {reference}.",
+  ),
+  internalSubject: "Nouvelle demande : {company} — {service} · {package} ({reference})",
+};
+
 const formSettings = {
   _id: "formSettings",
   _type: "formSettings",
@@ -45,6 +60,7 @@ const formSettings = {
   label_submit: l("Envoyer ma demande", "Send my request"),
   label_sending: l("Envoi de votre demande…", "Sending your request…"),
   ...formSettingsN5,
+  ...formSettingsR2,
   descriptionHelp: l("Une phrase suffit : ce que vous voulez préfabriquer ou faire vérifier.", "One sentence is enough: what you want prefabricated or checked."),
   filesHelp: l("Pour partager des fichiers, ajoutez un lien (ACC, Drive, WeTransfer) dans la description.", "To share files, add a link (ACC, Drive, WeTransfer) in the description."),
   includeServices: true,
@@ -106,13 +122,9 @@ const emailTemplates = {
   _type: "emailTemplates",
   fromName: "Bimurix",
   ackSubject: l("Nous avons bien reçu votre demande ({reference})", "We received your request ({reference})"),
-  ackBody: l(
-    "Bonjour {name},\n\nMerci d'avoir communiqué avec Bimurix au sujet de « {service} ». Nous examinons votre demande et vous répondrons dans les meilleurs délais.\n\nVotre référence : {reference}.",
-    "Hello {name},\n\nThank you for contacting Bimurix about \"{service}\". We are reviewing your request and will get back to you shortly.\n\nYour reference: {reference}.",
-  ),
   signature: l("L'équipe Bimurix\ncontact@bimurix.com", "The Bimurix team\ncontact@bimurix.com"),
-  internalSubject: "Nouvelle demande : {company} — {service} ({reference})",
   ...emailTemplatesN5,
+  ...emailTemplatesR2,
   replyTemplates: keyed([
     {
       name: "Demande de précisions",

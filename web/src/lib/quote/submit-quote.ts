@@ -34,6 +34,8 @@ export type AllowedOptions = {
   timelines: string[];
   budgets: string[];
   software: string[];
+  /** Réglage Studio « Proposer aussi un appel » (R2) : faux = toute demande d'appel est refusée. */
+  callEnabled: boolean;
 };
 
 /** Dépendances injectées : le cas d'usage se teste sans base, sans réseau, sans Sanity. */
@@ -55,6 +57,8 @@ function outsideOptions(input: QuoteInput, opts: AllowedOptions): (keyof QuoteIn
   const bad: (keyof QuoteInput)[] = [];
   const check = (key: keyof QuoteInput, value: string | undefined, list: string[]) => value && !list.includes(value) && bad.push(key);
   if (!opts.services.includes(input.service)) bad.push("service");
+  // decision: R2 — fail-closed : l'appel n'existe que si Studio l'active, quoi que le client envoie.
+  if (input.requestType === "call" && !opts.callEnabled) bad.push("requestType");
   check("packageCode", input.packageCode, opts.packages);
   check("projectType", input.projectType, opts.projectTypes);
   check("region", input.region, opts.regions);

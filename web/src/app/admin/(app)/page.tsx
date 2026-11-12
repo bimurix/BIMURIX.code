@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin/auth";
-import { getAdminContent, getStats, listRequests, PAGE_SIZE, parseFilters } from "@/lib/admin/data";
+import { getAdminContent, getStats, listRequests, PAGE_SIZE, parseFilters, shouldShowType } from "@/lib/admin/data";
 import { formatDate, REQUEST_TYPES, requestTypeLabel, STATUSES, statusLabel } from "@/lib/admin/labels";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
 import { StatusBadge } from "@/ui/admin/StatusBadge";
@@ -13,6 +13,7 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
   const ctx = await requireAdmin();
   const filters = parseFilters(await searchParams);
   const [{ rows, total }, stats, content] = await Promise.all([listRequests(ctx, filters), getStats(ctx), getAdminContent()]);
+  const showType = await shouldShowType(ctx, content);
   const serviceInfo = new Map(content.services.map((s) => [s.value, s]));
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const pageHref = (page: number) => {
@@ -46,7 +47,7 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
         ))}
       </dl>
 
-      <form method="get" className="grid gap-3 bg-paper p-4 sm:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto] sm:items-end" role="search">
+      <form method="get" className={`grid gap-3 bg-paper p-4 ${showType ? "sm:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto]" : "sm:grid-cols-[2fr_1fr_1fr_1fr_auto]"} sm:items-end`} role="search">
         <label className="text-[13px] text-ink-2">Recherche
           <input name="q" defaultValue={filters.q} placeholder="Nom, entreprise, courriel, référence" className="mt-1 block min-h-11 w-full border border-ink px-3 text-[15px] text-ink" />
         </label>
@@ -56,12 +57,14 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
             {STATUSES.map((s) => <option key={s} value={s}>{statusLabel[s]}</option>)}
           </select>
         </label>
-        <label className="text-[13px] text-ink-2">Type
-          <select name="type" defaultValue={filters.type ?? ""} className="mt-1 block min-h-11 w-full border border-ink bg-paper px-2 text-[15px] text-ink">
-            <option value="">Tous</option>
-            {REQUEST_TYPES.map((t) => <option key={t} value={t}>{requestTypeLabel[t]}</option>)}
-          </select>
-        </label>
+        {showType && (
+          <label className="text-[13px] text-ink-2">Type
+            <select name="type" defaultValue={filters.type ?? ""} className="mt-1 block min-h-11 w-full border border-ink bg-paper px-2 text-[15px] text-ink">
+              <option value="">Tous</option>
+              {REQUEST_TYPES.map((t) => <option key={t} value={t}>{requestTypeLabel[t]}</option>)}
+            </select>
+          </label>
+        )}
         <label className="text-[13px] text-ink-2">Service
           <select name="service" defaultValue={filters.service ?? ""} className="mt-1 block min-h-11 w-full border border-ink bg-paper px-2 text-[15px] text-ink">
             <option value="">Tous</option>
@@ -82,14 +85,14 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
           <caption className="sr-only">Demandes de soumission, les plus récentes d&apos;abord</caption>
           <thead className="border-b border-ink text-start text-[12px] text-ink-2">
             <tr>
-              {["Date", "Référence", "Type", "Client", "Service", "Région", "Statut", "Dernière réponse"].map((h) => (
+              {["Date", "Référence", ...(showType ? ["Type"] : []), "Client", "Service", "Région", "Statut", "Dernière réponse"].map((h) => (
                 <th key={h} scope="col" className="px-3 py-2 text-start font-semibold">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 && (
-              <tr><td colSpan={8} className="px-3 py-10 text-center text-ink-2">Aucune demande pour ces filtres.</td></tr>
+              <tr><td colSpan={showType ? 8 : 7} className="px-3 py-10 text-center text-ink-2">Aucune demande pour ces filtres.</td></tr>
             )}
             {rows.map((r) => {
               const svc = serviceInfo.get(r.service);
@@ -97,8 +100,8 @@ export default async function InboxPage({ searchParams }: PageProps<"/admin">) {
                 <tr key={r.id} className={`border-b border-rule hover:bg-paper-2 ${r.status === "new" ? "font-semibold" : ""}`}>
                   <td className="px-3 py-2.5 whitespace-nowrap text-ink-2">{formatDate(r.created_at)}</td>
                   <td className="px-3 py-2.5 font-mono"><Link href={`/admin/demandes/${r.id}`} className="text-blue underline-offset-4 hover:underline">{r.reference}</Link></td>
-                  <td className="px-3 py-2.5 whitespace-nowrap">{requestTypeLabel[r.request_type] ?? r.request_type}{r.package_code && <span className="block font-mono text-[13px] font-normal text-ink-2">{r.package_code}</span>}</td>
-                  <td className="px-3 py-2.5 text-ink">{r.full_name}<span className="block text-[13px] font-normal text-ink-2">{r.company}</span></td>
+                  {showType && <td className="px-3 py-2.5 whitespace-nowrap">{requestTypeLabel[r.request_type] ?? r.request_type}{r.package_code && <span className="block font-mono text-[13px] font-normal text-ink-2">{r.package_code}</span>}</td>}
+                  <td className="px-3 py-2.5 text-ink">{r.full_name}<span className="block text-[13px] font-normal text-ink-2">{r.company}</span>{!showType && r.package_code && <span className="block font-mono text-[13px] font-normal text-ink-2">{r.package_code}</span>}</td>
                   <td className="px-3 py-2.5"><span className="flex items-center gap-2">{svc?.network && <NetworkSwatch network={svc.network} />}{svc?.label ?? r.service}</span></td>
                   <td className="px-3 py-2.5 text-ink-2">{r.region ? content.labelFor("regions", r.region) : "—"}</td>
                   <td className="px-3 py-2.5"><StatusBadge status={r.status} /></td>

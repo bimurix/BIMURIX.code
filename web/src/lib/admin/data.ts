@@ -2,10 +2,11 @@ import "server-only";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { fetchPublished } from "@/sanity/fetch";
 import { QUOTE_FORM_QUERY } from "@/sanity/queries";
-import { packageChoices, PACKAGE_OTHER, type QuoteFormContent } from "@/lib/quote/form-content";
+import { callEnabled, packageChoices, PACKAGE_OTHER, type QuoteFormContent } from "@/lib/quote/form-content";
 import type { NetworkColor } from "@/sanity/types-content";
 import type { AdminContext } from "./auth";
 import { isRequestType, isStatus, type QuoteStatus, type RequestType } from "./labels";
+import { showRequestType } from "./request-type";
 
 export const PAGE_SIZE = 25;
 
@@ -85,12 +86,24 @@ export async function getMessages({ supabase }: AdminContext, id: string) {
   return (data ?? []) as MessageRow[];
 }
 
+/** Nombre de demandes de type appel en base (RLS : visibles par un admin). Sert à garder la colonne « Type » tant qu'il en reste. */
+export async function countCallRequests({ supabase }: AdminContext) {
+  const { count, error } = await supabase.from("quote_requests").select("id", { count: "exact", head: true }).eq("request_type", "call");
+  if (error) throw error;
+  return count ?? 0;
+}
+
 export type Stats = { new_7d: number; new_30d: number; awaiting: number; avg_first_reply_hours: number | null; by_service: Record<string, number> };
 
 export async function getStats({ supabase }: AdminContext): Promise<Stats> {
   const { data, error } = await supabase.rpc("admin_stats");
   if (error) throw error;
   return data as Stats;
+}
+
+/** Colonne et filtre « Type » affichés ? (decision: R2) */
+export async function shouldShowType(ctx: AdminContext, content: { callEnabled: boolean }) {
+  return content.callEnabled || showRequestType(false, await countCallRequests(ctx));
 }
 
 export type ServiceInfo = { value: string; label: string; network?: NetworkColor; code?: string };
@@ -115,5 +128,5 @@ export async function getAdminContent() {
     const found = packageChoices(content).find((p) => p.code === code);
     return found ? `${code} — ${pick(found.title, "fr", "")}`.replace(/ — $/, "") : code;
   };
-  return { services, labelFor, packageLabel, templates: content?.emails?.replyTemplates ?? [], signature: content?.emails?.signature, fromEmail: content?.fromEmail, fromName: content?.emails?.fromName };
+  return { callEnabled: callEnabled(content), services, labelFor, packageLabel, templates: content?.emails?.replyTemplates ?? [], signature: content?.emails?.signature, fromEmail: content?.fromEmail, fromName: content?.emails?.fromName };
 }

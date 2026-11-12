@@ -23,7 +23,7 @@ export const formFieldKeys = [
   ["preferredLanguage", "Langue de communication"],
   ["requestType", "Type de demande (titre du choix)"],
   ["package", "Forfait visé"],
-  ["moreDetails", "Volet « Plus de détails » (demande d’appel)"],
+  ["moreDetails", "Volet « Plus de détails » (seulement si l’appel est activé)"],
   ["service", "Service recherché"],
   ["projectType", "Type de projet"],
   ["region", "Région du projet"],
@@ -48,9 +48,18 @@ export const formSettings = defineType({
     { name: "consent", title: "Consentement" },
   ],
   fields: [
+    // decision: R2 — l'appel de 20 minutes n'est plus proposé par défaut ; ce réglage le réactive sans développeur.
+    defineField({
+      name: "callEnabled",
+      title: "Proposer aussi un appel de 20 minutes",
+      type: "boolean",
+      initialValue: false,
+      group: "texts",
+      description: "Désactivé (cas normal) : le formulaire est une simple demande de soumission, sans mention d'appel. Activé : le visiteur choisit entre « Réserver un appel » et « Demander une soumission », et les textes et courriels « appel » ci-dessous servent. Pense aussi à publier ce document.",
+    }),
     ...formFieldKeys.map(([name, title]) => defineField({ name: `label_${name}`, title, type: "localeString", group: "texts" })),
     // decision: ADR-006 n° 7 — type de demande et forfait visé.
-    defineField({ name: "requestTypeCall", title: "Choix : appel", type: "localeString", group: "texts", description: "Ex. : Réserver un appel de 20 minutes." }),
+    defineField({ name: "requestTypeCall", title: "Choix : appel", type: "localeString", group: "texts", description: "Utilisé seulement si l’appel est activé. Ex. : Réserver un appel de 20 minutes." }),
     defineField({ name: "requestTypeQuote", title: "Choix : soumission", type: "localeString", group: "texts", description: "Ex. : Demander une soumission." }),
     defineField({ name: "requestTypeCallShort", title: "Nom court : appel (courriels)", type: "localeString", group: "texts", description: "Variable {type} des courriels. Ex. : Appel de 20 minutes." }),
     defineField({ name: "requestTypeQuoteShort", title: "Nom court : soumission (courriels)", type: "localeString", group: "texts", description: "Variable {type} des courriels. Ex. : Soumission." }),
@@ -71,7 +80,7 @@ export const formSettings = defineType({
     defineField({ name: "errorEmail", title: "Courriel invalide", type: "localeString", group: "messages" }),
     defineField({ name: "successTitle", title: "Succès : titre", type: "localeString", group: "messages" }),
     defineField({ name: "successBody", title: "Succès : texte", type: "localeText", group: "messages" }),
-    defineField({ name: "successBodyCall", title: "Succès : texte (demande d’appel)", type: "localeText", group: "messages", description: "Facultatif ; sinon le texte de succès ci-dessus est utilisé." }),
+    defineField({ name: "successBodyCall", title: "Succès : texte (demande d’appel)", type: "localeText", group: "messages", description: "Utilisé seulement si l’appel est activé. Facultatif ; sinon le texte de succès ci-dessus est utilisé." }),
     defineField({ name: "failureTitle", title: "Échec : titre", type: "localeString", group: "messages" }),
     defineField({ name: "failureBody", title: "Échec : texte", type: "localeText", group: "messages" }),
 

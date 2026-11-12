@@ -1,7 +1,7 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { pathFor } from "@/lib/links";
-import { packageChoices, PACKAGE_OTHER, serviceOptions, type FormOption, type QuoteFormContent } from "@/lib/quote/form-content";
+import { callEnabled, packageChoices, PACKAGE_OTHER, serviceOptions, type FormOption, type QuoteFormContent } from "@/lib/quote/form-content";
 import type { Choice } from "./fields";
 
 const fallback = {
@@ -40,6 +40,8 @@ export type FormModel = {
   packages: Array<Choice & { serviceId?: string }>;
   options: Record<"service" | "projectType" | "region" | "phase" | "timeline" | "budget" | "software", Choice[]>;
   privacyHref: string | null;
+  /** Appel de 20 minutes proposé (réglage Studio, faux par défaut). */
+  callEnabled: boolean;
 };
 
 /** Libellés et listes du formulaire dans la langue de la page (Sanity, sinon valeurs de secours). */
@@ -78,5 +80,6 @@ export function buildFormModel(content: QuoteFormContent, locale: Locale): FormM
       software: choices(f.softwareOptions),
     },
     privacyHref: pathFor(content?.privacyPage, locale),
+    callEnabled: callEnabled(content),
   };
 }
