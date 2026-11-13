@@ -1,12 +1,13 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
+import { Icon } from "@/ui/components/Icon";
 import { Section, SectionHeading } from "../section";
 
-export type MethodData = { heading?: Localized; steps?: Array<{ _key: string; title?: Localized; text?: Localized }> };
+export type MethodData = { heading?: Localized; steps?: Array<{ _key: string; title?: Localized; text?: Localized; icon?: string | null }> };
 
 /**
- * Étapes reliées par un même tuyau : les raccords portent le numéro d'étape (la séquence est l'information).
- * Vertical sur mobile, horizontal sur grand écran.
+ * Étapes reliées par un même tuyau : les raccords portent le numéro d'étape (la séquence est l'information) ; quand un
+ * symbole est choisi, il prend le raccord et le numéro passe devant le titre (T3). Vertical sur mobile, horizontal sur grand écran.
  */
 export function Method({ data, locale }: { data: MethodData; locale: Locale }) {
   const steps = data.steps ?? [];
@@ -16,14 +17,17 @@ export function Method({ data, locale }: { data: MethodData; locale: Locale }) {
       <SectionHeading>{pick(data.heading, locale, "")}</SectionHeading>
       <div className="relative">
         <span aria-hidden="true" className="absolute start-[18px] top-5 bottom-5 w-[5px] bg-blue lg:start-5 lg:end-5 lg:top-[18px] lg:bottom-auto lg:h-[5px] lg:w-auto" />
-        <ol className="relative grid gap-10 lg:grid-cols-(--bx-steps) lg:gap-6" style={columns}>
+        <ol className="relative grid gap-7 lg:grid-cols-(--bx-steps) lg:gap-6" style={columns}>
           {steps.map((step, i) => (
             <li key={step._key} className="flex gap-5 lg:flex-col lg:gap-4">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-blue bg-paper font-mono text-[13px] text-blue">
-                {String(i + 1).padStart(2, "0")}
+                {step.icon ? <Icon name={step.icon} /> : String(i + 1).padStart(2, "0")}
               </span>
               <span>
-                <span className="font-display block text-xl font-bold text-ink">{pick(step.title, locale, "")}</span>
+                <span className="font-display block text-xl font-bold text-ink">
+                  {step.icon && <span className="me-2 font-mono text-[13px] font-normal text-ink-2">{String(i + 1).padStart(2, "0")}</span>}
+                  {pick(step.title, locale, "")}
+                </span>
                 <span className="mt-2 block max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{pick(step.text, locale, "")}</span>
               </span>
             </li>

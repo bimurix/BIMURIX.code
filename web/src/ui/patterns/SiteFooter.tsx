@@ -4,6 +4,7 @@ import { pick } from "@/lib/i18n/pick";
 import { isExternalHref, resolveLink } from "@/lib/links";
 import { isPlaceholder } from "@/lib/placeholders";
 import type { Shell } from "@/sanity/types-content";
+import { Icon } from "@/ui/components/Icon";
 import { Logo } from "@/ui/components/Logo";
 import { navGroups } from "./nav-model";
 
@@ -23,8 +24,8 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
 
   return (
     <footer className="bg-ink text-paper">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(4,1fr)]">
-        <div className="max-w-sm space-y-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-8 px-4 py-10 sm:px-6 md:gap-10 md:py-10 lg:grid-cols-[1.5fr_repeat(4,1fr)]">
+        <div className="col-span-2 max-w-sm space-y-4 lg:col-span-1">
           <Logo image={settings?.logoInverse} alt={pick(settings?.logoAlt, locale, "Bimurix")} wordmark={settings?.wordmark ?? "bimurix"} inverse />
           <p className="text-[15px] leading-relaxed text-paper/75">{pick(footer?.blurb, locale, "")}</p>
         </div>
@@ -63,23 +64,23 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
           </nav>
         ))}
 
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <h2 className="mb-3 text-[13px] font-semibold text-paper/60">{t.contact}</h2>
           <ul className="space-y-2 text-[15px]">
             {settings?.email && (
-              <li><a href={`mailto:${settings.email}`} className="inline-flex min-h-(--bx-tap-min) items-center hover:underline">{settings.email}</a></li>
+              <li><a href={`mailto:${settings.email}`} className="inline-flex min-h-(--bx-tap-min) items-center gap-2.5 hover:underline"><Icon name="courriel" size="sm" className="text-paper/75" />{settings.email}</a></li>
             )}
             {settings?.phone && (
               <li>
                 {/* Valeur d'exemple : texte simple, jamais un lien tel: (ADR-009 n° 4). */}
                 {isPlaceholder(settings.phone) ? (
-                  <span className="inline-flex min-h-(--bx-tap-min) items-center font-mono text-[14px] text-paper/75">{settings.phone}</span>
+                  <span className="inline-flex min-h-(--bx-tap-min) items-center gap-2.5 font-mono text-[14px] text-paper/75"><Icon name="telephone" size="sm" />{settings.phone}</span>
                 ) : (
-                  <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="inline-flex min-h-(--bx-tap-min) items-center font-mono text-[14px] hover:underline">{settings.phone}</a>
+                  <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="inline-flex min-h-(--bx-tap-min) items-center gap-2.5 font-mono text-[14px] hover:underline"><Icon name="telephone" size="sm" className="text-paper/75" />{settings.phone}</a>
                 )}
               </li>
             )}
-            {settings?.serviceArea && <li className="text-paper/75">{pick(settings.serviceArea, locale, "")}</li>}
+            {settings?.serviceArea && <li className="flex items-center gap-2.5 text-paper/75"><Icon name="region" size="sm" />{pick(settings.serviceArea, locale, "")}</li>}
           </ul>
         </div>
       </div>

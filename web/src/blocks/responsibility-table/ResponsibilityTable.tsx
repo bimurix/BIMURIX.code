@@ -4,6 +4,7 @@ import { v5Label, type UiLabels } from "@/lib/i18n/v5-labels";
 import { resolveLink } from "@/lib/links";
 import type { Cta } from "@/sanity/types-content";
 import Link from "next/link";
+import { Icon } from "@/ui/components/Icon";
 import { Section, SectionHeading } from "../section";
 
 export type ResponsibilityRowData = {
@@ -83,12 +84,13 @@ export function ResponsibilityTable({ data, locale, ui }: Props) {
                     <span className="text-ink-2 md:sr-only">{v5Label(ui, labelKey, locale)}{locale === "fr" ? " : " : ": "}</span>
                     {marked ? (
                       <>
-                        <span className="font-semibold">{yes}</span>
+                        <Icon name="oui" className="inline-block align-middle text-ink" />
+                        <span className="sr-only">{yes}</span>
                         {detail && <span className="block text-[14px] text-ink-2">{detail}</span>}
                       </>
                     ) : (
                       <>
-                        <span aria-hidden="true" className="text-ink-3">—</span>
+                        <Icon name="non" className="inline-block align-middle text-ink-3" />
                         <span className="sr-only">{no}</span>
                       </>
                     )}
@@ -123,9 +125,9 @@ function ShortVersion({ data, locale, ui }: Props) {
   return (
     <Section id="qui-fait-quoi">
       <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "")}</SectionHeading>
-      <dl className="border-t-[1.5px] border-ink">
+      <dl className="grid border-t-[1.5px] border-ink lg:grid-cols-3 lg:gap-x-10">
         {rows.map((row) => (
-          <div key={row._key} className="grid gap-1 border-b border-rule py-4 md:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] md:gap-8">
+          <div key={row._key} className="grid content-start gap-1 border-b border-rule py-3.5 md:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] md:gap-8 lg:grid-cols-1 lg:gap-1 lg:py-4">
             <dt className="font-display text-lg font-bold text-ink">{pick(row.title, locale, "")}</dt>
             <dd className="max-w-[62ch] text-[16px] leading-relaxed text-ink-2">{pick(row.text, locale, "")}</dd>
           </div>

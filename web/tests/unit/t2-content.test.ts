@@ -156,8 +156,11 @@ describe("T2 — champs préparés pour T3 : liste fermée de symboles", () => {
     expect(new Set(ICON_NAMES).size).toBe(ICON_NAMES.length);
   });
 
-  it("aucune ligne du contenu de départ n'a de symbole choisi (T3 les choisit)", () => {
-    expect(text(docs.filter((d) => !["page-privacy", "page-terms"].includes(d._id)))).not.toContain('"icon"');
+  // T3 a choisi les symboles (scripts/seed/icons-t3.mts) : tous viennent de la liste fermée.
+  it("tout symbole du contenu de départ appartient à la liste fermée", () => {
+    const found = [...text(docs).matchAll(/"(?:icon|cardIcon)":"([^"]+)"/g)].map((m) => m[1]);
+    expect(found.length).toBeGreaterThan(20);
+    for (const name of found) expect(ICON_NAMES as readonly string[], name).toContain(name);
   });
 });
 

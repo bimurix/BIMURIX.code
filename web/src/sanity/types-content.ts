@@ -26,6 +26,8 @@ export type ServiceSummary = RouteTarget & {
   cardTitle?: Localized;
   cardText?: Localized;
   cardLinkLabel?: Localized;
+  /** Symbole au trait de la ligne de service (liste fermée de `icon-names.ts`). */
+  cardIcon?: string | null;
 };
 
 export type UiStrings = Partial<Record<
@@ -53,10 +55,10 @@ export type Shell = {
   launch?: { bannerEnabled?: boolean | null; bannerText?: Localized; deadline?: string | null } | null;
   services?: ServiceSummary[];
   quotePage?: RouteTarget;
-  routes?: RouteTarget[];
-} | null;
   /** Titre de l’accueil (premier maillon du fil d’Ariane en données structurées). */
   home?: { title?: Localized } | null;
+  routes?: RouteTarget[];
+} | null;
 
 export type TitleBlockData = { sheet?: string; revision?: string; date?: string } | null | undefined;
 

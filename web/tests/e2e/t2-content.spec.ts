@@ -25,7 +25,10 @@ for (const lang of ["fr", "en"] as const) {
     const projects = page.locator("#projets");
     await expect(projects.locator("ol > li")).toHaveCount(3);
     await expect(projects.getByText(lang === "fr" ? "Exemple — à remplacer" : "Example — to be replaced")).toHaveCount(3);
-    await expect(projects.locator("img")).toHaveCount(0);
+    // T3 : chaque fiche porte une photo d'illustration, avec texte alternatif et la légende « Photo d'illustration ».
+    await expect(projects.locator("img")).toHaveCount(3);
+    for (const img of await projects.locator("img").all()) await expect(img).toHaveAttribute("alt", /.{5,}/);
+    await expect(projects.getByText(lang === "fr" ? "Photo d'illustration" : "Illustrative photo")).toHaveCount(3);
     // « Ce qu'il faut nous envoyer » ne figure plus sur l'accueil.
     await expect(page.getByRole("heading", { level: 2, name: lang === "fr" ? "Ce qu'il faut nous envoyer" : "What to send us" })).toHaveCount(0);
     // Réassurance sous le bouton final, sans « gratuit » ni « sans engagement ».

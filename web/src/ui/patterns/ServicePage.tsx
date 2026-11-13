@@ -20,6 +20,8 @@ import type { FigureImageData } from "@/ui/components/FigureImage";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
 import { NetworkList, Pledge, type Keyed } from "./service-sections";
 
+type LineItem = Keyed<Localized & { icon?: string | null }>;
+
 export type ServiceDoc = {
   _id: string;
   code?: string;
@@ -42,15 +44,15 @@ export type ServiceDoc = {
   figureImage?: FigureImageData;
   deliverablesNote?: Localized;
   needsHeading?: Localized;
-  needs?: Array<Keyed<Localized & object>> | null;
+  needs?: LineItem[] | null;
   needsNote?: Localized;
   methodHeading?: Localized;
-  methodSteps?: Array<Keyed<Localized & object>>;
+  methodSteps?: LineItem[];
   extraHeading?: Localized;
-  extraItems?: Array<Keyed<Localized & object>>;
+  extraItems?: LineItem[];
   extraNote?: Localized;
   moreHeading?: Localized;
-  moreItems?: Array<Keyed<Localized & object>>;
+  moreItems?: LineItem[];
   moreNote?: Localized;
   responsibilityRows?: ResponsibilityRowData[] | null;
   proof?: ProofData | null;
@@ -121,7 +123,7 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
       )}
       <NetworkList id="a-envoyer" heading={{ [locale]: pick(doc.needsHeading, locale, v5Label(ui, "needsHeadingDefault", locale)) }} items={doc.needs ?? undefined} note={doc.needsNote} network={network} locale={locale} />
       <Packages data={{ heading: ui?.offerPackages, taxNote: doc.taxNote, creditText: doc.creditText, packages: doc.packages, ui, quotePage: shell?.quotePage }} locale={locale} />
-      {doc.methodSteps?.length ? <Method data={{ heading: doc.methodHeading, steps: doc.methodSteps.map((s) => ({ _key: s._key, title: s })) }} locale={locale} /> : null}
+      {doc.methodSteps?.length ? <Method data={{ heading: doc.methodHeading, steps: doc.methodSteps.map((s) => ({ _key: s._key, title: s, icon: s.icon })) }} locale={locale} /> : null}
       <NetworkList heading={doc.extraHeading} items={doc.extraItems} note={doc.extraNote} network={network} locale={locale} />
       <NetworkList heading={doc.moreHeading} items={doc.moreItems} note={doc.moreNote} network={network} locale={locale} />
       <ResponsibilityTable data={{ heading: ui?.responsibilities, rows: doc.responsibilityRows ?? [], note: doc.responsibilityNote }} locale={locale} ui={ui} />

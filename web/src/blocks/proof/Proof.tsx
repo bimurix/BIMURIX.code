@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { canShowProof, proofSourceName } from "@/lib/packages/proof";
+import { Icon } from "@/ui/components/Icon";
 import { Section, SectionHeading } from "../section";
 
 export type ProofData = {
@@ -31,7 +32,7 @@ export function Proof({ data, locale }: { data: ProofData; locale: Locale }) {
       <figure className="border-[1.5px] border-ink bg-paper">
         <dl className="grid divide-y divide-rule sm:grid-cols-[repeat(auto-fit,minmax(0,1fr))] sm:divide-x sm:divide-y-0">
           {figures.map((f) => (
-            <div key={f._key} className="flex flex-col-reverse justify-end gap-1 p-5">
+            <div key={f._key} className="flex flex-col-reverse justify-end gap-1 p-4 sm:p-5">
               <dt className="max-w-[28ch] text-ink-2">{pick(f.label, locale, "")}</dt>
               <dd className="font-mono text-4xl font-bold tabular-nums">{f.value}</dd>
             </div>
@@ -43,6 +44,7 @@ export function Proof({ data, locale }: { data: ProofData; locale: Locale }) {
             {sourceLabel && `${sourceLabel}${locale === "fr" ? " : " : ": "}`}
             <a href={data.sourceUrl ?? undefined} rel="noopener noreferrer" className="inline-flex min-h-(--bx-tap-min) items-center text-ink underline underline-offset-4 hover:text-blue">
               {proofSourceName(data, locale)}
+              <Icon name="lien-externe" size="sm" className="ms-1.5" />
             </a>
           </span>
         </figcaption>

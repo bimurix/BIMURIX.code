@@ -58,7 +58,7 @@ function ScenarioLinks({ item, locale, ui, quotePath, short }: Omit<Props, "item
   const quoteHref = !short && quotePath && item.service?._id ? `${quotePath}?service=${encodeURIComponent(item.service._id)}` : null;
   if (!servicePath && !quoteHref) return null;
   return (
-    <p className="flex flex-wrap gap-x-6 lg:col-start-2">
+    <p className="-mt-1 flex flex-wrap gap-x-6 lg:col-start-2">
       {servicePath && (
         <Link href={servicePath} className={linkClass}>
           {v5Label(ui, "scenarioServiceLink", locale)}
@@ -81,10 +81,10 @@ function ScenarioItem({ item, locale, ui, quotePath, short }: Omit<Props, "items
     return text ? [{ field, label: v5Label(ui, labelKey, locale), text }] : [];
   });
   return (
-    <li className={`border-b border-rule ${short ? "py-4" : "py-6"}`}>
+    <li className={`border-b border-rule ${short ? "py-3 lg:py-3.5" : "py-6"}`}>
       <article className="grid gap-x-10 gap-y-2 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
         <div>
-          <h3 className="font-display max-w-[28ch] text-xl leading-snug font-bold text-balance text-ink">{pick(item.title, locale, "")}</h3>
+          <h3 className="font-display max-w-[28ch] text-lg leading-snug sm:text-xl font-bold text-balance text-ink">{pick(item.title, locale, "")}</h3>
           <FigureImage image={item.image} locale={locale} ratio="3 / 2" sizes="(min-width: 640px) 384px, 100vw" className="mt-4 max-w-sm" />
         </div>
         {cells.length > 0 && (

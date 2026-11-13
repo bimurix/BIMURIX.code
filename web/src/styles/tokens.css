@@ -44,10 +44,21 @@
    * Rythme vertical (plan de contenu v5 § 8 n° 3) : deux espacements seulement,
    * entre deux sections et entre un titre de section et son contenu.
    */
-  --bx-space-section: 3rem;
-  --bx-space-section-lg: 4.5rem;
-  --bx-space-head: 2rem;
+  --bx-space-section: 2.25rem;
+  --bx-space-section-lg: 2rem;
+  --bx-space-head: 1.25rem;
 
   /* Barre d'action fixe du mobile (S3b) : hauteur réservée en bas de page pour ne rien masquer. */
   --bx-actionbar-h: 62px;
+}
+
+/*
+ * Interligne du texte courant : un peu plus serré sur téléphone (cahier v6 T3, accueil plus court).
+ * Tailwind lit --leading-relaxed ; 1,5 reste confortable (WCAG 1.4.12 demande 1,5 comme repère).
+ */
+@media (max-width: 639px) {
+  :root {
+    --leading-relaxed: 1.5;
+    --bx-space-section: 1.5rem;
+  }
 }

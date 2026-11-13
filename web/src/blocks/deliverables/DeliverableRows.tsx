@@ -5,7 +5,7 @@ import { FigureImage, type FigureImageData } from "@/ui/components/FigureImage";
 import { Section, SectionHeading } from "../section";
 import { DeliverableTable } from "./DeliverableTable";
 
-export type DeliverableRowData = { _key: string; title?: Localized; purpose?: Localized };
+export type DeliverableRowData = { _key: string; icon?: string | null; title?: Localized; purpose?: Localized };
 
 type Props = {
   heading?: Localized;
@@ -25,7 +25,7 @@ type Props = {
 export function DeliverableRows({ heading, rows, figure, note, locale, ui, illustrativeLabel }: Props) {
   const lines = rows.flatMap((r) => {
     const title = pick(r.title, locale, "");
-    return title ? [{ key: r._key, title, purpose: pick(r.purpose, locale, "") }] : [];
+    return title ? [{ key: r._key, title, purpose: pick(r.purpose, locale, ""), icon: r.icon }] : [];
   });
   if (lines.length === 0) return null;
   const hasFigure = Boolean(figure?.asset?.url);

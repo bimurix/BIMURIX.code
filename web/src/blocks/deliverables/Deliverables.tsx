@@ -6,7 +6,7 @@ import type { ImageAsset } from "@/sanity/types-content";
 import { Section, SectionHeading } from "../section";
 import { DeliverableTable } from "./DeliverableTable";
 
-type Item = { _key: string; title?: Localized; text?: Localized; purpose?: Localized; image?: (ImageAsset & { alt?: Localized; illustrative?: boolean }) | null };
+type Item = { _key: string; icon?: string | null; title?: Localized; text?: Localized; purpose?: Localized; image?: (ImageAsset & { alt?: Localized; illustrative?: boolean }) | null };
 export type DeliverablesData = { heading?: Localized; intro?: Localized; note?: Localized; items?: Item[] };
 
 type Props = { data: DeliverablesData; locale: Locale; illustrativeLabel: string; labels: { item: string; purpose: string } };
@@ -31,10 +31,10 @@ export function Deliverables({ data, locale, illustrativeLabel, labels }: Props)
         </ul>
       ) : (
         <DeliverableTable
-          className="max-w-5xl"
+          className="max-w-6xl"
           caption={heading || undefined}
           labels={labels}
-          lines={items.map((item) => ({ key: item._key, title: pick(item.title, locale, ""), text: pick(item.text, locale, ""), purpose: pick(item.purpose, locale, "") }))}
+          lines={items.map((item) => ({ key: item._key, title: pick(item.title, locale, ""), text: pick(item.text, locale, ""), purpose: pick(item.purpose, locale, ""), icon: item.icon }))}
         />
       )}
       {data.note && <p className="mt-8 max-w-[60ch] text-[15px] text-ink-2">{pick(data.note, locale, "")}</p>}

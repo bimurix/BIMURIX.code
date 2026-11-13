@@ -1,4 +1,5 @@
 import { formAndEmails } from "./form-and-emails.mts";
+import { withIcons } from "./icons-t3.mts";
 import { legalPages } from "./legal.mts";
 import { launchSettingsDoc, packageDocs } from "./packages.mts";
 import { pages } from "./pages.mts";
@@ -15,4 +16,5 @@ const [modelisation, tqc] = servicesOrigine;
 export const serviceDocs = [modelisation, serviceTuyauterie, serviceGicleurs, serviceCombinee, service7d, tqc];
 
 /** Tout le contenu de départ : un dataset neuf reçoit exactement ceci (source commune du seed, du patch R1 et des tests). */
-export const seedDocuments: Array<{ _id: string; _type: string } & Record<string, unknown>> = [...singletons, ...formAndEmails, ...serviceDocs, ...redirects, ...packageDocs, launchSettingsDoc, ...pages, ...legalPages];
+// T3-A : les symboles des lignes viennent de `icons-t3.mts` (une table pour le seed et pour le patch development).
+export const seedDocuments: Array<{ _id: string; _type: string } & Record<string, unknown>> = withIcons([...singletons, ...formAndEmails, ...serviceDocs, ...redirects, ...packageDocs, launchSettingsDoc, ...pages, ...legalPages]);

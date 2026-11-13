@@ -6,6 +6,7 @@ import { shortName } from "@/lib/services/families";
 import type { NetworkColor } from "@/sanity/types-content";
 import { Arrow } from "@/ui/components/Arrow";
 import { FigureImage, type FigureImageData } from "@/ui/components/FigureImage";
+import { Icon } from "@/ui/components/Icon";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
 import { Section, SectionHeading } from "../section";
 
@@ -15,13 +16,13 @@ export type ProblemsData = {
   heading?: Localized;
   intro?: Localized;
   image?: FigureImageData;
-  items?: Array<{ _key: string; title?: Localized; text?: Localized; services?: Array<ProblemService | null> | null }>;
+  items?: Array<{ _key: string; icon?: string | null; title?: Localized; text?: Localized; services?: Array<ProblemService | null> | null }>;
 };
 
 /**
- * Problèmes de chantier : une rangée par problème, en trois temps lus de gauche à droite : le problème, ce que fait
- * Bimurix, le service qui s'en charge (couleur du réseau, code en mono, lien). Traits fins, pas de cartes.
- * Un service sans adresse dans la langue n'a pas de lien.
+ * Problèmes de chantier : une liste dense à deux colonnes dès lg (T3), chaque entrée en trois temps : le problème (avec son
+ * symbole au trait, s'il est choisi), ce que fait Bimurix, le service qui s'en charge (couleur du réseau, code en mono, lien).
+ * Traits fins, pas de cartes. Un service sans adresse dans la langue n'a pas de lien.
  */
 export function Problems({ data, locale, illustrativeLabel }: { data: ProblemsData; locale: Locale; illustrativeLabel?: string }) {
   const items = (data.items ?? []).filter((item) => pick(item.title, locale, ""));
@@ -30,7 +31,7 @@ export function Problems({ data, locale, illustrativeLabel }: { data: ProblemsDa
     <Section id="problemes">
       <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "")}</SectionHeading>
       <FigureImage image={data.image} locale={locale} ratio="21 / 9" sizes="(min-width: 1280px) 1232px, 100vw" illustrativeLabel={illustrativeLabel} className="mb-(--bx-space-head)" />
-      <ol className="border-t-[1.5px] border-ink">
+      <ol className="grid border-t-[1.5px] border-ink lg:grid-cols-2 lg:gap-x-12">
         {items.map((item) => {
           const links = (item.services ?? []).flatMap((s) => {
             // Un service masqué (ou supprimé) ne donne aucun lien.
@@ -39,14 +40,17 @@ export function Problems({ data, locale, illustrativeLabel }: { data: ProblemsDa
             return href ? [{ id: s._id, href, label: shortName(s, locale), code: s.code, network: s.network ?? "tqc" }] : [];
           });
           return (
-            <li key={item._key} className="grid gap-x-8 gap-y-2 border-b border-rule py-5 md:grid-cols-2 lg:grid-cols-[minmax(0,5fr)_minmax(0,5fr)_minmax(0,4fr)]">
-              <h3 className="font-display max-w-[30ch] text-lg leading-snug font-bold text-ink sm:text-xl">{pick(item.title, locale, "")}</h3>
-              <p className="max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{pick(item.text, locale, "")}</p>
+            <li key={item._key} className="border-b border-rule py-3 lg:py-4">
+              <h3 className="font-display flex max-w-[40ch] items-start gap-3 text-lg leading-snug font-bold text-ink">
+                <Icon name={item.icon} className="mt-0.5 text-blue" />
+                {pick(item.title, locale, "")}
+              </h3>
+              <p className="mt-1.5 max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{pick(item.text, locale, "")}</p>
               {links.length > 0 && (
-                <ul className="md:col-span-2 lg:col-span-1 lg:-mt-2.5">
+                <ul className="mt-0.5 flex flex-wrap gap-x-6">
                   {links.map((l) => (
                     <li key={l.id}>
-                      <Link href={l.href} className="group flex min-h-(--bx-tap-min) items-center gap-3 text-[15px] font-semibold text-blue hover:text-blue-deep">
+                      <Link href={l.href} className="group flex min-h-(--bx-tap-min) items-center gap-2.5 text-[15px] font-semibold text-blue hover:text-blue-deep">
                         <NetworkSwatch network={l.network} />
                         {l.code && <span className="shrink-0 font-mono text-[12px] font-normal text-ink-2">{l.code}</span>}
                         <span className="underline underline-offset-4">{l.label}</span>

@@ -1,13 +1,14 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
+import { Icon } from "@/ui/components/Icon";
 
-export type QuoteNeedsData = { heading?: Localized; items?: Array<Localized & { _key?: string }>; note?: Localized };
+export type QuoteNeedsData = { heading?: Localized; items?: Array<Localized & { _key?: string; icon?: string | null }>; note?: Localized };
 
 /** Encart « Utile, si vous l'avez sous la main » (ex-« Ce qu'il faut nous envoyer »), dans la colonne à côté du formulaire. Texte de Studio (Formulaire de soumission) ; sans ligne, rien. */
 export function QuoteNeeds({ data, locale }: { data: QuoteNeedsData; locale: Locale }) {
   const items = (data.items ?? []).flatMap((item, i) => {
     const text = pick(item, locale, "");
-    return text ? [{ key: item._key ?? String(i), text }] : [];
+    return text ? [{ key: item._key ?? String(i), text, icon: item.icon }] : [];
   });
   if (items.length === 0) return null;
   const heading = pick(data.heading, locale, "");
@@ -18,7 +19,7 @@ export function QuoteNeeds({ data, locale }: { data: QuoteNeedsData; locale: Loc
       <ul className={heading ? "mt-3" : ""}>
         {items.map((item) => (
           <li key={item.key} className="flex gap-3 border-b border-rule py-2.5 text-[16px] text-ink">
-            <span aria-hidden="true" className="mt-2 size-2 shrink-0 rounded-full border-2 border-blue bg-paper" />
+            {item.icon ? <Icon name={item.icon} size="sm" className="mt-0.5 text-blue" /> : <span aria-hidden="true" className="mt-2 size-2 shrink-0 rounded-full border-2 border-blue bg-paper" />}
             {item.text}
           </li>
         ))}

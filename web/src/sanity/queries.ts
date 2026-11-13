@@ -20,7 +20,7 @@ const sections = `sections[]{
   _type == "serviceNetworks" => {
     ...,
     "services": coalesce(services[]->, *[_type == "service"] | order(order asc))[visible != false]{
-      _id, _type, code, network, title, shortTitle, family, slug, cardTitle, cardText, cardLinkLabel
+      _id, _type, code, network, title, shortTitle, family, slug, cardTitle, cardText, cardLinkLabel, cardIcon
     }
   },
   _type == "projectCycle" => {

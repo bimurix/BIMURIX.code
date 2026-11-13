@@ -18,9 +18,9 @@ export function Section({ id, children, className = "", band = false }: SectionP
 export function SectionHeading({ children, intro }: { children: React.ReactNode; intro?: string }) {
   if (!children) return null;
   return (
-    <div className="mb-(--bx-space-head) max-w-3xl">
-      <h2 className="font-display text-[1.7rem] leading-tight font-bold tracking-[-0.015em] text-balance sm:text-4xl">{children}</h2>
-      {intro && <p className="mt-4 max-w-[68ch] text-[17px] leading-relaxed text-ink-2">{intro}</p>}
+    <div className={`mb-(--bx-space-head) ${intro ? "lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-end lg:gap-x-12" : "max-w-3xl"}`}>
+      <h2 className="font-display text-[1.6rem] leading-tight font-bold tracking-[-0.015em] text-balance sm:text-4xl">{children}</h2>
+      {intro && <p className="mt-3 max-w-[68ch] text-[17px] leading-normal text-ink-2 lg:mt-0 lg:leading-relaxed">{intro}</p>}
     </div>
   );
 }

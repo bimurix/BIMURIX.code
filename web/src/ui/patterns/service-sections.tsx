@@ -2,6 +2,7 @@ import { Section, SectionHeading } from "@/blocks/section";
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import type { NetworkColor } from "@/sanity/types-content";
+import { Icon } from "@/ui/components/Icon";
 import { networkVar } from "@/ui/components/NetworkSwatch";
 
 export type Keyed<T> = T & { _key: string };
@@ -18,8 +19,8 @@ export function Note({ heading, text, locale }: { heading?: Localized; text?: Lo
   );
 }
 
-/** Liste à puces « raccords » dans la couleur du réseau du service. */
-export function NetworkList({ heading, items, note, network, locale, id }: { heading?: Localized; items?: Array<Keyed<Localized & object>>; note?: Localized; network: NetworkColor; locale: Locale; id?: string }) {
+/** Liste à puces « raccords » dans la couleur du réseau du service ; une ligne avec symbole prend le symbole à la place de la puce. */
+export function NetworkList({ heading, items, note, network, locale, id }: { heading?: Localized; items?: Array<Keyed<Localized & { icon?: string | null }>>; note?: Localized; network: NetworkColor; locale: Locale; id?: string }) {
   if (!items?.length) return null;
   return (
     <Section id={id}>
@@ -27,7 +28,7 @@ export function NetworkList({ heading, items, note, network, locale, id }: { hea
       <ul className="grid max-w-5xl gap-x-10 border-t-[1.5px] border-ink sm:grid-cols-2">
         {items.map((item) => (
           <li key={item._key} className="flex min-h-14 items-center gap-4 border-b border-rule py-3 text-[16px] text-ink">
-            <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full border-2 bg-paper" style={{ borderColor: networkVar[network] }} />
+            {item.icon ? <Icon name={item.icon} className="text-blue" /> : <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full border-2 bg-paper" style={{ borderColor: networkVar[network] }} />}
             {pick(item, locale, "")}
           </li>
         ))}

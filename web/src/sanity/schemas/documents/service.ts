@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { iconField } from "../objects/icon";
 import { requireFr } from "../objects/locale";
 
 const titledText = (name: string) =>
@@ -36,6 +37,7 @@ export const service = defineType({
     defineField({ name: "cardTitle", title: "Titre de la carte", type: "localeString", group: "card", validation: requireFr }),
     defineField({ name: "cardText", title: "Texte de la carte", type: "localeText", group: "card", validation: requireFr }),
     defineField({ name: "cardLinkLabel", title: "Libellé du lien", type: "localeString", group: "card" }),
+    defineField({ ...iconField, name: "cardIcon", title: "Symbole de la ligne (facultatif)", group: "card", description: "Accompagne la ligne du service sur l'accueil. Vide : aucun symbole." }),
 
     // Ordre de la page : même ordre que le gabarit (plan de contenu v5 § 2b). Tous les nouveaux champs sont facultatifs.
     defineField({ name: "heroHeading", title: "Titre principal (H1)", type: "localeString", group: "page", validation: requireFr }),

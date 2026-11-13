@@ -53,13 +53,13 @@ export function HeroSheet({ data, locale, shell, titleBlock, runs = [], aside, m
   const bottomLeft = hint || aside;
 
   return (
-    <section className={`mx-auto max-w-7xl px-4 pt-6 sm:px-6 sm:pt-10 ${compact ? "pb-4" : "pb-10"}`}>
+    <section className={`mx-auto max-w-7xl px-4 pt-6 sm:px-6 sm:pt-10 ${compact ? "pb-4" : "pb-6"}`}>
       <Sheet>
         <div className="bx-iso">
-          <div className={`grid gap-8 p-5 sm:p-8 lg:gap-6 lg:p-10 ${withDrawing ? "lg:grid-cols-12" : ""}`}>
-            <div className={withDrawing ? "lg:col-span-6 lg:pt-4" : "max-w-4xl"}>
+          <div className={`grid gap-6 p-4 sm:gap-8 sm:p-8 lg:gap-6 lg:p-6 ${withDrawing ? "lg:grid-cols-12" : ""}`}>
+            <div className={withDrawing ? "lg:col-span-6 lg:pt-0" : "max-w-4xl"}>
               {meta && <div className="mb-4">{meta}</div>}
-              <h1 className={`font-display leading-[1.04] font-bold tracking-[-0.02em] text-balance text-ink ${compact ? "text-[2rem] sm:text-[2.6rem] lg:text-[3rem]" : "text-[1.75rem] sm:text-5xl lg:text-[3.2rem] xl:text-[3.5rem]"}`}>
+              <h1 className={`font-display leading-[1.04] font-bold tracking-[-0.02em] text-balance text-ink ${compact ? "text-[2rem] sm:text-[2.6rem] lg:text-[3rem]" : "text-[1.55rem] sm:text-5xl lg:text-[2.8rem] xl:text-[3.1rem]"}`}>
                 {pick(data.heading, locale, "")}
               </h1>
               {data.intro && <p className="mt-5 max-w-[60ch] text-[17px] leading-relaxed text-ink-2">{pick(data.intro, locale, "")}</p>}

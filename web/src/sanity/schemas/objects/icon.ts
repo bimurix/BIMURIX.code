@@ -7,5 +7,5 @@ export const iconField = defineField({
   title: "Symbole (facultatif)",
   type: "string",
   options: { list: ICON_OPTIONS.map((o) => ({ title: o.title, value: o.value })) },
-  description: "Dessiné et branché par la tâche T3. Vide : aucun symbole.",
+  description: "Symbole au trait qui accompagne la ligne. Vide : la ligne s'affiche sans symbole.",
 });

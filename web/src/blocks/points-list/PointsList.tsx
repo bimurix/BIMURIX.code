@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { FigureImage, type FigureImageData } from "@/ui/components/FigureImage";
+import { Icon } from "@/ui/components/Icon";
 import { Section, SectionHeading } from "../section";
 
 type Item = { _key: string; title?: Localized; text?: Localized; group?: Localized; icon?: string | null };
@@ -42,7 +43,7 @@ export function PointsList({ data, locale, illustrativeLabel }: { data: PointsLi
         <ul className="grid gap-x-10 border-t-[1.5px] border-ink sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
             <li key={item._key} className="flex min-h-14 items-center gap-4 border-b border-rule py-3 text-[16px] font-semibold text-ink">
-              <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full border-2 border-blue bg-paper" />
+              {item.icon ? <Icon name={item.icon} className="text-blue" /> : <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full border-2 border-blue bg-paper" />}
               {pick(item.title, locale, "")}
             </li>
           ))}
@@ -60,12 +61,15 @@ export function PointsList({ data, locale, illustrativeLabel }: { data: PointsLi
           <dl className="border-t-[1.5px] border-ink">
             {items.map((item) => (
               <div key={item._key} className="grid gap-2 border-b border-rule py-5 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-8">
-                <dt className="font-display text-lg font-bold text-ink">{pick(item.title, locale, "")}</dt>
+                <dt className="font-display flex items-start gap-3 text-lg font-bold text-ink">
+                  <Icon name={item.icon} className="mt-0.5 text-blue" />
+                  {pick(item.title, locale, "")}
+                </dt>
                 <dd className="max-w-[62ch] text-[16px] leading-relaxed text-ink-2">{pick(item.text, locale, "")}</dd>
               </div>
             ))}
           </dl>
-          <FigureImage image={data.image} locale={locale} ratio="4 / 3" sizes="(min-width: 1024px) 400px, 100vw" illustrativeLabel={illustrativeLabel} />
+          <FigureImage image={data.image} locale={locale} ratio="16 / 9" ratioSm="3 / 1" sizes="(min-width: 1024px) 400px, 100vw" illustrativeLabel={illustrativeLabel} />
         </div>
       </Section>
     );
@@ -86,8 +90,11 @@ export function PointsList({ data, locale, illustrativeLabel }: { data: PointsLi
             {group.items.map((item) => {
               const Title = grouped ? "h4" : "h3";
               return (
-                <li key={item._key} className="border-b border-rule py-4 sm:py-5">
-                  <Title className="font-display text-lg font-bold text-ink sm:text-xl">{pick(item.title, locale, "")}</Title>
+                <li key={item._key} className="border-b border-rule py-3.5 sm:py-5">
+                  <Title className="font-display flex items-start gap-3 text-lg font-bold text-ink sm:text-xl">
+                    <Icon name={item.icon} className="mt-0.5 text-blue sm:mt-1" />
+                    {pick(item.title, locale, "")}
+                  </Title>
                   <p className="mt-1.5 max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{pick(item.text, locale, "")}</p>
                 </li>
               );
@@ -96,7 +103,7 @@ export function PointsList({ data, locale, illustrativeLabel }: { data: PointsLi
         </div>
       ))}
       </div>
-      <FigureImage image={data.image} locale={locale} ratio="4 / 3" sizes="(min-width: 1024px) 400px, 100vw" illustrativeLabel={illustrativeLabel} />
+      <FigureImage image={data.image} locale={locale} ratio="16 / 9" ratioSm="3 / 1" sizes="(min-width: 1024px) 400px, 100vw" illustrativeLabel={illustrativeLabel} />
       </div>
     </Section>
   );

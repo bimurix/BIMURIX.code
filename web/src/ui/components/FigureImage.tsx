@@ -13,6 +13,8 @@ type Props = {
   locale: Locale;
   /** Rapport largeur / hauteur réservé avant le chargement (ex. « 4 / 3 », « 21 / 9 »). */
   ratio?: string;
+  /** Rapport plus bas sur téléphone (hauteur de page, T3) ; absent = le même partout. */
+  ratioSm?: string;
   sizes: string;
   /** Seulement pour l'image du haut de page (plan de contenu v5 § 7 n° 5). */
   priority?: boolean;
@@ -24,7 +26,7 @@ type Props = {
  * Image de page dans un cadre de feuille de plan : le rapport est fixé par le gabarit (pas de saut de mise en page),
  * la légende reste visible. Sans image, ne rend rien. Photo d'illustration : légende et mention saisies dans Studio.
  */
-export function FigureImage({ image, locale, ratio = "4 / 3", sizes, priority = false, illustrativeLabel, className = "" }: Props) {
+export function FigureImage({ image, locale, ratio = "4 / 3", ratioSm, sizes, priority = false, illustrativeLabel, className = "" }: Props) {
   if (!image?.asset?.url) return null;
   const caption = pick(image.caption, locale, "");
   const mention = image.illustrative ? illustrativeLabel || illustrativeFallback[locale] : "";
@@ -32,7 +34,7 @@ export function FigureImage({ image, locale, ratio = "4 / 3", sizes, priority = 
   const vector = image.asset.url.split("?")[0].endsWith(".svg");
   return (
     <figure className={`border-[1.5px] border-ink bg-paper ${className}`}>
-      <div className="relative w-full" style={{ aspectRatio: ratio }}>
+      <div className="relative aspect-(--bx-r-sm) w-full sm:aspect-(--bx-r)" style={{ "--bx-r": ratio, "--bx-r-sm": ratioSm ?? ratio } as React.CSSProperties}>
         <Image src={vector ? image.asset.url : urlForImage(image).width(1400).url()} alt={pick(image.alt, locale, "")} fill sizes={sizes} priority={priority} unoptimized={vector} className={vector ? "object-contain" : "object-cover"} />
       </div>
       {(caption || mention) && (

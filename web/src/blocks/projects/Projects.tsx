@@ -28,7 +28,7 @@ export type ProjectsData = {
 };
 
 // Colonnes du registre dès lg : projet, discipline, livré, outils. Sous lg, chaque fiche est une liste empilée.
-const COLUMNS = "lg:grid-cols-[minmax(0,5fr)_minmax(0,3fr)_minmax(0,5fr)_minmax(0,3fr)]";
+const COLUMNS = "lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)_minmax(0,4fr)_minmax(0,3fr)]";
 const cellLabel = "block text-[13px] font-semibold text-ink-2 lg:sr-only";
 
 /**
@@ -57,28 +57,30 @@ export function Projects({ data, locale, ui }: { data: ProjectsData; locale: Loc
           const delivered = (item.delivered ?? []).map((d) => ({ key: d._key ?? pick(d, locale, ""), text: pick(d, locale, "") })).filter((d) => d.text);
           const tools = pick(item.tools, locale, "");
           return (
-            <li key={item._key} className={`grid gap-x-8 gap-y-1.5 border-b border-rule py-4 lg:gap-y-3 lg:py-5 ${COLUMNS}`}>
-              <div>
+            <li key={item._key} className={`grid grid-cols-2 gap-x-6 gap-y-1 border-b border-rule py-3.5 lg:gap-x-8 lg:gap-y-3 lg:py-5 ${COLUMNS}`}>
+              <div className={`col-span-2 lg:col-span-1 ${item.image?.asset?.url ? "grid grid-cols-[7rem_minmax(0,1fr)] items-start gap-x-3 lg:grid-cols-[9rem_minmax(0,1fr)] lg:gap-x-4" : ""}`}>
+                <div>
                 <h3 className="font-display max-w-[30ch] text-lg leading-snug font-bold text-ink sm:text-xl">{pick(item.title, locale, "")}</h3>
                 {(badge || item.year) && (
-                  <p className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[12px] text-ink-2">
+                  <p className="mt-1.5 flex flex-wrap items-center gap-2 font-mono text-[12px] text-ink-2">
                     {badge && <span className="border border-ink px-2 py-0.5 text-ink">{badge}</span>}
                     {item.year && <span>{item.year}</span>}
                   </p>
                 )}
-                <FigureImage image={item.image} locale={locale} ratio="3 / 2" sizes="(min-width: 1024px) 280px, 100vw" className="mt-3 max-w-xs" />
+                </div>
+                <FigureImage image={item.image} locale={locale} ratio="3 / 2" sizes="(min-width: 1024px) 176px, 112px" className="order-first" />
               </div>
               {href && item.discipline && (
-                <div>
+                <div className="col-span-1">
                   <span className={cellLabel}>{v5Label(ui, "projectColDiscipline", locale)}</span>
-                  <Link href={href} className="group flex min-h-(--bx-tap-min) items-center gap-3 py-0 text-[15px] font-semibold text-blue hover:text-blue-deep">
+                  <Link href={href} className="group flex min-h-(--bx-tap-min) items-center gap-2.5 py-0 text-[15px] font-semibold text-blue hover:text-blue-deep">
                     <NetworkSwatch network={item.discipline.network ?? "tqc"} />
                     <span className="underline underline-offset-4">{shortName(item.discipline, locale)}</span>
                   </Link>
                 </div>
               )}
               {delivered.length > 0 && (
-                <div>
+                <div className="order-last col-span-2 lg:order-none lg:col-span-1">
                   <span className={cellLabel}>{v5Label(ui, "projectColDelivered", locale)}</span>
                   <ul className="mt-1 flex flex-wrap gap-x-4 text-[15px] leading-relaxed text-ink-2 lg:mt-0 lg:block">
                     {delivered.map((d) => (
@@ -88,7 +90,7 @@ export function Projects({ data, locale, ui }: { data: ProjectsData; locale: Loc
                 </div>
               )}
               {tools && (
-                <div>
+                <div className="col-span-1">
                   <span className={cellLabel}>{v5Label(ui, "projectColTools", locale)}</span>
                   <p className="mt-1 text-[15px] text-ink-2 lg:mt-0">{tools}</p>
                 </div>
