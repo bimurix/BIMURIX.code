@@ -10,7 +10,7 @@
  *    (polyfills des vieux navigateurs, jamais chargés par un navigateur moderne), dédoublonnés ;
  *    les scripts chargés plus tard par import dynamique ne comptent pas ;
  *  - taille = octets réellement transférés avec `Accept-Encoding: gzip` (corps compressé reçu du serveur) ;
- *  - 1 Ko = 1000 octets (unité SI ; le budget est de 150 Ko = 150 000 octets). L'écart 149,6 / 153,2 de l'audit S5 et de la
+ *  - 1 Ko = 1000 octets (unité SI ; le budget est de 155 Ko = 155 000 octets, ADR-010). L'écart 149,6 / 153,2 de l'audit S5 et de la
  *    session T2 vient de cette seule unité : mêmes octets, divisés par 1024 (S5) ou par 1000 (T2). Les deux sont affichés.
  * Sortie : une ligne par page, le détail des fichiers les plus lourds, et un code de sortie 1 si une page dépasse le budget.
  */
@@ -18,7 +18,8 @@ import http from "node:http";
 import https from "node:https";
 import { gzipSync } from "node:zlib";
 
-const BUDGET = 150_000;
+// decision: ADR-010 — 155 Ko (mesuré 154,3 Ko au 2026-11-13 ; le plancher de Next 16 + React 19 est ≈ 126 Ko). Même valeur dans tests/e2e/js-budget.spec.ts.
+const BUDGET = 155_000;
 const [base = "http://localhost:3200", ...rest] = process.argv.slice(2);
 const paths = rest.length ? rest : ["/", "/en", "/services/tuyauterie-plomberie", "/soumission"];
 
