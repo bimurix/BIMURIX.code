@@ -40,6 +40,7 @@ function deps(over: Partial<SubmitDeps> = {}): SubmitDeps {
   return {
     verifyCaptcha: vi.fn(async () => true),
     countRecentFromIp: vi.fn(async () => 0),
+    countRecentGlobal: vi.fn(async () => 0),
     insert: vi.fn(async () => ({ id: "uuid-1" })),
     afterInsert: vi.fn(async () => {}),
     options: async () => options,

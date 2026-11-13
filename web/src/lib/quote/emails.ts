@@ -41,6 +41,7 @@ export async function sendQuoteEmails(
   content: QuoteFormContent,
   mailer: Mailer,
   markSent: (column: "notification_sent_at" | "ack_email_sent_at") => Promise<void>,
+  { sendAck = true }: { sendAck?: boolean } = {},
 ) {
   const from = { email: content?.fromEmail ?? FALLBACK_FROM, name: content?.emails?.fromName ?? "Bimurix" };
   const service = serviceOptions(content).find((o) => o.value === input.service);
@@ -77,6 +78,8 @@ export async function sendQuoteEmails(
     html: `<table style="font:14px Arial,sans-serif">${table}</table><h3 style="font:600 15px Arial,sans-serif">Description</h3>${textToHtml(input.description)}`,
   });
   await markSent("notification_sent_at");
+  // S-03 : limite d'accusés par adresse décidée par l'appelant (la notification interne part toujours).
+  if (!sendAck) return;
 
   const lang = input.preferredLanguage;
   const subject = oneLine(fillTemplate(pick((isCall ? content?.emails?.ackSubjectCall : undefined) ?? content?.emails?.ackSubject, lang, fallbackAck[lang].subject), vars));

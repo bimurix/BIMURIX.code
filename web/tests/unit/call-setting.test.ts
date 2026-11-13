@@ -23,7 +23,7 @@ function form(extra: Record<string, string> = {}) {
 }
 
 const deps = (options: AllowedOptions | null): SubmitDeps => ({
-  verifyCaptcha: async () => true, countRecentFromIp: async () => 0, insert: vi.fn(async () => ({ id: "id-1" })),
+  verifyCaptcha: async () => true, countRecentFromIp: async () => 0, countRecentGlobal: async () => 0, insert: vi.fn(async () => ({ id: "id-1" })),
   afterInsert: async () => {}, options: async () => options, policyVersion: "2026-11", ipHash: null, now: () => new Date(),
 });
 

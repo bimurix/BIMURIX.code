@@ -1,3 +1,4 @@
+import { errorSummary } from "@/lib/safe-log";
 import { fieldErrors, formDataToInput, quoteSchema, type QuoteInput, type SubmitResult } from "./schema";
 import { newReference } from "./templates";
 
@@ -42,6 +43,8 @@ export type AllowedOptions = {
 export type SubmitDeps = {
   verifyCaptcha: (token: string | undefined) => Promise<boolean>;
   countRecentFromIp: (ipHash: string) => Promise<number>;
+  /** Demandes enregistrées depuis une heure, toutes origines : filet quand aucune IP fiable n'est connue (S-02/S-03). */
+  countRecentGlobal: () => Promise<number>;
   insert: (row: QuoteRow) => Promise<{ id: string } | { conflict: true }>;
   afterInsert: (row: QuoteRow & { id: string }, input: QuoteInput) => Promise<void>;
   options: () => Promise<AllowedOptions | null>;
@@ -51,6 +54,9 @@ export type SubmitDeps = {
 };
 
 export const MAX_REQUESTS_PER_IP = 3; // par fenêtre de 10 minutes (voir countRecentFromIp)
+// Plafond global par heure : sans IP fiable (sel absent, mandataire inconnu) c'est la seule limite ; il borne aussi
+// les courriels envoyés depuis le domaine de Bimurix. Très au-dessus du trafic réel d'une entreprise de services.
+export const MAX_REQUESTS_GLOBAL_PER_HOUR = 60;
 
 // Une valeur de liste doit exister dans les choix publiés dans Studio (fail-closed si la liste manque).
 function outsideOptions(input: QuoteInput, opts: AllowedOptions): (keyof QuoteInput)[] {
@@ -82,6 +88,9 @@ export async function submitQuote(form: FormData, deps: SubmitDeps): Promise<Sub
   if (!parsed.success) return { ok: false, code: "VALIDATION_FAILED", fields: fieldErrors(parsed.error, raw) };
   const input = parsed.data;
 
+  // S-12 : pas de consentement enregistré sans version de la politique acceptée (Loi 25).
+  if (!deps.policyVersion) return { ok: false, code: "SERVER_ERROR" };
+
   const options = await deps.options();
   if (!options) return { ok: false, code: "SERVER_ERROR" };
   const bad = outsideOptions(input, options);
@@ -90,13 +99,17 @@ export async function submitQuote(form: FormData, deps: SubmitDeps): Promise<Sub
   const token = form.get("cf-turnstile-response");
   if (!(await deps.verifyCaptcha(typeof token === "string" ? token : undefined))) return { ok: false, code: "CAPTCHA_FAILED" };
   if (deps.ipHash && (await deps.countRecentFromIp(deps.ipHash)) >= MAX_REQUESTS_PER_IP) return { ok: false, code: "RATE_LIMITED" };
+  if ((await deps.countRecentGlobal()) >= MAX_REQUESTS_GLOBAL_PER_HOUR) {
+    console.error("[soumission] ALERTE : plafond global d'envois par heure atteint (abus possible).");
+    return { ok: false, code: "RATE_LIMITED" };
+  }
 
   const base = toRow(input, deps);
   for (let attempt = 0; attempt < 3; attempt++) {
     const row = { ...base, reference: newReference() };
     const result = await deps.insert(row);
     if ("id" in result) {
-      await deps.afterInsert({ ...row, id: result.id }, input).catch((e: Error) => console.error(`[soumission] courriels : ${e.message}`));
+      await deps.afterInsert({ ...row, id: result.id }, input).catch((e: unknown) => console.error(`[soumission] courriels : ${errorSummary(e)}`));
       return { ok: true, reference: row.reference };
     }
   }

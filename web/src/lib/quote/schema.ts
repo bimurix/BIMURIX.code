@@ -4,11 +4,18 @@ import { z } from "zod";
 const optionalText = (max: number) =>
   z.string().trim().max(max).optional().transform((v) => (v ? v : undefined));
 
+// S-03 : le nom et l'entreprise sont recopiés dans l'accusé de réception envoyé à l'adresse saisie.
+// Ni adresse web, ni lien, ni balise, ni ponctuation de phrase : le texte ne peut pas servir d'hameçon.
+const LOOKS_LIKE_WEB = /[\p{L}\d-]\.\p{L}{2,}|:\/\/|www\./iu;
+const PERSON_NAME = /^[\p{L}\p{M}][\p{L}\p{M} .,'’-]*$/u;
+const noWeb = (v: string) => !LOOKS_LIKE_WEB.test(v) && !/[/\\<>:@]/.test(v);
+
 export const quoteSchema = z.object({
   locale: z.enum(["fr", "en"]),
-  fullName: z.string().trim().min(2).max(120),
-  company: z.string().trim().min(1).max(160),
-  email: z.email().trim().max(254),
+  fullName: z.string().trim().min(2).max(120).regex(PERSON_NAME).refine(noWeb),
+  company: z.string().trim().min(1).max(160).refine(noWeb),
+  // Minuscules : la limite d'accusés par adresse ne se contourne pas par la casse.
+  email: z.email().trim().toLowerCase().max(254),
   phone: optionalText(40).refine((v) => !v || /^[\d\s()+.-]{7,40}$/.test(v), { message: "phone" }),
   preferredLanguage: z.enum(["fr", "en"]),
   requestType: z.enum(["call", "quote"]),
@@ -22,7 +29,8 @@ export const quoteSchema = z.object({
   software: z.array(z.string().trim().min(1).max(40)).max(12).default([]),
   description: z.string().trim().min(10).max(5000),
   consent: z.literal(true),
-  sourcePath: optionalText(300),
+  // S-11 : chemin interne seulement (pas d'adresse externe affichée dans le tableau de bord).
+  sourcePath: optionalText(300).refine((v) => !v || /^\/(?!\/)\S*$/.test(v), { message: "sourcePath" }),
 });
 
 export type QuoteInput = z.infer<typeof quoteSchema>;
