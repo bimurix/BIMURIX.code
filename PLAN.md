@@ -55,11 +55,11 @@ Une ligne par session ; T2 passe seule et d'abord, T3 puis T4 ensuite, T5 et T6 
 |---|---|---|
 | T1 Critique | ✅ 2026-11-13 | Critique de l'ensemble du site (`docs/audits/2026-11-13_critique-t1.md`), ADR-009, cahier d'améliorations v6 (T2 à T6) ; rien modifié dans `web/` ni dans Sanity |
 | T2 Contenu et idées | ✅ 2026-11-13 | Valeurs d'exemple (téléphone, nom légal, NEQ) marquées « (exemple) », jamais en lien ni en données structurées (`lib/placeholders.ts`, `check:placeholders` les bloque) ; accueil à douze sections (nouveau titre, « Pourquoi Bimurix », registre « Projets » de trois fiches d'exemple, situations et « Qui fait quoi » en version courte, « Ce qu'il faut nous envoyer » retiré, trois questions de plus) ; services (groupes de prestations, phrase de confiance, titres, « vanne ») ; À propos (fiche « L'entreprise ») ; Soumission (réassurance, budget masqué, encart renommé) ; 404 ; promesse « d'ici un jour ouvrable » près des boutons ; champs `icon` vides pour T3 ; `patch-content-t2.mts` |
-| T3 Icônes et photos | à faire | Jeu de symboles au trait et sept photos d'illustration (cahier T3) |
-| T4 Mouvement | à faire (après T3) | Animations CSS seulement, zéro script de plus (cahier T4) |
-| T5 Sécurité et Loi 25 | en cours | Quinze constats de sécurité et pages légales (cahier T5) |
-| T6 Référencement | à faire | Données structurées, titres, hreflang, images de partage, vitesse, accessibilité (cahier T6) |
-| T7 Audit | à faire | Contrôle final selon la liste du cahier (« Ce que T7 vérifiera ») |
+| T3 Icônes et photos | ✅ 2026-11-13 | Jeu de 39 symboles au trait (composant `Icon`, serveur), photos d'illustration Unsplash (légende « Photo d'illustration »), accueil raccourci ; `patch-design-t3.mts`, `patch-photos-t3.mts` ; sources dans `docs/source/2026-11-12_images-s3b.md` |
+| T4 Mouvement | ✅ 2026-11-13 | CSS seulement (`styles/motion.css`, jetons de durée et de courbe), mouvement réduit respecté ; non fait : M-02, M-14, M-15, M-06 interne, M-10 épaississement (`docs/audits/2026-11-13_mouvement-t4.md`) |
+| T5 Sécurité et Loi 25 | ✅ 2026-11-13 | S-01 à S-04 prouvés par test puis corrigés, 7 migrations, pages légales complètes FR/EN (à faire valider) ; `docs/audits/2026-11-13_securite-t5.md` |
+| T6 Référencement | ✅ 2026-11-13 | JSON-LD, titres et descriptions uniques, hreflang, images de partage, plan du site, `noindex` hors production, résumé d'erreurs du formulaire ; `docs/audits/2026-11-13_seo-perf-t6.md` |
+| T7 Audit | ✅ 2026-11-13 | Audit indépendant (`docs/audits/2026-11-13_audit-t7.md`) ; corrections : budget JS 155 Ko (ADR-010), replis `<details>` sur téléphone (ADR-011), tests du formulaire, contrôle de mise en ligne élargi, JSON-LD, isométrique, photos de projets 1 et 2 retirées ; liste de mise en ligne : `docs/2026-11-13_mise-en-ligne.md` |
 
 Les sections 3 (pages) et 4 (formulaire) plus bas décrivent l'état N4/N5 ; elles sont remplacées par ADR-007 pour le contenu.
 

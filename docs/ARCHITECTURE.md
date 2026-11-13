@@ -44,7 +44,8 @@ web/
 │  │  ├─ admin/               Auth, lecture et actions du tableau de bord
 │  │  ├─ services/            Familles (groupByFamily, nom court), bouton « Demander une soumission » propre au service
 │  │  ├─ placeholders.ts      Valeurs d'exemple : marqueurs, `isPlaceholder`, `findPlaceholders` (seed, `check:placeholders` et site lisent la même liste)
-│  │  ├─ icon-names.ts        Liste fermée des symboles (champs `icon` de Studio ; T3 les dessine)
+│  │  ├─ icon-names.ts        Liste fermée des symboles (champs `icon` de Studio ; dessinés par ui/components/Icon, T3)
+│  │  ├─ jsonld.ts            Données structurées (fonctions pures, `cleanJsonLd` retire les valeurs d'exemple, T6) ; indexing.ts : noindex hors production
 │  │  ├─ i18n/v5-labels.ts    Valeurs de secours FR/EN des petits textes v5 (le texte public vit dans « Petits textes du site »)
 │  │  ├─ packages/            Forfaits : prix affiché ou « sur soumission », visibilité, date limite, garde de la preuve
 │  │  ├─ redirect-target.ts   Cible d'une redirection (interne seulement, sans boucle)
@@ -56,9 +57,11 @@ web/
 │  │  ├─ patterns/            Assemblages du site (en-tête, pied, feuille, formulaire, ServicePage = gabarit P1 à P11 du plan v5)
 │  │  └─ admin/               Pièces du tableau de bord
 │  ├─ styles/tokens.css       Seule source des couleurs, tailles et traits
+│  ├─ styles/motion.css       Mouvement en CSS seulement (T4) ; styles/fold.css : replis natifs <details class="bx-fold"> sous 640 px (T7, ADR-011)
 │  └─ proxy.ts                Routage FR / EN, garde de /admin, vrai 404 et redirection 308 avec `Location` (S4)
 ├─ scripts/                   seed-sanity.mts + seed/*.mts, db-env, add-admin, check-placeholders,
 │                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset ; S2, S3b et S5 se relancent dans n'importe quel ordre : photos conservées),
+│                             measure-js.mjs · measure-vitals.mjs · measure-home.mjs (budget de JS 155 Ko, LCP/CLS, hauteur de l'accueil ; ADR-010),
 │                             capture-pages.mjs (captures pour le client : `node scripts/capture-pages.mjs <dossier> [adresse]`, build de production sur le port 3200),
 │                             assets/s3b/ (schémas au trait générés par make-schematics.mjs, photos d'illustration ; importés par patch-design-s3b.mts)
 ├─ supabase/migrations/       SQL versionné, appliqué par `pnpm db:reset`
@@ -84,7 +87,7 @@ web/
 | Une colonne en base | Nouvelle migration dans `supabase/migrations/` (jamais modifier une ancienne) |
 
 ### Limites
-Fichier ≤ 300 lignes (au 2026-11-13 : plus gros fichier de `src/` 173 lignes), fonction ≤ 40 lignes : **non tenu par une quinzaine de composants JSX** (QuoteForm, InboxPage, MobileMenu, SiteFooter…), voir l'audit S5 ; à découper au fil des modifications, pas en bloc.
+Fichier ≤ 300 lignes (au 2026-11-13 : aucun fichier de code ou de test au-dessus de 300 lignes), fonction ≤ 40 lignes : **non tenu par une quinzaine de composants JSX** (QuoteForm, InboxPage, MobileMenu, SiteFooter…), voir l'audit S5 ; à découper au fil des modifications, pas en bloc.
 Server Components par défaut ; `"use client"` seulement pour l'interaction.
 
 ## 3. Les données
@@ -96,7 +99,7 @@ Server Components par défaut ; `"use client"` seulement pour l'interaction.
 | Courriels | — | Mailpit `localhost:54424` | Resend |
 | Antispam | Turnstile | clés de test | vraies clés |
 
-**Dataset neuf** : `pnpm seed` (documents sans images) puis `patch-design-s3b.mts` (schémas et photos, téléversés dans Sanity). Le seed contient déjà l'état final du texte (accueil sans bloc cycle, situations numérotées 1 à 3, nom de source anglais).
+**Dataset neuf** : `pnpm seed` (documents sans images, sans textes légaux ni titres de référencement) puis, dans cet ordre, `patch-design-s3b`, `patch-design-t3`, `patch-photos-t3`, `patch-photos-t7`, `patch-legal-t5`, `patch-seo-t6` (ordre non rejoué à l'audit T7). `production` se remplit en copiant `development`, jamais par le seed. Le seed contient déjà l'état final du texte (accueil sans bloc cycle, situations numérotées 1 à 3, nom de source anglais).
 
 Le dataset est choisi par `NEXT_PUBLIC_SANITY_DATASET` : `development` en mode dev (écrit par
 `node scripts/db-env.mjs`), `production` par défaut ailleurs (ADR-004, révision du 2026-11-10).

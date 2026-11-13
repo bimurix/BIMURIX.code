@@ -58,6 +58,7 @@ Hébergement plus tard : Netlify. Code dans `web/`.
   dégradés, texte en dégradé, verre dépoli, statistiques inventées, emoji en guise d'icônes.
 - Couleurs et tailles uniquement via les tokens (`web/src/styles/tokens.css`) ; aucune valeur en dur.
 - Mobile d'abord (360 px), propriétés logiques (`ms-`, `pe-`…), cibles tactiles ≥ 44 px, AA.
+- Budgets mesurés (ADR-010, ADR-011) : JS initial ≤ 155 Ko ; accueil < 7 500 px à 1440 px et < 11 500 px à 360 px. Pour raccourcir sur téléphone : `<details class="bx-fold">` (`styles/fold.css`), jamais de script ni de contenu retiré.
 
 ## 6. Sécurité et données
 - Ne jamais lire, écrire ou recopier `.env*` : l'utilisateur saisit lui-même les secrets.

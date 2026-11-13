@@ -48,6 +48,8 @@ export async function submitQuote(input: unknown, deps: QuoteDeps): Promise<Subm
 - Contrat (T2) : la section « Projets » (bloc `projects`) disparaît quand son interrupteur `enabled` est coupé ; le champ « Budget approximatif » est masqué tant que `formSettings.showBudget` est faux (la colonne en base, le schéma Zod et les courriels ne changent pas) ; les champs `icon` sont facultatifs et vides (liste fermée dans `src/lib/icon-names.ts`).
 - Contrat (S5) : les situations types de l'accueil sont numérotées 1, 2, 3 ; le nom de la source de la preuve s'affiche en anglais sur les pages EN (champ facultatif).
 
+- Contrat (T7, ADR-010 et ADR-011) : JS initial ≤ 155 Ko (`js-budget.spec.ts`) ; accueil < 7 500 px à 1440 px et < 11 500 px à 360 px (`home-height.spec.ts`) ; `pnpm check:placeholders` bloque aussi les formes « — exemple » et la mention de validation juridique des pages légales.
+
 ## Limites
 - **Toujours** : valider les entrées, tester avant de committer, textes dans Sanity.
 - **Demander d'abord** : nouvelle dépendance, changement de schéma de base, toute action en ligne.
