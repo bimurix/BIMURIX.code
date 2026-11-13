@@ -15,3 +15,12 @@ describe("S-09 : en-tête de lecture interne du gabarit 404", () => {
     expect(isInternalRequest(h({ [INTERNAL_HEADER]: internalHeaderValue(other) }), env)).toBe(false);
   });
 });
+
+describe("témoins de session /admin", () => {
+  it("HttpOnly, SameSite=Lax et Secure en production", async () => {
+    const { hardenCookieOptions } = await import("@/lib/supabase/cookie-options");
+    const prod = hardenCookieOptions({ httpOnly: false, maxAge: 400 }, { NODE_ENV: "production" } as unknown as NodeJS.ProcessEnv);
+    expect(prod).toMatchObject({ httpOnly: true, sameSite: "lax", secure: true, path: "/", maxAge: 400 });
+    expect(hardenCookieOptions(undefined, { NODE_ENV: "development" } as unknown as NodeJS.ProcessEnv).httpOnly).toBe(true);
+  });
+});

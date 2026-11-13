@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { hardenCookieOptions } from "./cookie-options";
 
 // Pages du tableau de bord accessibles sans session.
 const PUBLIC_ADMIN = ["/admin/connexion", "/admin/auth/callback"];
@@ -24,7 +25,7 @@ export async function refreshAdminSession(request: NextRequest): Promise<NextRes
       setAll: (list) => {
         for (const { name, value } of list) request.cookies.set(name, value);
         response = NextResponse.next({ request });
-        for (const { name, value, options } of list) response.cookies.set(name, value, options);
+        for (const { name, value, options } of list) response.cookies.set(name, value, hardenCookieOptions(options));
       },
     },
   });

@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { connection } from "next/server";
+import { hardenCookieOptions } from "./cookie-options";
 
 /**
  * Client Supabase de l'utilisateur connecté (clé publique + cookies de session) :
@@ -21,7 +22,7 @@ export async function createUserClient() {
       setAll: (list) => {
         // Dans un composant serveur, l'écriture échoue : la session est rafraîchie par le proxy.
         try {
-          for (const { name, value, options } of list) store.set(name, value, options);
+          for (const { name, value, options } of list) store.set(name, value, hardenCookieOptions(options));
         } catch {}
       },
     },
