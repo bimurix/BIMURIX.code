@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { adminCallbackUrl } from "./callback-url";
+import { errorSummary } from "@/lib/safe-log";
 import { createMailer } from "@/lib/mail/mailer";
 import { oneLine, textToHtml } from "@/lib/quote/templates";
 import { createUserClient } from "@/lib/supabase/server";
@@ -20,13 +22,14 @@ export async function sendMagicLink(_prev: ActionResult, form: FormData): Promis
   const email = z.email().safeParse(String(form.get("email") ?? "").trim().toLowerCase());
   if (!email.success) return { ok: false, error: "Adresse courriel invalide." };
   const h = await headers();
-  const origin = h.get("origin") ?? `http://${h.get("host")}`;
+  // S-04 : adresse de retour issue de la configuration, jamais des en-têtes de la requête (voir callback-url.ts).
+  const callback = adminCallbackUrl({ origin: h.get("origin"), host: h.get("host") });
   try {
     const supabase = await createUserClient();
     // shouldCreateUser: false — seuls les comptes créés par « pnpm admin:add » reçoivent un lien.
-    await supabase.auth.signInWithOtp({ email: email.data, options: { shouldCreateUser: false, emailRedirectTo: `${origin}/admin/auth/callback` } });
+    await supabase.auth.signInWithOtp({ email: email.data, options: { shouldCreateUser: false, emailRedirectTo: callback } });
   } catch (error) {
-    console.error(`[admin] lien magique : ${(error as Error).message}`);
+    console.error(`[admin] lien magique : ${errorSummary(error)}`);
   }
   return { ok: true, message: "Si cette adresse est autorisée, un lien de connexion vient d'être envoyé." };
 }
@@ -82,7 +85,7 @@ export async function sendReply(_prev: ActionResult, form: FormData): Promise<Ac
   try {
     ({ id: providerId } = await createMailer()({ from, to: { email: request.email, name: request.full_name }, replyTo: from.email, subject: oneLine(subject), text: body, html: textToHtml(body) }));
   } catch (e) {
-    console.error(`[admin] envoi de réponse : ${(e as Error).message}`);
+    console.error(`[admin] envoi de réponse : ${errorSummary(e)}`);
     return { ok: false, error: "Le courriel n'a pas pu être envoyé. Rien n'a été enregistré." };
   }
 
