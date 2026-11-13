@@ -24,6 +24,13 @@
   .bx-arrow { transition: none; }
   .group:is(:hover, :focus-visible) .bx-arrow { transform: none; }
   [dir="rtl"] .group:is(:hover, :focus-visible) .bx-arrow { transform: scaleX(-1); }
+  /* M-13 : la barre d'action mobile reste toujours visible. */
+  html .bx-actionbar { animation: none; }
+}
+
+/* Impression : tout est affiché, sans animation. */
+@media print {
+  .bx-reveal, .bx-rail, .bx-method-line, .bx-figure-draw { animation: none !important; opacity: 1 !important; transform: none !important; clip-path: none !important; }
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -24,7 +24,7 @@ function stripBlocks(css: string, opener: RegExp): string {
 
 describe("mouvement (cahier v6 T4)", () => {
   // Les images-clés ne s'appliquent que par les règles protégées : on les écarte avant de chercher un état caché.
-  const outside = stripBlocks(stripBlocks(motion, /@media \(prefers-reduced-motion: no-preference\)/), /@keyframes [\w-]+/);
+  const outside = stripBlocks(stripBlocks(stripBlocks(motion, /@media \(prefers-reduced-motion: no-preference\)/), /@keyframes [\w-]+/), /@media print/);
 
   it("aucune animation liée au défilement ni état caché hors de « no-preference »", () => {
     expect(outside).not.toMatch(/animation-timeline/);

@@ -33,7 +33,8 @@ const shots = pages.flatMap(([name, path]) => [[`${name}-bureau`, path, 1440], [
 
 const browser = await chromium.launch();
 for (const [name, path, width] of shots) {
-  const page = await browser.newPage({ viewport: { width, height: 900 } });
+  // Mouvement réduit : les captures pleine page montrent l'état final (les lignes liées au défilement sont sinon cachées hors de l'écran).
+  const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
   // « load » et non « networkidle » : la mise à jour en direct de Sanity garde une connexion ouverte.
   await page.goto(base + path, { waitUntil: "load", timeout: 90_000 });
   await page.waitForTimeout(1500);

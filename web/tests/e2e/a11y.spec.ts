@@ -16,6 +16,10 @@ for (const path of pages) {
     await page.goto(path);
     // Les tracés de l'isométrique sont animés : on attend leur état final pour mesurer les contrastes.
     await page.waitForTimeout(2200);
+    // T4 : les lignes qui apparaissent au défilement sont liées à la position : on mesure en bas de page, où tout ce qui précède est affiché.
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    for (let y = 0; y < height; y += 600) await page.evaluate((top) => window.scrollTo(0, top), y);
+    await page.waitForTimeout(300);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       // Iframe Turnstile (Cloudflare) : hors de notre contrôle.
