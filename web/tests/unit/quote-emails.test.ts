@@ -42,13 +42,13 @@ describe("accusé de réception sans forfait choisi", () => {
     const { ack } = await sent({ preferredLanguage: "fr" });
     expect(ack.text).not.toContain("Forfait visé");
     expect(ack.text).not.toContain("—");
-    expect(ack.text).toContain("Nous examinons votre demande de soumission");
+    expect(ack.text).toContain("». Nous examinons votre demande de soumission");
   });
   it("EN : la phrase « Package of interest » est omise", async () => {
     const { ack } = await sent({ preferredLanguage: "en" });
     expect(ack.text).not.toContain("Package of interest");
     expect(ack.text).not.toContain("—");
-    expect(ack.text).toContain("We are reviewing your quote request");
+    expect(ack.text).toContain("\"svc\". We are reviewing your quote request");
   });
   it("la notification interne n'a pas de séparateur orphelin dans l'objet", async () => {
     const { internal } = await sent({});

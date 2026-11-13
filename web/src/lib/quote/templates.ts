@@ -8,7 +8,7 @@ export type TemplateVars = { name: string; company: string; service: string; ref
 export function fillTemplate(template: string, vars: TemplateVars): string {
   const source = vars.package
     ? template
-    : template.replace(/\s*[·—-]\s*\{package\}/g, "").replace(/[^.!?\n]*\{package\}[^.!?\n]*[.!?]\s?/g, "");
+    : template.replace(/\s*[·—-]\s*\{package\}/g, "").replace(/[^.!?\n]*\{package\}[^.!?\n]*[.!?]/g, "");
   return source.replace(/\{(name|company|service|reference|type|package)\}/g, (_, key: keyof TemplateVars) => vars[key] ?? "");
 }
 
