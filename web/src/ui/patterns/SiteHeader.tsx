@@ -30,7 +30,7 @@ export function SiteHeader({ shell, locale, model }: Props) {
               <ServicesMenu key={item.key} label={item.label} services={item.services} />
             ) : (
               item.href && (
-                <Link key={item.key} href={item.href} className="inline-flex min-h-(--bx-tap-min) items-center px-1 text-[15px] text-ink hover:text-blue">
+                <Link key={item.key} href={item.href} className="inline-flex min-h-(--bx-tap-min) min-w-(--bx-tap-min) items-center justify-center px-1 text-[15px] text-ink hover:text-blue">
                   {item.label}
                 </Link>
               )

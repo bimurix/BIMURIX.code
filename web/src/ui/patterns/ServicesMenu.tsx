@@ -43,7 +43,7 @@ export function ServicesMenu({ label, services }: { label: string; services: Nav
             <li key={s.id}>
               <Link href={s.href} onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 text-[15px] hover:bg-paper-2">
                 <NetworkSwatch network={s.network} />
-                <span className="font-mono text-xs text-ink-2">{s.code}</span>
+                <span className="shrink-0 whitespace-nowrap font-mono text-xs text-ink-2">{s.code}</span>
                 <span className="text-ink">{s.label}</span>
               </Link>
             </li>
