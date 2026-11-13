@@ -119,10 +119,11 @@ describe("contenu de départ Sanity", () => {
     expect(text).not.toMatch(/20 minutes|20-minute|appel de 20|book a (20-minute )?call|réserver un appel|réservez un appel/i);
   });
 
+  // S3b : le schéma du cycle (H4) est fondu dans la section des services (H3) ; l'accueil compte onze sections.
   it("accueil : onze sections dans l'ordre du plan v5 (§ 2b), sans forfaits ni conditions, preuve limitée aux 2 chiffres sourcés", () => {
     const home = docs.find((d) => d.kind === "home") as unknown as { sections: Array<{ _type: string } & Record<string, unknown>> };
     expect(home.sections.map((x) => x._type)).toEqual([
-      "heroSheet", "problems", "serviceNetworks", "projectCycle", "deliverables", "scenarios", "proof", "responsibilityTable", "method", "pointsList", "faq", "quoteCta",
+      "heroSheet", "problems", "serviceNetworks", "deliverables", "scenarios", "proof", "responsibilityTable", "method", "pointsList", "faq", "quoteCta",
     ]);
     const proof = home.sections.find((x) => x._type === "proof") as Record<string, unknown>;
     expect((proof.figures as Array<{ value: string }>).map((f) => f.value)).toEqual(["≈ 90 %", "≈ 15 %"]);

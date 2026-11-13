@@ -55,16 +55,12 @@ export const home = {
         problem(["Le propriétaire exige des données d'équipements à la remise.", "The owner requires equipment data at handover."], ["Nous structurons, vérifions et signalons ce qui manque.", "We structure, check and flag what is missing."], ["service-bim-7d"]),
       ]),
     }),
-    block("serviceNetworks", { heading: l("Six services, du modèle à l'exploitation.", "Six services, from the model to operations.") }),
-    block("projectCycle", {
-      heading: l("Où Bimurix intervient dans votre projet.", "Where Bimurix steps into your project."),
+    // S3b : les services sont présentés une seule fois, dans l'ordre d'un projet ; le bloc « projectCycle » (schéma du cycle) est fondu ici, avec son introduction.
+    block("serviceNetworks", {
+      heading: l("Six services, du modèle à l'exploitation.", "Six services, from the model to operations."),
       intro: l(
         "Du modèle de conception à la remise du bâtiment, chaque service prend la suite du précédent. Un mandat peut couvrir une étape ou plusieurs.",
         "From the design model to building handover, each service picks up where the previous one ends. A mandate can cover one stage or several.",
-      ),
-      summary: l(
-        "Les six services de Bimurix dans l'ordre d'un projet : modélisation et coordination BIM, puis tuyauterie et plomberie, gicleurs et coordination tuyauterie et gicleurs, puis données d'actifs et tel que construit.",
-        "Bimurix's six services in project order: BIM modelling and coordination, then piping and plumbing, sprinklers and piping and sprinkler coordination, then asset data and as-built.",
       ),
     }),
     block("deliverables", {

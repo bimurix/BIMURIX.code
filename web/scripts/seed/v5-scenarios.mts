@@ -119,4 +119,9 @@ const withoutService = (k: K) => {
 /** Situations d'une page de service : sans lien vers elle-même. */
 export const serviceScenarios = (...keys: K[]) => keyed(keys.map(withoutService));
 /** Situations de l'accueil (§ 4.7) : une par famille, chacune renvoie à son service. */
-export const homeScenarios = () => keyed([scenarioByKey.mod1, scenarioByKey.tuy1, scenarioByKey.d2]);
+/** Sur l'accueil, les trois situations se suivent : leur numéro repart de 1 (S3b), le reste du titre est inchangé. */
+export const renumberScenarioTitle = (title: { fr: string; en: string }, n: number) => ({
+  fr: title.fr.replace(/^Situation type d+/, `Situation type ${n}`),
+  en: title.en.replace(/^Typical situation d+/, `Typical situation ${n}`),
+});
+export const homeScenarios = () => keyed([scenarioByKey.mod1, scenarioByKey.tuy1, scenarioByKey.d2].map((s, i) => ({ ...s, title: renumberScenarioTitle(s.title, i + 1) })));

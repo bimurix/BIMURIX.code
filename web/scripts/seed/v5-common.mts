@@ -109,6 +109,7 @@ export const uiStringsV5 = {
   scenarioAvoid: l("Ce que ça évite", "What it avoids"),
   scenarioQuoteLink: l("Demander une soumission pour une situation comme celle-ci", "Request a quote for a situation like this"),
   scenarioServiceLink: l("Voir le service", "See the service"),
+  deliverableLabel: l("Livrable", "Deliverable"),
   purposeLabel: l("À quoi ça sert", "What it is for"),
   serviceFaqHeading: l("Questions sur ce service", "Questions about this service"),
   needsHeadingDefault: l("Ce qu'il faut nous envoyer", "What to send us"),
