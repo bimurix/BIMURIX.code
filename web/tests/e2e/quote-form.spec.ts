@@ -24,28 +24,32 @@ test("le service choisi sur l'accueil est pré-sélectionné", async ({ page }) 
   await expect(page.locator("#service")).toHaveValue("service-prefabrication");
 });
 
-test("?forfait=F-01 pré-sélectionne le forfait et son offre ; aucun choix ni mention d'appel (R2)", async ({ page }) => {
+test("aucun forfait affiché : le champ « Forfait visé » est absent, même avec un ancien lien ?forfait=F-01 (ADR-008)", async ({ page }) => {
   await page.goto("/soumission?forfait=F-01");
-  await expect(page.locator("#packageCode")).toHaveValue("F-01");
-  await expect(page.locator("#service")).not.toHaveValue("");
+  await expect(page.locator("#packageCode")).toHaveCount(0);
+  await expect(page.getByText("Forfait visé")).toHaveCount(0);
+  await expect(page.locator("#service")).toHaveValue("");
   // Appel désactivé dans Studio : aucun choix de type, tous les champs de la soumission sont visibles.
   await expect(page.getByRole("radio", { name: /appel/i })).toHaveCount(0);
   await expect(page.locator("form").getByText(/appel de 20|réserver un appel/i)).toHaveCount(0);
   await expect(page.locator("#budget")).toBeVisible();
   await expect(page.locator("#region")).toBeVisible();
   await expect(page.getByRole("button", { name: "Envoyer ma demande" })).toBeVisible();
+  // Encart « Ce qu'il faut nous envoyer » à côté du formulaire.
+  await expect(page.getByRole("heading", { name: "Ce qu'il faut nous envoyer" })).toBeVisible();
 });
 
-test("soumission avec ?forfait=F-01 : ligne en base (quote + forfait), référence, 2 courriels sans mention d'appel", async ({ page, request }, info) => {
+test("soumission par un ancien lien ?forfait=F-01 : demande enregistrée sans forfait, référence, 2 courriels avec le délai de réponse et sans mention de forfait ni d'appel", async ({ page, request }, info) => {
   test.skip(!localStackReady, "pile Supabase locale non configurée (pnpm db:start puis pnpm db:env)");
   test.skip(info.project.name !== "desktop", "une seule demande réelle par exécution");
-  const email = `e2e-forfait-${Date.now()}@example.com`;
+  const email = `e2e-ancien-lien-${Date.now()}@example.com`;
   await page.setExtraHTTPHeaders({ "x-forwarded-for": `10.1.${Date.now() % 250}.${Math.floor(Math.random() * 250)}` });
 
   await page.goto("/soumission?forfait=F-01");
-  await page.locator("#fullName").fill("Essai Forfait");
+  await page.locator("#fullName").fill("Essai Ancien Lien");
   await page.locator("#company").fill("Tests Bimurix");
   await page.locator("#email").fill(email);
+  await page.locator("#service").selectOption("service-prefabrication");
   await page.locator("#description").fill("Demande de soumission de test automatisée.");
   await page.locator('input[name="consent"]').check();
   await expect(page.locator('input[name="cf-turnstile-response"]')).not.toHaveValue("", { timeout: 15_000 });
@@ -53,13 +57,14 @@ test("soumission avec ?forfait=F-01 : ligne en base (quote + forfait), référen
 
   const status = page.getByRole("status");
   await expect(status).toContainText("Merci pour votre demande.", { timeout: 15_000 });
-  await expect(status).not.toContainText(/appel/i);
+  await expect(status).toContainText("Nous vous répondons d'ici un jour ouvrable.");
+  await expect(status).not.toContainText(/appel|forfait/i);
   const reference = (await status.locator("strong").textContent())?.trim() ?? "";
   expect(reference).toMatch(/^BX-[A-Z0-9]{6}$/);
 
   const server = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, { auth: { persistSession: false } });
-  const { data } = await server.from("quote_requests").select("request_type, package_code").eq("reference", reference).single();
-  expect(data).toEqual({ request_type: "quote", package_code: "F-01" });
+  const { data } = await server.from("quote_requests").select("request_type, package_code, service").eq("reference", reference).single();
+  expect(data).toEqual({ request_type: "quote", package_code: null, service: "service-prefabrication" });
 
   await expect(async () => {
     const res = await request.get(`${MAILPIT}/api/v1/search?query=${encodeURIComponent(reference)}`);
@@ -69,9 +74,12 @@ test("soumission avec ?forfait=F-01 : ligne en base (quote + forfait), référen
     expect(messages.every((m) => !/[\r\n]/.test(m.Subject) && !/appel/i.test(m.Subject))).toBe(true);
     for (const m of messages) {
       const full = (await (await request.get(`${MAILPIT}/api/v1/message/${m.ID}`)).json()) as { Text: string };
-      expect(full.Text).not.toMatch(/appel|call/i);
-      expect(full.Text).toContain("F-01");
+      expect(full.Text).not.toMatch(/appel|call|F-01/i);
     }
+    const toClient = messages.find((m) => m.To.some((t) => t.Address === email));
+    const ack = (await (await request.get(`${MAILPIT}/api/v1/message/${toClient?.ID}`)).json()) as { Text: string };
+    expect(ack.Text).toContain("Nous vous répondons d'ici un jour ouvrable.");
+    expect(ack.Text).not.toMatch(/Forfait vis/i); // la notification interne garde sa ligne « Forfait visé : — »
   }).toPass({ timeout: 15_000 });
 });
 
@@ -128,12 +136,11 @@ test("connexion lente : le bouton d'envoi est inactif jusqu'au chargement du scr
   await expect(button).toBeEnabled({ timeout: 20_000 });
 });
 
-// N6 : choisir un forfait dans la liste (sans passer par ?forfait=) doit aussi choisir son offre.
-test("choisir un forfait dans la liste choisit l'offre correspondante", async ({ page }) => {
+// N6, ADR-008 : la liste des forfaits n'existe plus tant qu'aucun forfait n'est visible ; elle revient si Studio en rend un visible
+// (voir tests/unit/packages.test.ts et tests/unit/form-model.test.ts). Ici : le champ n'est jamais rendu.
+test("la liste des forfaits n'est pas rendue dans le formulaire", async ({ page }) => {
   await page.goto("/soumission");
-  await expect(async () => {
-    await page.locator("#packageCode").selectOption("F-04");
-    await expect(page.locator("#service")).not.toHaveValue("", { timeout: 1000 });
-  }).toPass({ timeout: 15_000 });
-  await expect(page.locator("#service")).toHaveValue("service-combinee");
+  await expect(page.locator("#service")).toBeVisible();
+  await expect(page.locator("#packageCode")).toHaveCount(0);
+  await expect(page.locator("form")).not.toContainText(/forfait/i);
 });

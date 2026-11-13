@@ -32,6 +32,7 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
   const presetService = params.get("service") ?? undefined;
   // decision: ADR-006 n° 7 — ?forfait=<code> (lien d'une ligne de forfait) pré-choisit le forfait et son offre.
   const presetCode = params.get("forfait")?.trim().toUpperCase();
+  const hasPackages = model.packages.length > 1; // plus que « autre »
   const presetPackage = model.packages.find((p) => p.value === presetCode);
   // decision: R2 — sans appel activé dans Studio, la demande est toujours une soumission et aucun choix n'est affiché.
   const { callEnabled } = model;
@@ -126,10 +127,13 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
 
       <fieldset className="space-y-5">
         <legend className="font-display mb-4 text-xl font-bold text-ink">{t.project}</legend>
-        <SelectField {...common} name="packageCode" label={t.package} placeholder={t.choose} options={model.packages} defaultValue={presetPackage?.value} onValueChange={(code) => {
-          const linked = model.packages.find((p) => p.value === code)?.serviceId;
-          if (linked && options.service.some((o) => o.value === linked)) setService(linked);
-        }} error={err("packageCode")} />
+        {/* decision: ADR-008 — aucun forfait affiché : le champ « Forfait visé » n'existe que si un forfait est rendu visible dans Studio. */}
+        {hasPackages ? (
+          <SelectField {...common} name="packageCode" label={t.package} placeholder={t.choose} options={model.packages} defaultValue={presetPackage?.value} onValueChange={(code) => {
+            const linked = model.packages.find((p) => p.value === code)?.serviceId;
+            if (linked && options.service.some((o) => o.value === linked)) setService(linked);
+          }} error={err("packageCode")} />
+        ) : null}
         <SelectField {...common} name="service" label={t.service} required placeholder={t.choose} options={options.service} value={service} onValueChange={setService} error={err("service")} />
         {callEnabled ? (
           <details ref={detailsRef} className={requestType === "quote" ? "[&>summary]:hidden" : ""}>

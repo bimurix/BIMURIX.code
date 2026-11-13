@@ -73,23 +73,29 @@ test("l'ancienne adresse « préfabrication MEP » redirige vers la nouvelle", a
   expect(en.headers().location).toContain("/en/services/piping-prefabrication");
 });
 
-test("chaque page de service affiche pour qui, ses forfaits et qui fait quoi", async ({ page }) => {
-  // Modélisation et TQC n'ont aucun forfait : la section des forfaits n'apparaît pas.
-  const expected: Record<string, string[]> = {
-    "/services/modelisation-bim-coordination": [],
-    "/services/tqc-controle-qualite": [],
-    "/services/prefabrication-tuyauterie": ["F-01", "F-02"],
-    "/services/prefabrication-gicleurs": ["F-03"],
-    "/services/tuyauterie-gicleurs-coordonnes": ["F-04"],
-    "/services/bim-7d-donnees-actifs": ["F-05"],
-  };
-  for (const [path, codes] of Object.entries(expected)) {
+test("chaque page de service affiche pour qui, situations types, ce qu'il faut nous envoyer, qui fait quoi et questions ; aucun forfait ni prix", async ({ page }) => {
+  // ADR-008 : les forfaits sont masqués dans Studio ; le gabarit v5 (P1 à P11) remplace la section des forfaits.
+  const paths = [
+    "/services/modelisation-bim-coordination",
+    "/services/prefabrication-tuyauterie",
+    "/services/prefabrication-gicleurs",
+    "/services/tuyauterie-gicleurs-coordonnes",
+    "/services/bim-7d-donnees-actifs",
+    "/services/tqc-controle-qualite",
+  ];
+  for (const path of paths) {
     await page.goto(path);
     await expect(page.getByRole("heading", { name: "Pour qui", level: 2 })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Qui fait quoi", level: 2 })).toBeVisible();
-    if (codes.length === 0) await expect(page.locator("#forfaits")).toHaveCount(0);
-    else await expect(page.locator("#forfaits")).toBeVisible();
-    for (const code of codes) await expect(page.locator("#forfaits tbody tr").filter({ hasText: code })).toHaveCount(1);
+    await expect(page.getByRole("heading", { name: "Ce qu'il faut nous envoyer", level: 2 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Questions sur ce service", level: 2 })).toBeVisible();
+    await expect(page.locator("#situations")).toContainText("Situation type");
+    await expect(page.locator("#forfaits")).toHaveCount(0);
+    const text = (await page.locator("#contenu").innerText()).replace(/un jour ouvrable/g, "");
+    expect(text, path).not.toMatch(/\d\s?\$|\$\s?\d|forfait|F-0\d|jours? ouvrables?|60 jours|net 15/i);
     await expect(page.locator("#contenu")).toContainText(/ing[ée]nieur/);
+    // Le bouton du haut porte le libellé propre au service et mène à la soumission avec ce service.
+    const cta = page.locator("#contenu").getByRole("link", { name: /^Demander une soumission/ }).filter({ visible: true }).first();
+    await expect(cta).toHaveAttribute("href", /^\/soumission\?service=service-/);
   }
 });
