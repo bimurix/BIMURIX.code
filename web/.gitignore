@@ -44,3 +44,6 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /blob-report/
+
+# M1 : exports de mise en ligne (jamais commités)
+/.golive/
