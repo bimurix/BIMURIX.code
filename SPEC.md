@@ -1,16 +1,16 @@
-# SPEC — Site BIMURIX v1.2 (6 services dont 4 à forfaits, ADR-006 et ADR-007)
+# SPEC — Site BIMURIX v1.3 (6 services en 3 familles, sans prix publiés, ADR-007 et ADR-008)
 
 ## Objectif
 Présenter les **6 services** de Bimurix (modélisation BIM et coordination, préfabrication tuyauterie,
-préfabrication gicleurs, tuyauterie + gicleurs, BIM 7D, TQC et contrôle qualité), dont 4 avec des forfaits à prix fixe, aux entrepreneurs en mécanique du bâtiment, en plomberie et en gicleurs,
+préfabrication gicleurs, tuyauterie + gicleurs, BIM 7D, TQC et contrôle qualité), rangés en trois familles (Modéliser et coordonner, Préfabriquer, Livrer et exploiter), sans prix, type de forfait ni délai fixe publiés, aux entrepreneurs en mécanique du bâtiment, en plomberie et en gicleurs,
 aux constructeurs modulaires et aux propriétaires du Grand Montréal, et transformer les visites en
 **demandes de soumission**, suivies dans un **tableau de bord privé**.
 
 Réussite :
-- un visiteur voit les forfaits, leurs prix et leurs conditions, et demande une soumission en moins de 2 minutes, sur mobile ;
+- un visiteur reconnaît son problème de chantier, voit ce qu'il reçoit et à quoi ça sert, et demande une soumission en moins de 2 minutes, sur mobile ;
 - chaque demande arrive en base, déclenche une notification, et Bimurix y répond depuis `/admin` ;
-- Bimurix modifie seul tout le contenu public dans Sanity Studio, sans développeur : textes, **prix, délais,
-  conditions, date limite**, et peut **masquer un forfait ou une offre** en un clic.
+- Bimurix modifie seul tout le contenu public dans Sanity Studio, sans développeur : textes, situations types, livrables,
+  « Qui fait quoi », questions fréquentes, et peut **masquer un service** ou **rallumer un forfait** (masqué par défaut, ADR-008) en un clic.
 
 ## Périmètre
 **Inclus** : 11 pages FR/EN (accueil, 6 services, à propos, soumission, confidentialité, conditions) + 404,
@@ -40,8 +40,9 @@ export async function submitQuote(input: unknown, deps: QuoteDeps): Promise<Subm
 - **Playwright** (mobile 390 px et bureau 1440 px) : navigation FR/EN, envoi d'une demande (succès et
   échec), connexion admin, réponse à une demande.
 - Contrat : aucune route publique n'expose de demande ; un non-admin ne lit rien.
-- Contrat : un forfait ou une offre masqué n'apparaît nulle part (page, menu, sitemap, formulaire) ;
-  un forfait « sur soumission » n'affiche aucun montant.
+- Contrat : un forfait ou une offre masqué n'apparaît nulle part (page, menu, sitemap, formulaire) ; avec tous les forfaits masqués (état par défaut),
+  aucune page n'affiche de prix, de forfait, de délai fixe ni de condition de paiement, et le champ « Forfait visé » est absent du formulaire.
+- Contrat : un forfait remis à visible: true réapparaît (le code des forfaits reste).
 
 ## Limites
 - **Toujours** : valider les entrées, tester avant de committer, textes dans Sanity.

@@ -9,9 +9,14 @@
 3. Tâche touchant plusieurs fichiers : annoncer le plan (fichiers, tests, risques) avant de coder.
 
 ## 1. Produit
-Entreprise de services BIM au **Québec**, spécialisée en préfabrication MEP. Vitrine de **6 services** (ADR-007) : modélisation BIM et coordination, préfabrication tuyauterie (SysQue),
-préfabrication gicleurs (AutoSPRINK), tuyauterie + gicleurs, BIM 7D, TQC et contrôle qualité ; les 4 préfabrications
-et le 7D ont des forfaits à prix fixe (ADR-006). Règle : on intègre les offres au site existant, on ne le remplace pas. Site **FR par défaut** (`/`), **EN** sous `/en`.
+Entreprise de services BIM au **Québec**, spécialisée en préfabrication MEP. Vitrine de **six services en trois familles**
+(ADR-007, ADR-008) : **Modéliser et coordonner** (modélisation et coordination BIM) ; **Préfabriquer** (tuyauterie et plomberie
+avec SysQue, gicleurs avec AutoSPRINK, coordination tuyauterie + gicleurs) ; **Livrer et exploiter** (données d'actifs BIM 7D,
+tel que construit TQC). **Aucun prix, aucun type de forfait ni aucun délai fixe n'est publié** : le site montre le problème de
+chantier, ce que Bimurix fait, ce que le client reçoit et à quoi ça sert (ADR-008) ; le prix se donne sur soumission. Les
+forfaits F-01 à F-05 restent dans Studio, **masqués** (`visible: false`), et leur code reste : les cocher les fait réapparaître.
+Seul engagement de délai publié : « Nous vous répondons d'ici un jour ouvrable » (réponse à la demande). Règle : on intègre les offres au site existant, on ne le
+remplace pas. Site **FR par défaut** (`/`), **EN** sous `/en`.
 Objectif : demande de soumission → Supabase → tableau de bord `/admin` → réponse par courriel.
 
 ## 2. Stack

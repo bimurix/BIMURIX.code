@@ -32,6 +32,20 @@ ci-dessus reste valable pour le code ; le contenu est revu.
 | R2 Formulaire | ✅ 2026-11-12 | Formulaire et courriels sans appel de 20 minutes (réglage Studio `callEnabled`, faux par défaut) ; `patch-form-r2.mts` |
 | R3 Vérification | ✅ 2026-11-12 | Audit indépendant après R1 et R2 : `docs/audits/2026-11-12_audit-r3.md` ; 3 corrections (accusé sans forfait, menu, tests instables) ; reste à faire relire par le client |
 
+### Révision S (2026-11-12) — la valeur avant le prix (ADR-008)
+
+Le client ne publie plus de prix, de type de forfait ni de délai fixe : six services en trois familles, situations types,
+« Qui fait quoi ». Plan de contenu : `docs/source/2026-11-12_plan-contenu-v5.md`. Les forfaits restent dans Studio, masqués.
+
+| Étape | État | Contenu |
+|---|---|---|
+| S1 Plan de contenu | ✅ 2026-11-12 | Plan v5 (critique, textes avant/après, situations types, choix par défaut) et ADR-008 (commits `8c640d1`, `37b16a7`) |
+| S3a Champs et blocs | ✅ 2026-11-12 | Blocs `problems`, `projectCycle`, `scenarios`, `responsibilityTable`, champs de service (famille, nom court, situations, livrables avec usage, besoins, FAQ), gabarit P1 à P11 (commits `50d23cc` à `7d81717`) |
+| S4 Défauts de production | ✅ 2026-11-12 | 404 et 308 décidés avant le rendu par le proxy (commit `cf421b3`) |
+| S2 Contenu | ✅ 2026-11-12 | Plan v5 appliqué à `development` en FR et EN (`patch-content-s2.mts`, seed à jour) ; forfaits masqués, bandeau éteint, conditions retirées ; champ « Forfait visé » absent du formulaire ; tests transformés |
+| S3b Design et images | ⏳ | Tokens, nomenclature, situations en feuille, schéma du cycle, images (champs laissés vides par S2) |
+| S5 Audit | ⏳ | Audit indépendant : fidélité aux faits d'origine, aucun prix publié, FR et EN, 360 px et 1440 px, JS ≤ 150 Ko |
+
 Les sections 3 (pages) et 4 (formulaire) plus bas décrivent l'état N4/N5 ; elles sont remplacées par ADR-007 pour le contenu.
 
 ## 1. Règles de travail (toutes les sessions)
