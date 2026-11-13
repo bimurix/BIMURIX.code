@@ -30,7 +30,7 @@ export function CompanySheet({ data, locale, ui, settings }: Props) {
     { key: "legal", label: v5Label(ui, "companyLegalName", locale), value: settings?.legalName },
     { key: "neq", label: v5Label(ui, "companyNeq", locale), value: settings?.neq },
     { key: "phone", label: v5Label(ui, "companyPhone", locale), value: phone && (isPlaceholder(phone) ? phone : <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="underline underline-offset-4">{phone}</a>) },
-    { key: "email", label: v5Label(ui, "companyEmail", locale), value: settings?.email && <a href={`mailto:${settings.email}`} className="underline underline-offset-4">{settings.email}</a> },
+    { key: "email", label: v5Label(ui, "companyEmail", locale), value: settings?.email && <a href={`mailto:${settings.email}`} className="inline-flex min-h-(--bx-tap-min) items-center underline underline-offset-4">{settings.email}</a> },
     { key: "area", label: v5Label(ui, "companyArea", locale), value: pick(settings?.serviceArea, locale, "") },
     { key: "languages", label: v5Label(ui, "companyLanguages", locale), value: pick(data.languages, locale, "") },
     { key: "responsible", label: v5Label(ui, "companyResponsible", locale), value: [responsible, founder].filter(Boolean).join(locale === "fr" ? " : " : ": ") },
