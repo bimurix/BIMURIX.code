@@ -15,8 +15,12 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 7"] } },
     { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
   ],
+  // R3 : PLAYWRIGHT_PROD=1 teste le build de production (référence stable ; le mode dev compile chaque route à la demande).
+  // Préalable : node scripts/next-dev-env.mjs build (même dataset et clés locales qu'en dev).
   webServer: {
-    command: "pnpm dev",
+    command: process.env.PLAYWRIGHT_PROD
+      ? "node scripts/next-dev-env.mjs start"
+      : "pnpm dev",
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

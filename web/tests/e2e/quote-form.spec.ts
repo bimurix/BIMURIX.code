@@ -121,7 +121,9 @@ test("connexion lente : le bouton d'envoi est inactif jusqu'au chargement du scr
   });
   await page.goto("/soumission", { waitUntil: "domcontentloaded" });
   const button = page.getByRole("button", { name: "Envoyer ma demande" });
-  await expect(button).toBeDisabled();
+  // R3 : en développement le formulaire est rendu par le serveur (bouton inactif) ; dans le build de production il n'apparaît
+  // qu'à l'hydratation. Dans les deux cas, aucun bouton actif ne doit exister avant le script.
+  await expect(page.locator("button:enabled", { hasText: "Envoyer ma demande" })).toHaveCount(0);
   release();
   await expect(button).toBeEnabled({ timeout: 20_000 });
 });

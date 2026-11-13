@@ -10,7 +10,8 @@ if (ready) process.loadEnvFile(envFile);
 const MAILPIT = "http://127.0.0.1:54424";
 const ADMIN = "contact@bimurix.com";
 
-test.describe.configure({ mode: "serial" });
+// R3 : la connexion par lien magique traverse /admin/auth/callback et /admin, compilés au premier passage en mode dev (jusqu'à 45 s sous charge) : délai élargi.
+test.describe.configure({ mode: "serial", timeout: 120_000 });
 test.skip(!ready, "pile Supabase locale non configurée");
 
 /** Connexion par lien magique : le lien est lu dans Mailpit (aucun courriel réel). */
@@ -83,12 +84,18 @@ test("admin : voit la demande, change le statut, ajoute une note et répond", as
   await page.getByRole("link", { name: reference }).click();
   await expect(page.getByRole("heading", { name: "Client Essai" })).toBeVisible({ timeout: 60_000 });
 
-  await page.locator("#request-status").selectOption("in_review");
-  await expect(page.getByText("Statut : En cours")).toBeVisible();
+  // R3 : en mode dev, un choix fait avant l'hydratation de la fiche est perdu : on le refait jusqu'à ce que le statut change.
+  await expect(async () => {
+    await page.locator("#request-status").selectOption("in_review");
+    await expect(page.getByText("Statut : En cours")).toBeVisible({ timeout: 3000 });
+  }).toPass({ timeout: 30_000 });
 
-  await page.locator("#note").fill("Rappeler mardi.");
-  await page.getByRole("button", { name: "Ajouter la note" }).click();
-  await expect(page.getByText("Rappeler mardi.")).toBeVisible();
+  // R3 : l'action serveur est compilée au premier appel en mode dev ; la note est refaite si elle n'apparaît pas (premier élément trouvé).
+  await expect(async () => {
+    await page.locator("#note").fill("Rappeler mardi.");
+    await page.getByRole("button", { name: "Ajouter la note" }).click();
+    await expect(page.getByText("Rappeler mardi.").first()).toBeVisible({ timeout: 8000 });
+  }).toPass({ timeout: 40_000 });
 
   await page.locator("#reply-subject").fill(`Votre demande ${reference}`);
   await page.locator("#reply-body").fill("Bonjour, merci pour votre demande.");
