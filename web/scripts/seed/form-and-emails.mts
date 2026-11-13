@@ -1,4 +1,5 @@
 import { emailTemplatesN5, formSettingsN5 } from "./form-n5.mts";
+import { formSettingsS2, emailTemplatesS2 } from "./form-s2.mts";
 import { keyed, l } from "./helpers.mts";
 
 const opt = (value: string, fr: string, en: string) => ({ value, label: l(fr, en) });
@@ -61,6 +62,7 @@ const formSettings = {
   label_sending: l("Envoi de votre demande…", "Sending your request…"),
   ...formSettingsN5,
   ...formSettingsR2,
+  ...formSettingsS2,
   descriptionHelp: l("Une phrase suffit : ce que vous voulez préfabriquer ou faire vérifier.", "One sentence is enough: what you want prefabricated or checked."),
   filesHelp: l("Pour partager des fichiers, ajoutez un lien (ACC, Drive, WeTransfer) dans la description.", "To share files, add a link (ACC, Drive, WeTransfer) in the description."),
   includeServices: true,
@@ -106,7 +108,6 @@ const formSettings = {
   errorRequired: l("Ce champ est obligatoire.", "This field is required."),
   errorEmail: l("Veuillez saisir une adresse courriel valide.", "Please enter a valid email address."),
   successTitle: l("Merci pour votre demande.", "Thank you for your request."),
-  successBody: l("Votre message a été transmis. Nous examinerons les informations fournies et communiquerons avec vous si des précisions sont nécessaires.", "Your message has been sent. We will review the information and contact you if we need more details."),
   failureTitle: l("L'envoi n'a pas abouti.", "Your request could not be sent."),
   failureBody: l("Veuillez vérifier les champs requis et réessayer. Si le problème persiste, écrivez-nous à contact@bimurix.com.", "Please check the required fields and try again. If the problem persists, email us at contact@bimurix.com."),
   consentText: l(
@@ -125,6 +126,7 @@ const emailTemplates = {
   signature: l("L'équipe Bimurix\ncontact@bimurix.com", "The Bimurix team\ncontact@bimurix.com"),
   ...emailTemplatesN5,
   ...emailTemplatesR2,
+  ...emailTemplatesS2,
   replyTemplates: keyed([
     {
       name: "Demande de précisions",

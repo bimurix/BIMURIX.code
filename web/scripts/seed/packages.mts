@@ -15,7 +15,7 @@ const pkg = (n: number, fields: Record<string, unknown>) => ({
   _id: `package-f-0${n}`,
   _type: "package",
   code: `F-0${n}`,
-  visible: true,
+  visible: false,
   highlighted: false,
   priceMode: "fixed",
   order: n * 10,
@@ -84,27 +84,13 @@ export const packageDocs = [
   }),
 ];
 
-// ADR-006 n° 13 : aucune date limite pour l'instant (champ `deadline` absent, aucune date affichée).
+// ADR-008 : forfaits masqués (visible: false), bandeau éteint, crédit, conditions de paiement et « 100 $/h » retirés. Le code des forfaits reste.
 export const launchSettingsDoc = {
   _id: "launchSettings",
   _type: "launchSettings",
-  bannerEnabled: true,
+  bannerEnabled: false,
   bannerText: l("Forfaits de lancement à prix fixe", "Fixed-price launch packages"),
   taxNote: l("Prix en dollars canadiens, avant TPS et TVQ.", "Prices in Canadian dollars, before GST and QST."),
-  creditText: l(
-    "Le montant du forfait est déduit si vous commandez le reste du projet dans les 60 jours (exemple : 12 000 $ − 1 800 $ = 10 200 $).",
-    "The package price is deducted if you order the rest of the project within 60 days (example: $12,000 − $1,800 = $10,200).",
-  ),
-  conditions: keyed([
-    { title: l("Portée d'une zone pilote", "Pilot zone scope"), text: l("Jusqu'à 30 spools ou 150 m (500 pi) de tuyauterie, une discipline, supports et parasismique de la zone compris. Au-delà : sur soumission.", "Up to 30 spools or 150 m (500 ft) of piping, one discipline, including hangers and seismic bracing for the zone. Beyond that: on quote.") },
-    { title: l("Portée gicleurs", "Sprinkler scope"), text: l("Un étage jusqu'à 10 000 pi². Au-delà : au nombre de têtes, sur soumission.", "One floor up to 10,000 sq. ft. Beyond that: by head count, on quote.") },
-    { title: l("Crédit", "Credit"), text: l("Une seule fois, même client, nouvelle commande supérieure au montant du forfait. Non remboursable, non transférable.", "One time only, same client, for a new order larger than the package price. Non-refundable and non-transferable.") },
-    { title: l("Documents requis", "Required documents"), text: l("Dessins d'atelier approuvés, modèle de l'ingénieur ou plans, fabricants retenus (raccords, vannes, supports) et standards de l'atelier. Pour la 7D : modèle, convention de codification et livrables de dessins d'atelier.", "Approved shop drawings, the engineer's model or drawings, selected manufacturers (fittings, valves, hangers) and shop standards. For 7D: the model, the coding convention and the shop drawing deliverables.") },
-    { title: l("Délai", "Lead time"), text: l("5 jours ouvrables pour la zone pilote, le skid standard et les gicleurs, 7 pour l'offre combinée, 3 pour l'audit 7D, à partir de documents complets.", "5 business days for the pilot zone, standard skid and sprinklers, 7 for the combined offer, 3 for the 7D audit, from complete documents.") },
-    { title: l("Révisions", "Revisions"), text: l("Une ronde de commentaires incluse. Modifications après approbation : 100 $/h, sur accord préalable.", "One round of comments included. Changes after approval: $100/h, by prior agreement.") },
-    { title: l("Paiement", "Payment"), text: l("50 % à la commande, 50 % à la livraison, net 15 jours.", "50% at order, 50% on delivery, net 15 days.") },
-    { title: l("Exclusions", "Exclusions"), text: l("Conception et calculs d'ingénierie (y compris parasismique), approbation, signature et sceau des dessins.", "Engineering design and calculations (including seismic), approval, signature and seal of the drawings.") },
-  ]),
   professionalNote: l(
     "La conception, les calculs (y compris parasismique), l'approbation, la signature et le sceau des dessins restent à l'ingénieur ou à l'entrepreneur.",
     "Design, calculations (including seismic), approval, and the signature and seal of the drawings remain with the engineer or the contractor.",

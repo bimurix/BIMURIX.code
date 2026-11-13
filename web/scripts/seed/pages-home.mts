@@ -1,9 +1,21 @@
-import { block, internalCta, keyed, l, pt, titled } from "./helpers.mts";
+import { block, internalCta, keyed, l, ref, titled } from "./helpers.mts";
+import { allResponsibilityRows, deliverableRows, engineerSentence, faqEntries } from "./v5-common.mts";
+import { brennanProof } from "./v5-proof.mts";
+import { homeScenarios } from "./v5-scenarios.mts";
 
-// ADR-007 — accueil : contenu d'ORIGINE restauré (production, mot pour mot, même ordre), puis intégration des ajouts
-// de la refonte N4 : forfaits, conditions, preuve (2 chiffres sourcés, ADR-006 n° 21), « Inclus pour l'atelier et le chantier », FAQ.
-// La méthode « Comment ça marche » de N4 (avec l'appel de 20 minutes) fait double emploi avec la méthode d'origine : retirée.
+// Plan de contenu v5 § 2b et § 3.1 (ADR-008) : accueil en 11 sections, de la question du lecteur à l'action.
+// Les blocs « forfaits » et « conditions » ne sont plus posés (ils restent codés). Aucun prix ni délai fixe. Images : session S3b.
 const requestQuote = l("Demander une soumission", "Request a quote");
+
+export const needsList = [
+  titled(l("Les plans ou le modèle de l'ingénieur", "The engineer's drawings or model")),
+  titled(l("Les dessins d'atelier approuvés", "The approved shop drawings")),
+  titled(l("Les fabricants retenus (raccords, vannes, supports)", "The selected manufacturers (fittings, valves, hangers)")),
+  titled(l("Les standards de votre atelier", "Your shop standards")),
+  titled(l("Les exigences de remise du propriétaire", "The owner's handover requirements")),
+];
+
+const problem = (title: [string, string], text: [string, string], services: string[]) => ({ title: l(...title), text: l(...text), services: keyed(services.map((s) => ref(s))) });
 
 export const home = {
   _id: "page-home",
@@ -14,125 +26,86 @@ export const home = {
   seo: {
     title: l("Services BIM au Québec | Bimurix", "BIM services in Quebec | Bimurix"),
     description: l(
-      "Bimurix accompagne les équipes de construction en modélisation BIM, coordination architecture-structure-MEP, préfabrication mécanique, BIM 7D et documentation tel que construit.",
-      "Bimurix supports construction teams with BIM modelling, architecture-structure-MEP coordination, mechanical prefabrication, BIM 7D and as-built documentation.",
+      "Bimurix modélise, coordonne et dessine : modèles BIM, détection de conflits, dessins d'atelier de tuyauterie et de gicleurs, plans tel que construit et données d'actifs. Grand Montréal.",
+      "Bimurix models, coordinates and draws: BIM models, clash detection, piping and sprinkler shop drawings, as-built drawings and asset data. Greater Montreal.",
     ),
   },
   sections: [
     block("heroSheet", {
-      heading: l("Des modèles BIM fiables. Une construction mieux préparée.", "Reliable BIM models. Better-prepared construction."),
+      heading: l("Des modèles BIM fiables. Moins de surprises au chantier.", "Reliable BIM models. Fewer surprises on site."),
       intro: l(
-        "Bimurix accompagne les professionnels de la construction dans la modélisation BIM, la coordination des systèmes du bâtiment, la préparation à la préfabrication et la structuration des données d'actifs.",
-        "Bimurix supports construction professionals with BIM modelling, building systems coordination, prefabrication readiness and asset data structuring.",
+        "Bimurix modélise, coordonne et dessine pour les entrepreneurs, les firmes de génie-conseil et les propriétaires. Les conflits se règlent au modèle. La tuyauterie et les gicleurs arrivent prêts à fabriquer. Les plans tel que construit et les données sont prêts à remettre.",
+        "Bimurix models, coordinates and draws for contractors, engineering firms and owners. Clashes are resolved in the model. Piping and sprinklers arrive ready to fabricate. As-built drawings and data are ready to hand over.",
       ),
-      ctas: keyed([internalCta(requestQuote, "page-quote"), { label: l("Découvrir nos services", "Explore our services"), style: "secondary", link: { kind: "external", external: "#services" } }]),
-      specialties: l("Architecture · Structure · MEP · Préfabrication · BIM 7D · TQC", "Architecture · Structure · MEP · Prefabrication · BIM 7D · As-built"),
+      ctas: keyed([internalCta(requestQuote, "page-quote"), { label: l("Voir les six services", "See the six services"), style: "secondary", link: { kind: "external", external: "#services" } }]),
+      specialties: l("Modéliser et coordonner · Préfabriquer · Livrer et exploiter", "Model and coordinate · Prefabricate · Deliver and operate"),
     }),
-    block("richText", {
-      heading: l("Le BIM doit servir le chantier, pas seulement le modèle.", "BIM should serve the site, not just the model."),
-      body: {
-        fr: pt([
-          ["normal", "Un modèle BIM apporte une réelle valeur lorsqu'il aide les équipes à mieux coordonner les disciplines, à anticiper les difficultés d'installation et à transmettre des informations fiables."],
-          ["normal", "Bimurix intervient sur les modèles, les données et les livrables pour aider les équipes à travailler avec une information plus claire, mieux structurée et adaptée aux objectifs du projet."],
-        ]),
-        en: pt([
-          ["normal", "A BIM model delivers real value when it helps teams coordinate disciplines, anticipate installation issues and pass on reliable information."],
-          ["normal", "Bimurix works on models, data and deliverables so teams can rely on clearer, better-structured information suited to the project's goals."],
-        ]),
-      },
-    }),
-    block("serviceNetworks", { heading: l("Nos services", "Our services") }),
-    // Ajouts de la refonte (document v3.1) : forfaits de lancement, conditions, preuve sourcée.
-    block("packages", {
-      heading: l("Commencez petit, à prix fixe.", "Start small, at a fixed price."),
-      intro: l("Un livrable clair, un délai, un prix.", "A clear deliverable, a lead time, a price."),
-      showTaxNote: true,
-    }),
-    block("conditions", { heading: l("Conditions des forfaits de lancement", "Launch package conditions") }),
-    block("proof", {
-      enabled: true,
-      heading: l("Ce que donne la préfabrication, selon un entrepreneur", "What prefabrication delivers, according to one contractor"),
-      figures: keyed([
-        { value: "≈ 90 %", label: l("de préfabrication", "prefabricated") },
-        { value: "≈ 15 %", label: l("d'économies globales", "in overall savings") },
-      ]),
-      attribution: l(
-        "Résultats publiés par l'entrepreneur J.M. Brennan, avec SysQue. Ce ne sont pas des résultats de Bimurix.",
-        "Results published by contractor J.M. Brennan, using SysQue. These are not Bimurix results.",
+    block("problems", {
+      heading: l("Les problèmes qu'on règle avant le chantier.", "The problems we solve before the site."),
+      intro: l(
+        "Un modèle BIM vaut ce qu'il apporte au chantier : moins de conflits entre les corps de métier, moins d'imprévus à l'installation, des informations fiables à la remise. Pour les directeurs de construction, les chargés de projet, les estimateurs, les entrepreneurs généraux et spécialisés, les firmes de génie-conseil et les propriétaires.",
+        "A BIM model is worth what it brings to the site: fewer clashes between trades, fewer surprises at installation, reliable information at handover. For construction directors, project managers, estimators, general and specialty contractors, engineering firms and owners.",
       ),
-      sourceName: "Étude de cas Trimble MEP",
-      sourceUrl: "https://www.casestudies.com/company/trimble-mep/case-study/15-cost-savings-with-streamlined-bim-workflow",
-    }),
-    block("pointsList", {
-      heading: l("Inclus pour l'atelier et le chantier", "Included for the shop and the site"),
-      layout: "list",
       items: keyed([
-        titled(l("Spools numérotés et dessins de spool", "Numbered spools and spool drawings"), l("Chaque spool a son numéro et son dessin.", "Each spool has its number and its drawing.")),
-        titled(l("Listes de matériel exactes", "Exact material lists"), l("Longueurs exactes et numéros de pièces du fabricant, pour l'approvisionnement.", "Exact lengths and manufacturer part numbers, for purchasing.")),
-        titled(l("Étiquettes imprimables", "Printable labels"), l("Pour chaque spool et chaque support.", "For each spool and each hanger.")),
-        titled(l("Plans couleur sur tablette", "Colour drawings on a tablet"), l("Par système et par spool, lisibles au chantier.", "By system and by spool, readable on site.")),
-        titled(l("Hauteurs de tiges calculées", "Calculated rod heights"), l("Les longueurs de tiges figurent dans les listes de matériel.", "Rod lengths appear in the material lists.")),
+        problem(["Les tuyaux, les gicleurs et les conduits se croisent au même endroit.", "Pipes, sprinklers and ducts cross in the same place."], ["On détecte les conflits au modèle et on les règle en réunion de coordination, avant l'installation.", "We detect the clashes in the model and resolve them in the coordination meeting, before installation."], ["service-modelisation", "service-combinee"]),
+        problem(["Le chantier perd du temps à mesurer et à couper sur place.", "The site loses time measuring and cutting on the spot."], ["La tuyauterie se fabrique en atelier, avec des spools numérotés et des listes de coupe.", "Piping is built in the shop, with numbered spools and cut lists."], ["service-prefabrication"]),
+        problem(["Vos dessinateurs de gicleurs sont débordés.", "Your sprinkler drafters are swamped."], ["Nous dessinons étage par étage, dans AutoSPRINK.", "We draw floor by floor, in AutoSPRINK."], ["service-gicleurs"]),
+        problem(["Deux fournisseurs, deux modèles, des allers-retours.", "Two suppliers, two models, back-and-forth."], ["Un seul interlocuteur pour la tuyauterie et les gicleurs.", "One contact for piping and sprinklers."], ["service-combinee"]),
+        problem(["Les plans de remise montrent la conception, pas ce qui a été construit.", "The handover drawings show the design, not what was built."], ["Nous intégrons les demandes de changement et les relevés de chantier.", "We integrate the change orders and the site surveys."], ["service-tqc"]),
+        problem(["Le propriétaire exige des données d'équipements à la remise.", "The owner requires equipment data at handover."], ["Nous structurons, vérifions et signalons ce qui manque.", "We structure, check and flag what is missing."], ["service-bim-7d"]),
       ]),
     }),
-    // Contenu d'origine (production).
+    block("serviceNetworks", { heading: l("Six services, du modèle à l'exploitation.", "Six services, from the model to operations.") }),
+    block("projectCycle", {
+      heading: l("Où Bimurix intervient dans votre projet.", "Where Bimurix steps into your project."),
+      intro: l(
+        "Du modèle de conception à la remise du bâtiment, chaque service prend la suite du précédent. Un mandat peut couvrir une étape ou plusieurs.",
+        "From the design model to building handover, each service picks up where the previous one ends. A mandate can cover one stage or several.",
+      ),
+      summary: l(
+        "Les six services de Bimurix dans l'ordre d'un projet : modélisation et coordination BIM, puis tuyauterie et plomberie, gicleurs et coordination tuyauterie et gicleurs, puis données d'actifs et tel que construit.",
+        "Bimurix's six services in project order: BIM modelling and coordination, then piping and plumbing, sprinklers and piping and sprinkler coordination, then asset data and as-built.",
+      ),
+    }),
+    block("deliverables", {
+      heading: l("Ce que vous recevez, et à quoi ça sert.", "What you receive, and what it is for."),
+      items: deliverableRows([
+        [["Rapports ou listes de conflits", "Clash reports and lists"], ["à décider en réunion de coordination qui déplace quoi", "to decide in the coordination meeting who moves what"]],
+        [["Dessins de spool et d'assemblage numérotés", "Numbered spool and assembly drawings"], ["à ce que l'atelier fabrique chaque pièce sans ambiguïté", "so the shop builds each piece without ambiguity"]],
+        [["Listes de coupe et de matériel avec références du fabricant", "Cut and material lists with manufacturer references"], ["à couper et à commander les bonnes pièces", "to cut and order the right parts"]],
+        [["Étiquettes imprimables pour chaque spool et support", "Printable labels for each spool and hanger"], ["à repérer chaque pièce à la réception et à l'installation", "to identify each piece on receiving and at installation"]],
+        [["Dessins d'atelier de gicleurs", "Sprinkler shop drawings"], ["à fabriquer et à installer, après approbation par l'ingénieur ou l'entrepreneur", "to fabricate and install, once approved by the engineer or the contractor"]],
+        [["Modèles et plans tel que construit mis à jour", "Updated as-built models and drawings"], ["à remettre au propriétaire ce qui est réellement installé", "to hand the owner what is actually installed"]],
+        [["Rapport Excel des données manquantes ou erronées", "Excel report of missing or wrong data"], ["à savoir quoi compléter avant la remise", "to know what to complete before handover"]],
+        [["Dossier de remise (fichiers, versions, documents)", "Handover package (files, versions, documents)"], ["à retrouver chaque document sans fouiller", "to find each document without digging"]],
+      ]),
+    }),
+    block("scenarios", {
+      heading: l("Trois situations types de chantier.", "Three typical site situations."),
+      note: l("Ce sont des situations types, pas des projets réalisés.", "These are typical situations, not completed projects."),
+      items: homeScenarios(),
+    }),
+    block("proof", brennanProof()),
+    block("responsibilityTable", { heading: l("Qui fait quoi.", "Who does what."), rows: allResponsibilityRows(), note: engineerSentence }),
     block("method", {
-      heading: l("Une méthode claire, du besoin au livrable.", "A clear method, from need to deliverable."),
+      heading: l("Comment se déroule un mandat.", "How a mandate unfolds."),
       steps: keyed([
-        titled(l("Comprendre", "Understand"), l("Nous clarifions les exigences du projet, les disciplines concernées, les usages BIM, les formats attendus et les critères d'acceptation.", "We clarify project requirements, disciplines involved, BIM uses, expected formats and acceptance criteria.")),
-        titled(l("Produire", "Produce"), l("Nous réalisons ou mettons à jour les modèles, les données et la documentation selon le périmètre convenu.", "We create or update models, data and documentation within the agreed scope.")),
-        titled(l("Vérifier", "Check"), l("Nous contrôlons les éléments convenus : cohérence, paramètres, coordination, complétude et conformité aux exigences communiquées.", "We check the agreed items: consistency, parameters, coordination, completeness and compliance with the stated requirements.")),
-        titled(l("Livrer", "Deliver"), l("Nous préparons les fichiers et documents convenus pour faciliter leur revue, leur utilisation par les équipes et leur intégration au processus du projet.", "We prepare the agreed files and documents for easy review, use by the teams and integration into the project process.")),
+        titled(l("Vous demandez une soumission", "You request a quote"), l("Dites-nous le projet, la discipline et ce que vous voulez recevoir. Nous vous répondons d'ici un jour ouvrable.", "Tell us the project, the discipline and what you want to receive. We reply within one business day.")),
+        titled(l("Nous clarifions la portée", "We clarify the scope"), l("Exigences du projet, disciplines, formats attendus et critères d'acceptation.", "Project requirements, disciplines, expected formats and acceptance criteria.")),
+        titled(l("Nous produisons et nous vérifions", "We produce and we check"), l("Modèles, dessins et données ; cohérence, paramètres, coordination et complétude.", "Models, drawings and data; consistency, parameters, coordination and completeness.")),
+        titled(l("Nous livrons", "We deliver"), l("Les fichiers et documents convenus, avec la liste des points à confirmer.", "The agreed files and documents, with the list of points to confirm.")),
       ]),
     }),
-    block("pointsList", {
-      heading: l("Une approche axée sur la qualité des livrables.", "An approach focused on deliverable quality."),
-      layout: "columns",
-      items: keyed([
-        titled(l("Coordination plus claire", "Clearer coordination"), l("Faciliter l'identification et le suivi des problèmes entre disciplines.", "Make it easier to identify and track issues between disciplines.")),
-        titled(l("Préparation à l'installation", "Installation readiness"), l("Structurer les informations et les documents nécessaires à la préparation des réseaux mécaniques.", "Structure the information and documents needed to prepare mechanical networks.")),
-        titled(l("Données mieux organisées", "Better-organised data"), l("Améliorer la cohérence et la complétude des paramètres selon les exigences définies.", "Improve parameter consistency and completeness against defined requirements.")),
-        titled(l("Livrables traçables", "Traceable deliverables"), l("Clarifier les éléments vérifiés, les informations reçues et les livrables remis.", "Make clear what was checked, what was received and what was delivered.")),
-      ]),
-    }),
-    block("pointsList", {
-      heading: l("Un soutien BIM adapté aux équipes de construction.", "BIM support built for construction teams."),
-      layout: "list",
-      items: keyed([
-        titled(l("Entrepreneurs généraux", "General contractors"), l("Soutien BIM pour la coordination, le suivi des livrables et la cohérence de l'information entre disciplines.", "BIM support for coordination, deliverable tracking and information consistency across disciplines.")),
-        titled(l("Entrepreneurs MEP", "MEP contractors"), l("Soutien spécialisé pour les réseaux mécaniques, la plomberie, le chauffage, la préfabrication et la préparation des documents d'installation.", "Specialised support for mechanical networks, plumbing, heating, prefabrication and installation documents.")),
-        titled(l("Firmes de génie-conseil", "Engineering firms"), l("Soutien à la production, à la coordination et à la vérification des modèles et informations BIM selon le mandat.", "Support producing, coordinating and checking BIM models and information within the mandate.")),
-        titled(l("Fabricants et équipes de préfabrication", "Fabricators and prefab teams"), l("Préparation des informations et des documents nécessaires aux flux de fabrication convenus.", "Preparing the information and documents required by the agreed fabrication workflows.")),
-        titled(l("Propriétaires et gestionnaires d'actifs", "Owners and asset managers"), l("Structuration des données et préparation des informations utiles à la livraison et à l'exploitation du bâtiment.", "Structuring data and preparing information for building handover and operations.")),
-      ]),
-    }),
-    // Ajout de la refonte : questions fréquentes (aucune ne promet un appel).
+    block("pointsList", { heading: l("Ce qu'il faut nous envoyer", "What to send us"), layout: "list", items: keyed(needsList) }),
     block("faq", {
       heading: l("Questions fréquentes", "Frequently asked questions"),
-      items: keyed([
-        { question: l("Faut-il avoir SysQue ?", "Do we need SysQue?"), answer: l("Non. Vous recevez des PDF, des listes Excel et des étiquettes. Le modèle Revit est inclus si vous le voulez.", "No. You receive PDFs, Excel lists and labels. The Revit model is included if you want it.") },
-        { question: l("Qui conçoit le parasismique ?", "Who designs the seismic bracing?"), answer: l("Votre ingénieur. Bimurix modélise et coordonne les contreventements selon les dessins et les calculs approuvés.", "Your engineer. Bimurix models and coordinates the bracing from the approved drawings and calculations.") },
-        { question: l("Qui signe les dessins ?", "Who signs the drawings?"), answer: l("Bimurix produit les dessins. L'approbation, la signature et le sceau restent à l'ingénieur ou à l'entrepreneur.", "Bimurix produces the drawings. Approval, signature and seal remain with the engineer or the contractor.") },
-        { question: l("Quels fabricants ?", "Which manufacturers?"), answer: l("Ceux que vous utilisez déjà, pour les raccords, les vannes et les supports, grâce au contenu fabricant de SysQue.", "The ones you already use, for fittings, valves and hangers, thanks to SysQue's manufacturer content.") },
-        { question: l("Et si un projet démarre vite ?", "What if a project starts fast?"), answer: l("Le délai standard est de 5 jours ouvrables après la réception de documents complets.", "The standard lead time is 5 business days after we receive complete documents.") },
-        { question: l("Le prix inclut-il les taxes ?", "Do prices include taxes?"), answer: l("Non. Les prix sont en dollars canadiens, avant TPS et TVQ.", "No. Prices are in Canadian dollars, before GST and QST.") },
-        { question: l("Le montant du forfait est-il perdu ?", "Is the package price lost?"), answer: l("Non. Il est déduit si vous commandez le reste du projet dans les 60 jours. Les conditions sont détaillées plus haut.", "No. It is deducted if you order the rest of the project within 60 days. The conditions are detailed above.") },
-        { question: l("Quelle région desservez-vous ?", "Which area do you serve?"), answer: l("Le Grand Montréal. Nous travaillons en français et en anglais.", "Greater Montreal. We work in French and in English.") },
-      ]),
-    }),
-    // Contenu d'origine (production) : les deux appels finaux.
-    block("quoteCta", {
-      heading: l("Une expertise BIM orientée vers les besoins réels du projet.", "BIM expertise focused on the project's real needs."),
-      text: l(
-        "Bimurix associe compréhension technique, rigueur documentaire et attention portée à la qualité des données. Chaque mandat commence par la clarification des besoins, des responsabilités, des informations disponibles et des critères de livraison.",
-        "Bimurix combines technical understanding, documentation rigour and attention to data quality. Every mandate starts by clarifying needs, responsibilities, available information and delivery criteria.",
-      ),
-      button: internalCta(l("En savoir plus sur Bimurix", "More about Bimurix"), "page-about", "secondary"),
+      items: faqEntries("sysque", "seismic", "signs", "makers", "documents", "price", "soon", "region"),
     }),
     block("quoteCta", {
-      heading: l("Parlons de votre prochain projet.", "Let's talk about your next project."),
+      heading: l("Envoyez-nous votre projet.", "Send us your project."),
       text: l(
-        "Vous avez besoin de soutien en modélisation BIM, coordination MEP, préfabrication, données d'actifs ou documentation TQC ? Présentez-nous votre projet et les livrables attendus.",
-        "Need support with BIM modelling, MEP coordination, prefabrication, asset data or as-built documentation? Tell us about your project and the expected deliverables.",
+        "Dites-nous la discipline, les plans disponibles et ce que vous voulez recevoir : modèle, dessins d'atelier, plans tel que construit ou données d'actifs.",
+        "Tell us the discipline, the drawings available and what you want to receive: model, shop drawings, as-built drawings or asset data.",
       ),
       button: internalCta(requestQuote, "page-quote"),
     }),

@@ -75,3 +75,15 @@ describe("canShowProof", () => {
     expect(canShowProof(null)).toBe(false);
   });
 });
+
+describe("forfaits masqués par défaut (ADR-008) et rallumables dans Studio", () => {
+  it("le seed masque les 5 forfaits ; les remettre à visible: true les fait réapparaître sur le site", async () => {
+    const { packageDocs } = await import("../../scripts/seed/packages.mts");
+    const docs = packageDocs as unknown as Array<Record<string, unknown>>;
+    const asData = (visible: boolean): PackageData[] =>
+      docs.map((d) => ({ _id: d._id as string, code: d.code as string, order: d.order as number, visible, service: { visible: true } }));
+    expect(docs.every((d) => d.visible === false)).toBe(true);
+    expect(visiblePackages(asData(false))).toEqual([]);
+    expect(visiblePackages(asData(true)).map((p) => p.code)).toEqual(["F-01", "F-02", "F-03", "F-04", "F-05"]);
+  });
+});

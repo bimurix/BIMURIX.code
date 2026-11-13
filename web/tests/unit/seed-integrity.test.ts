@@ -56,11 +56,11 @@ describe("contenu de départ Sanity", () => {
     expect(docs.filter((d) => d.kind === "notFound")).toHaveLength(1);
   });
 
-  it("contient les 5 forfaits d'entrée, visibles, avec prix fixe et une offre existante", () => {
+  it("garde les 5 forfaits d'entrée dans Studio, masqués du site (ADR-008), avec prix fixe et une offre existante", () => {
     const pkgs = docs.filter((d) => d._type === "package");
     expect(pkgs.map((p) => p.price)).toEqual([1800, 2200, 1500, 2800, 1200]);
     for (const p of pkgs) {
-      expect(p.visible).toBe(true);
+      expect(p.visible).toBe(false);
       expect(p.priceMode).toBe("fixed");
       expect(docs.find((d) => d._id === (p.service as { _ref: string })._ref)?._type).toBe("service");
     }
@@ -104,13 +104,13 @@ describe("contenu de départ Sanity", () => {
     expect(pkgs).not.toContain("service-tqc");
   });
 
-  it("le BIM 7D garde son contenu d'origine et y ajoute les éléments du v3.1", () => {
+  it("le BIM 7D garde ses faits d'origine (en 9 blocs) et ceux du v3.1", () => {
     const d = docs.find((x) => x._id === "service-bim-7d") as Doc;
     const titles = (d.offerings as Array<{ title: { fr: string } }>).map((o) => o.title.fr);
-    for (const t of ["Structuration des paramètres", "Contrôle de complétude", "Préparation à l'exploitation-maintenance", "Audit des données", "Codification des équipements", "Numérotation des robinets", "Fonction et position des robinets", "Lien avec les dessins d'atelier", "Local de chaque élément"]) {
+    for (const t of ["Structuration des paramètres", "Contrôle de complétude", "Préparation à la remise et à l'exploitation-maintenance", "Audit des données", "Codification des équipements", "Robinets", "Lien avec les dessins d'atelier", "Local de chaque élément"]) {
       expect(titles, t).toContain(t);
     }
-    expect((d.heroHeading as { fr: string }).fr).toBe("Des données BIM organisées pour faciliter la livraison du bâtiment.");
+    expect((d.heroHeading as { fr: string }).fr).toBe("Des données d'équipements complètes à la remise du bâtiment.");
   });
 
   it("aucune mention d'un appel de 20 minutes dans le contenu du site (ADR-007)", () => {
@@ -119,20 +119,19 @@ describe("contenu de départ Sanity", () => {
     expect(text).not.toMatch(/20 minutes|20-minute|appel de 20|book a (20-minute )?call|réserver un appel|réservez un appel/i);
   });
 
-  it("accueil : sections d'origine dans leur ordre, ajouts intégrés, preuve limitée aux 2 chiffres sourcés (ADR-006 n° 21)", () => {
+  it("accueil : onze sections dans l'ordre du plan v5 (§ 2b), sans forfaits ni conditions, preuve limitée aux 2 chiffres sourcés", () => {
     const home = docs.find((d) => d.kind === "home") as unknown as { sections: Array<{ _type: string } & Record<string, unknown>> };
-    const types = home.sections.map((x) => x._type).filter((t) => t !== "serviceNetworks");
-    expect(types).toEqual(["heroSheet", "richText", "packages", "conditions", "proof", "pointsList", "method", "pointsList", "pointsList", "faq", "quoteCta", "quoteCta"]);
-    // Les sections d'origine restent dans l'ordre d'origine (production).
-    const heading = (s: Record<string, unknown>) => (s.heading as { fr?: string } | undefined)?.fr;
-    expect(home.sections.map((s) => heading(s)).filter((h) => h && !/forfait|Conditions|selon un entrepreneur|Inclus pour|Questions fréquentes|Commencez/.test(h))).toEqual([
-      "Des modèles BIM fiables. Une construction mieux préparée.", "Le BIM doit servir le chantier, pas seulement le modèle.", "Nos services", "Une méthode claire, du besoin au livrable.",
-      "Une approche axée sur la qualité des livrables.", "Un soutien BIM adapté aux équipes de construction.", "Une expertise BIM orientée vers les besoins réels du projet.", "Parlons de votre prochain projet.",
+    expect(home.sections.map((x) => x._type)).toEqual([
+      "heroSheet", "problems", "serviceNetworks", "projectCycle", "deliverables", "scenarios", "proof", "responsibilityTable", "method", "pointsList", "faq", "quoteCta",
     ]);
     const proof = home.sections.find((x) => x._type === "proof") as Record<string, unknown>;
     expect((proof.figures as Array<{ value: string }>).map((f) => f.value)).toEqual(["≈ 90 %", "≈ 15 %"]);
     expect(proof.sourceUrl).toBe("https://www.casestudies.com/company/trimble-mep/case-study/15-cost-savings-with-streamlined-bim-workflow");
+    expect(proof.sourceName).toBeTruthy();
     expect(JSON.stringify(home)).not.toMatch(/718|même méthode|same method/);
+    const scenarios = home.sections.find((x) => x._type === "scenarios") as unknown as { items: unknown[]; note: { fr: string } };
+    expect(scenarios.items).toHaveLength(3);
+    expect(scenarios.note.fr).toMatch(/situations types, pas des projets réalisés/);
   });
 
   it("coordonnées et lancement (ADR-006 n° 13 à 18)", () => {
@@ -141,9 +140,10 @@ describe("contenu de départ Sanity", () => {
     for (const k of ["phone", "neq", "legalName"]) expect(settings[k], k).toBeUndefined();
     expect(settings.serviceArea).toEqual({ fr: "Grand Montréal", en: "Greater Montreal" });
     expect(settings.privacyOfficer).toBe("Fondateur de Bimurix");
-    expect(launchSettingsDoc.bannerEnabled).toBe(true);
-    expect(launchSettingsDoc.bannerText).toEqual({ fr: "Forfaits de lancement à prix fixe", en: "Fixed-price launch packages" });
+    expect(launchSettingsDoc.bannerEnabled).toBe(false);
     expect("deadline" in launchSettingsDoc).toBe(false);
+    // ADR-008 : ni crédit, ni conditions de paiement, ni taux horaire.
+    expect(JSON.stringify(launchSettingsDoc)).not.toMatch(/100 \$|net 15|50 %|credit|crédit|60 jours|60 days/i);
   });
 
   it("n'inclut aucun élément « hypothèse à valider » (ADR-006 n° 3)", () => {
@@ -153,8 +153,70 @@ describe("contenu de départ Sanity", () => {
     for (const re of banned) expect(text, String(re)).not.toMatch(re);
   });
 
-  it("donne un texte FR et EN à chaque forfait et à chaque condition", () => {
-    const pairs = [...(packageDocs as unknown as Array<Record<string, { fr?: string; en?: string }>>).flatMap((p) => [p.title, p.scope]), ...launchSettingsDoc.conditions.flatMap((c) => [c.title, c.text])];
+  it("donne un texte FR et EN à chaque forfait (le code des forfaits reste)", () => {
+    const pairs = (packageDocs as unknown as Array<Record<string, { fr?: string; en?: string }>>).flatMap((p) => [p.title, p.scope]);
     for (const v of pairs) expect(v?.fr && v?.en).toBeTruthy();
+  });
+
+  it("Loi 96 : chaque champ { fr, en } rempli dans une langue l'est dans les deux", () => {
+    const missing: string[] = [];
+    const walk = (v: unknown, path: string) => {
+      if (Array.isArray(v)) return v.forEach((x, i) => walk(x, `${path}[${i}]`));
+      if (!v || typeof v !== "object") return;
+      const o = v as Record<string, unknown>;
+      const keys = Object.keys(o);
+      if (keys.length && keys.every((k) => k === "fr" || k === "en") && typeof (o.fr ?? o.en) === "string") {
+        if (!o.fr || !o.en) missing.push(path);
+        return;
+      }
+      for (const [k, x] of Object.entries(o)) walk(x, `${path}.${k}`);
+    };
+    for (const d of docs.filter((x) => !["page-privacy", "page-terms"].includes(x._id))) walk(d, d._id);
+    expect(missing).toEqual([]);
+  });
+
+  it("ADR-008 : aucune page ni aucun service ne publie de prix, de forfait, de délai fixe ni de condition de paiement", () => {
+    const shown = docs.filter((d) => ["page", "service", "navigation", "footer", "settings"].includes(d._type) && !["page-privacy", "page-terms"].includes(d._id));
+    const all = JSON.stringify(shown);
+    const text = all.replace(/un jour ouvrable|one business day/g, "");
+    const banned = [/\d\s?\$/, /\$\s?\d/, /forfait/i, /fixed[- ]price|launch package|choose this package|packages for this offer/i, /F-0\d/, /jours? ouvrables?/, /business days?/, /60 jours/, /60 days/, /net 15/i, /100 \$/, /Choisir ce/i, /lancement|launch/i];
+    for (const re of banned) expect(text, String(re)).not.toMatch(re);
+    // Le délai de réponse est le seul engagement de délai : « un jour ouvrable » / « one business day ».
+    expect(all).toMatch(/un jour ouvrable/);
+  });
+
+  it("six services : famille, nom court, situations types, livrables avec usage, besoins, qui fait quoi, FAQ, bouton propre, mention de l'ingénieur", () => {
+    const shown = docs.filter((d) => d._type === "service");
+    expect(shown.map((d) => d.family)).toEqual(["modeler", "prefabriquer", "prefabriquer", "prefabriquer", "livrer", "livrer"]);
+    const pair = (v: unknown) => v as { fr?: string; en?: string } | undefined;
+    for (const d of shown) {
+      expect(pair(d.shortTitle)?.fr && pair(d.shortTitle)?.en, `${d._id}.shortTitle`).toBeTruthy();
+      expect(pair(d.quoteButtonLabel)?.fr, d._id).toMatch(/^Demander une soumission/);
+      expect(d.heroCta, d._id).toBeUndefined();
+      expect(d.deliverables, d._id).toBeUndefined();
+      expect((d.scenarios as unknown[]).length, d._id).toBe(2);
+      expect(JSON.stringify(d.scenarios), d._id).toMatch(/Situation type 1/);
+      expect((d.deliverableRows as Array<{ purpose: unknown }>).every((r) => r.purpose), d._id).toBe(true);
+      expect((d.needs as unknown[]).length, d._id).toBeGreaterThanOrEqual(4);
+      expect((d.responsibilityRows as unknown[]).length, d._id).toBeGreaterThanOrEqual(2);
+      expect((d.faq as unknown[]).length, d._id).toBeGreaterThanOrEqual(3);
+      expect(JSON.stringify(d.responsibilityRows), d._id).toMatch(/Conception et calculs/);
+      expect(d.heroImage, d._id).toBeUndefined(); // les images viennent de S3b
+    }
+    // Preuve J.M. Brennan : tuyauterie et tuyauterie + gicleurs seulement, source et lien présents.
+    expect(shown.filter((d) => d.proof).map((d) => d._id)).toEqual(["service-prefabrication", "service-combinee"]);
+    for (const d of shown.filter((x) => x.proof)) expect((d.proof as { sourceUrl: string }).sourceUrl).toMatch(/^https:\/\/www\.casestudies\.com\//);
+  });
+
+  it("Soumission : encart « Ce qu'il faut nous envoyer » et accusé avec le délai de réponse ; À propos : tableau « Qui fait quoi »", () => {
+    const form = docs.find((d) => d._id === "formSettings") as Doc;
+    expect((form.needsItems as unknown[]).length).toBeGreaterThanOrEqual(4);
+    expect(JSON.stringify(form.successBody)).toMatch(/un jour ouvrable/);
+    const mail = docs.find((d) => d._id === "emailTemplates") as Doc;
+    expect(JSON.stringify(mail.ackBody)).toMatch(/un jour ouvrable/);
+    expect(JSON.stringify(mail.ackBody)).not.toMatch(/forfait|package/i);
+    const about = docs.find((d) => d.kind === "about") as unknown as { sections: Array<{ _type: string; note?: { fr: string } }> };
+    const table = about.sections.find((x) => x._type === "responsibilityTable");
+    expect(table?.note?.fr).toMatch(/ingénieur ou à l'entrepreneur/);
   });
 });

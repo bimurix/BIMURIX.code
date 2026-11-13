@@ -1,10 +1,9 @@
-import { internalCta, keyed, l, titled } from "./helpers.mts";
+import { keyed, l, titled } from "./helpers.mts";
+import { deliverableRows, faqEntries, needs, responsibilityRows } from "./v5-common.mts";
+import { serviceScenarios } from "./v5-scenarios.mts";
 
-// ADR-007 : base = page d'origine « BIM 7D et données d'actifs » (production, mot pour mot) ; on y ADJOINT les éléments
-// de offres-bim-v3-1.md §4 (6 prestations, 2 livrables de l'audit, pour qui, qui fait quoi). Le forfait Audit 7D (F-05) est dans packages.mts.
-// La mise en conformité (3 900 $) et le tarif à l'élément restent non publiés (ADR-006 n° 3).
-const quote = "page-quote";
-
+// Plan de contenu v5 § 3.6 (ADR-008) : les 11 blocs deviennent 9, mêmes faits. Les rapports d'audit sont des livrables possibles (choix par défaut n° 16).
+// La mise en conformité et le tarif à l'élément restent non publiés (ADR-006 n° 3). Aucun prix, forfait ni délai fixe.
 export const service7d = {
   _id: "service-bim-7d",
   _type: "service",
@@ -12,84 +11,80 @@ export const service7d = {
   order: 50,
   code: "D-05",
   network: "data",
-  title: l("BIM 7D et données d'actifs", "BIM 7D and asset data"),
+  family: "livrer",
+  title: l("Données d'actifs pour l'exploitation (BIM 7D)", "Asset data for operations (BIM 7D)"),
+  shortTitle: l("Données d'actifs (BIM 7D)", "Asset data (BIM 7D)"),
   slug: l("services/bim-7d-donnees-actifs", "services/bim-7d-asset-data"),
-  cardTitle: l("Des données prêtes pour la livraison et l'exploitation", "Data ready for handover and operations"),
+  cardTitle: l("Des données prêtes pour la remise et l'exploitation", "Data ready for handover and operations"),
   cardText: l(
-    "Structuration des paramètres, vérification de la complétude des informations et préparation des données d'équipements selon les exigences de remise du projet.",
-    "Parameter structuring, information completeness checks and equipment data preparation to the project's handover requirements.",
+    "Paramètres structurés, complétude vérifiée, équipements codifiés, données prêtes pour les manuels d'exploitation et d'entretien et la maintenance.",
+    "Structured parameters, completeness checked, equipment coded, data ready for the O&M manuals and maintenance.",
   ),
-  cardLinkLabel: l("Découvrir le BIM 7D", "Explore BIM 7D"),
-  heroHeading: l("Des données BIM organisées pour faciliter la livraison du bâtiment.", "Organised BIM data for a smoother building handover."),
+  cardLinkLabel: l("Voir les données d'actifs", "See asset data"),
+  heroHeading: l("Des données d'équipements complètes à la remise du bâtiment.", "Complete equipment data at building handover."),
   heroIntro: l(
-    "Bimurix aide à structurer, compléter et vérifier les informations associées aux équipements et aux actifs du bâtiment, en fonction des exigences de remise et des besoins d'exploitation définis par le client.",
-    "Bimurix helps structure, complete and check the information attached to building equipment and assets, based on the handover requirements and operational needs defined by the client.",
+    "Bimurix structure, complète et vérifie les informations des équipements et des actifs du bâtiment, selon les exigences de remise et les besoins d'exploitation du client. Les données manquantes sont signalées, jamais inventées.",
+    "Bimurix structures, completes and checks the information on the building's equipment and assets, based on the client's handover requirements and operational needs. Missing data is flagged, never invented.",
   ),
-  // Ajouts du document v3.1 §4 (pour qui) et des exclusions (qui fait quoi).
+  quoteButtonLabel: l("Demander une soumission de données 7D", "Request a 7D data quote"),
   audience: l(
     "Propriétaires institutionnels et gestionnaires d'actifs, entrepreneurs généraux et entrepreneurs mécaniques qui livrent un modèle tel que construit avec données, firmes d'ingénierie.",
     "Institutional owners and asset managers, general contractors and mechanical contractors who deliver an as-built model with data, engineering firms.",
   ),
+  scenarios: serviceScenarios("d1", "d2"),
   responsibilityNote: l(
     "Bimurix organise et vérifie les données du modèle, sans en inventer. Les champs non confirmés sont signalés comme manquants. La conception, les calculs et la validation professionnelle restent à l'ingénieur ou à l'entrepreneur.",
     "Bimurix organises and checks the model data without inventing any. Unconfirmed fields are flagged as missing. Design, calculations and professional validation remain with the engineer or the contractor.",
   ),
-  heroCta: internalCta(l("Discuter de vos données BIM", "Discuss your BIM data"), quote, "primary", "service-bim-7d"),
-  offeringsHeading: l("Services", "Services"),
+  responsibilityRows: responsibilityRows("design", "approval"),
+  offeringsHeading: l("Ce que nous faisons", "What we do"),
   offerings: keyed([
+    titled(l("Audit des données", "Data audit"), l("Votre modèle est comparé aux grilles de suivi du propriétaire ; les données manquantes ou erronées sont rapportées par élément.", "Your model is compared to the owner's tracking grids; missing or wrong data is reported per element.")),
     titled(l("Structuration des paramètres", "Parameter structuring"), l("Organisation des propriétés et paramètres selon les conventions, gabarits et exigences fournis.", "Organising properties and parameters to the conventions, templates and requirements provided.")),
     titled(l("Remplissage des données", "Data population"), l("Saisie ou intégration des informations d'actifs disponibles, dans les champs et formats convenus.", "Entering or importing available asset information into the agreed fields and formats.")),
     titled(l("Contrôle de complétude", "Completeness checks"), l("Identification des paramètres manquants, des valeurs incohérentes et des données nécessitant une confirmation.", "Identifying missing parameters, inconsistent values and data requiring confirmation.")),
-    titled(l("Préparation des livrables", "Deliverable preparation"), l("Préparation des tableaux, nomenclatures, exports ou données associés à la remise BIM, selon les formats requis.", "Preparing tables, schedules, exports or data for the BIM handover, in the required formats.")),
-    titled(l("Préparation à l'exploitation-maintenance", "Operations and maintenance readiness"), l("Organisation des informations nécessaires aux processus de gestion des actifs, selon les exigences du propriétaire ou du gestionnaire.", "Organising the information needed for asset management processes, to the owner's or manager's requirements.")),
-    // Ajouts du document v3.1 §4.
-    titled(l("Audit des données", "Data audit"), l("Votre modèle est comparé aux grilles de suivi du propriétaire ; les données manquantes ou erronées sont rapportées par élément.", "Your model is compared to the owner's tracking grids; missing or wrong data is reported per element.")),
     titled(l("Codification des équipements", "Equipment coding"), l("Un code unique selon la convention du projet : pompes, réservoirs, compteurs, chauffe-eau, panneaux radiants.", "A unique code per the project convention: pumps, tanks, meters, water heaters, radiant panels.")),
-    titled(l("Numérotation des robinets", "Valve numbering"), l("Code d'équipement et code de système, selon l'abréviation du réseau.", "Equipment code and system code, per the network abbreviation.")),
-    titled(l("Fonction et position des robinets", "Valve function and position"), l("Fonction et position normale selon le type : à bille, papillon, équilibrage, filtre, antirefoulement, réducteur de pression.", "Function and normal position by type: ball, butterfly, balancing, strainer, backflow preventer, pressure reducing.")),
+    titled(l("Robinets", "Valves"), l("Numéro, fonction et position normale selon le type : à bille, papillon, équilibrage, filtre, antirefoulement, réducteur de pression.", "Number, function and normal position by type: ball, butterfly, balancing, strainer, backflow preventer, pressure reducing.")),
     titled(l("Lien avec les dessins d'atelier", "Link to shop drawings"), l("Numéro de devis, description, code de système, quantité et nom du dessin révisé, tirés de vos livrables Procore.", "Spec number, description, system code, quantity and revised drawing name, taken from your Procore deliverables.")),
     titled(l("Local de chaque élément", "Room of each element"), l("Chaque élément est repéré dans sa pièce d'architecture, avec le numéro et le nom du local.", "Each element is located in its architectural room, with the room number and name.")),
+    titled(l("Préparation à la remise et à l'exploitation-maintenance", "Handover and operations and maintenance readiness"), l("Tableaux, nomenclatures et exports selon les formats requis, et information organisée pour les processus de gestion des actifs du propriétaire ou du gestionnaire.", "Tables, schedules and exports in the required formats, and information organised for the owner's or manager's asset management processes.")),
   ]),
-  deliverablesHeading: l("Exemples de données", "Example data"),
-  deliverables: keyed([
-    l("Identifiant ou code d'actif", "Asset ID or code"),
-    l("Désignation et catégorie", "Description and category"),
-    l("Fabricant et modèle, si connus", "Manufacturer and model, if known"),
-    l("Numéro de série, lorsqu'il est disponible", "Serial number, when available"),
-    l("Localisation dans le bâtiment", "Location in the building"),
-    l("Informations de garantie, si fournies", "Warranty information, if provided"),
-    l("Fréquences ou consignes de maintenance, si fournies et validées", "Maintenance frequencies or instructions, if provided and validated"),
-    l("Références aux documents et manuels associés", "References to related documents and manuals"),
+  deliverablesHeading: l("Ce que vous recevez", "What you receive"),
+  deliverableRows: deliverableRows([
+    [["Rapport Excel des données manquantes ou erronées, avec détail par élément", "Excel report of missing or wrong data, with detail per element"], ["à savoir quoi compléter avant la remise", "to know what to complete before handover"]],
+    [["Données d'actifs : identifiant, désignation, fabricant et modèle, numéro de série, localisation, garantie, consignes d'entretien, références aux manuels d'exploitation et d'entretien", "Asset data: ID, description, manufacturer and model, serial number, location, warranty, maintenance instructions, references to the O&M manuals"], ["à ce que l'équipe d'exploitation retrouve chaque équipement et son entretien", "so the operations team can find each piece of equipment and its maintenance"]],
   ]),
   deliverablesNote: l(
     "Les données ne sont jamais inventées. Les champs non confirmés sont signalés comme manquants, à confirmer ou non applicables selon les règles du projet.",
     "Data is never invented. Unconfirmed fields are flagged as missing, to be confirmed or not applicable, following project rules.",
   ),
-  methodHeading: l("Méthode de travail", "How we work"),
+  needsHeading: l("Ce qu'il faut nous envoyer", "What to send us"),
+  needs: needs([
+    ["Le modèle (format)", "The model (format)"],
+    ["La convention de codification du propriétaire", "The owner's coding convention"],
+    ["Les grilles de suivi", "The tracking grids"],
+    ["Les livrables de dessins d'atelier", "The shop drawing deliverables"],
+    ["Le type et le nombre approximatif d'actifs", "The type and approximate number of assets"],
+  ]),
+  methodHeading: l("Comment ça se passe", "How it works"),
   methodSteps: keyed([
-    l("Revoir les exigences d'information du client", "Review the client's information requirements"),
-    l("Définir les paramètres et formats à utiliser", "Define the parameters and formats to use"),
-    l("Intégrer les données fournies par les parties responsables", "Integrate data provided by the responsible parties"),
-    l("Contrôler la complétude et la cohérence", "Check completeness and consistency"),
-    l("Produire les exports et livrables convenus", "Produce the agreed exports and deliverables"),
+    l("Nous revoyons vos exigences d'information", "We review your information requirements"),
+    l("Nous définissons les paramètres et les formats", "We define the parameters and formats"),
+    l("Nous intégrons les données fournies par les parties responsables", "We integrate the data provided by the responsible parties"),
+    l("Nous contrôlons la complétude et la cohérence", "We check completeness and consistency"),
+    l("Nous produisons les exports et les livrables convenus", "We produce the agreed exports and deliverables"),
   ]),
-  // Ajout du document v3.1 §4 : ce que livre le forfait Audit 7D (délai et prix : bloc des forfaits).
-  extraHeading: l("Ce que vous recevez avec l'audit 7D", "What you receive with the 7D audit"),
-  extraItems: keyed([
-    l("Rapport Excel des données manquantes ou erronées", "Excel report of missing or wrong data"),
-    l("Détail par élément du modèle", "Detail per model element"),
-  ]),
-  ctaHeading: l("Vous devez compléter les paramètres de vos modèles BIM ?", "Need to complete your BIM model parameters?"),
+  faq: faqEntries("documents", "price", "missing"),
+  ctaHeading: l("Des données d'équipements à fournir à la remise ?", "Equipment data to provide at handover?"),
   ctaText: l(
     "Indiquez les types d'actifs, le format du modèle, les exigences de remise et le volume approximatif de données.",
     "Tell us the asset types, model format, handover requirements and approximate data volume.",
   ),
-  ctaButton: internalCta(l("Demander une soumission pour les données BIM", "Request a BIM data quote"), quote, "primary", "service-bim-7d"),
   titleBlock: { sheet: "S-05", revision: "0", date: "2026-11" },
   seo: {
-    title: l("BIM 7D et données d'actifs du bâtiment | Bimurix", "BIM 7D and building asset data | Bimurix"),
+    title: l("Données d'actifs du bâtiment (BIM 7D) | Bimurix", "Building asset data (BIM 7D) | Bimurix"),
     description: l(
-      "Structuration des paramètres BIM, contrôle de la complétude des données d'équipements et préparation des informations pour la livraison et la gestion des actifs.",
+      "Structuration des paramètres BIM, contrôle de la complétude des données d'équipements et préparation des informations pour la remise et la gestion des actifs.",
       "BIM parameter structuring, equipment data completeness checks and information preparation for handover and asset management.",
     ),
   },
