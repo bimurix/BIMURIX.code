@@ -28,13 +28,15 @@ export function FigureImage({ image, locale, ratio = "4 / 3", sizes, priority = 
   if (!image?.asset?.url) return null;
   const caption = pick(image.caption, locale, "");
   const mention = image.illustrative ? illustrativeLabel || illustrativeFallback[locale] : "";
+  // Schéma au trait (SVG) : servi tel quel, entier dans son cadre ; une photo est recadrée au rapport du gabarit.
+  const vector = image.asset.url.split("?")[0].endsWith(".svg");
   return (
     <figure className={`border-[1.5px] border-ink bg-paper ${className}`}>
       <div className="relative w-full" style={{ aspectRatio: ratio }}>
-        <Image src={urlForImage(image).width(1400).url()} alt={pick(image.alt, locale, "")} fill sizes={sizes} priority={priority} className="object-cover" />
+        <Image src={vector ? image.asset.url : urlForImage(image).width(1400).url()} alt={pick(image.alt, locale, "")} fill sizes={sizes} priority={priority} unoptimized={vector} className={vector ? "object-contain" : "object-cover"} />
       </div>
       {(caption || mention) && (
-        <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-ink px-3 py-2 font-mono text-[12px] text-ink-3">
+        <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-ink px-3 py-2 font-mono text-[12px] text-ink-2">
           <span>{caption}</span>
           {mention && caption !== mention && <span>{mention}</span>}
         </figcaption>

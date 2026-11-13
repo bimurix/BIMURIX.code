@@ -34,4 +34,15 @@
 
   --bx-tap-min: 44px;
   --bx-header-h: 64px;
+
+  /*
+   * Rythme vertical (plan de contenu v5 § 8 n° 3) : deux espacements seulement,
+   * entre deux sections et entre un titre de section et son contenu.
+   */
+  --bx-space-section: 3rem;
+  --bx-space-section-lg: 4.5rem;
+  --bx-space-head: 2rem;
+
+  /* Barre d'action fixe du mobile (S3b) : hauteur réservée en bas de page pour ne rien masquer. */
+  --bx-actionbar-h: 62px;
 }

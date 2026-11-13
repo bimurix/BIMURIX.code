@@ -1,13 +1,10 @@
-import Image from "next/image";
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { resolveLink } from "@/lib/links";
-import { urlForImage } from "@/sanity/image";
-import type { Cta, ImageAsset, Shell, TitleBlockData } from "@/sanity/types-content";
-import { Arrow } from "@/ui/components/Arrow";
+import type { Cta, Shell, TitleBlockData } from "@/sanity/types-content";
 import { ButtonLink } from "@/ui/components/ButtonLink";
+import { FigureImage, type FigureImageData } from "@/ui/components/FigureImage";
 import { Logo } from "@/ui/components/Logo";
-import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
 import { IsoNetworks, type IsoRun } from "@/ui/patterns/IsoNetworks";
 import { Sheet, TitleBlock } from "@/ui/patterns/Sheet";
 
@@ -16,7 +13,7 @@ export type HeroSheetData = {
   intro?: Localized;
   ctas?: Cta[];
   specialties?: Localized;
-  illustration?: (ImageAsset & { alt?: Localized; caption?: Localized; illustrative?: boolean }) | null;
+  illustration?: FigureImageData;
 };
 
 type Props = {
@@ -50,24 +47,10 @@ export function HeroSheet({ data, locale, shell, titleBlock, runs = [], aside, m
   const withDrawing = runs.length > 0 || illustration;
   const compact = runs.length === 0;
 
-  const legend = runs.length > 0 && (
-    <>
-      <p className="mb-3 text-[14px] text-ink-2">{pick(ui?.networkHint, locale, t.hint)}</p>
-      <ol className="grid gap-x-6 sm:grid-cols-2">
-        {runs.map((run, i) => (
-          <li key={run.id}>
-            <a href={run.href} data-net-i={i} className="group flex min-h-12 items-center gap-3 border-b border-rule text-[15px] text-ink hover:text-blue">
-              <NetworkSwatch network={run.network} />
-              <span className="w-11 shrink-0 font-mono text-[12px] text-ink-2">{run.code}</span>
-              <span className="flex-1">{run.label}</span>
-              <Arrow className="transition-transform group-hover:translate-x-1" />
-            </a>
-          </li>
-        ))}
-      </ol>
-    </>
-  );
-  const bottomLeft = legend || aside;
+  // S3b : l'isométrique ne redit plus la liste des services (présentés une fois, plus bas). Chaque tracé reste un lien
+  // nommé (code et service) pour le clavier et les lecteurs d'écran ; la phrase d'aide n'apparaît que là où les codes se lisent.
+  const hint = runs.length > 0 && <p className="text-[14px] text-ink-2 max-sm:hidden">{pick(ui?.networkHint, locale, t.hint)}</p>;
+  const bottomLeft = hint || aside;
 
   return (
     <section className={`mx-auto max-w-7xl px-4 pt-6 sm:px-6 sm:pt-10 ${compact ? "pb-4" : "pb-10"}`}>
@@ -89,26 +72,22 @@ export function HeroSheet({ data, locale, shell, titleBlock, runs = [], aside, m
                   ))}
                 </div>
               )}
-              {data.specialties && <p className="mt-6 text-[14px] text-ink-3">{pick(data.specialties, locale, "")}</p>}
+              {data.specialties && <p className="mt-6 text-[14px] text-ink-2">{pick(data.specialties, locale, "")}</p>}
             </div>
             {withDrawing && (
-              <figure className="lg:col-span-6 lg:self-center">
+              <div className="lg:col-span-6 lg:self-center">
                 {illustration ? (
-                  <Image src={urlForImage(illustration).width(1200).url()} alt={pick(illustration.alt, locale, "")} width={1200} height={Math.round(1200 * ((illustration.asset?.height ?? 3) / (illustration.asset?.width ?? 4)))} sizes="(min-width: 1024px) 50vw, 100vw" priority className="h-auto w-full" />
+                  // Seule image prioritaire de la page ; le titre (texte) ne dépend pas d'elle pour s'afficher.
+                  <FigureImage image={illustration} locale={locale} ratio="4 / 3" sizes="(min-width: 1280px) 560px, (min-width: 1024px) 45vw, 100vw" priority illustrativeLabel={pick(ui?.illustrativeExample, locale, "") || undefined} />
                 ) : (
-                  <IsoNetworks runs={runs} title={t.figure} />
+                  <figure><IsoNetworks runs={runs} title={t.figure} /></figure>
                 )}
-                {illustration && (pick(illustration.caption, locale, "") || illustration.illustrative) && (
-                  <figcaption className="mt-2 font-mono text-[12px] text-ink-3">
-                    {pick(illustration.caption, locale, "") || pick(ui?.illustrativeExample, locale, locale === "fr" ? "Exemple illustratif" : "Illustrative example")}
-                  </figcaption>
-                )}
-              </figure>
+              </div>
             )}
           </div>
 
           <div className="grid border-t-[1.5px] border-ink lg:grid-cols-12">
-            <div className={`p-5 sm:p-6 lg:col-span-8 ${bottomLeft ? "" : "max-lg:hidden"}`}>{bottomLeft}</div>
+            <div className={`p-5 sm:p-6 lg:col-span-8 ${aside ? "" : hint ? "max-sm:hidden" : "max-lg:hidden"}`}>{bottomLeft}</div>
             <div className="lg:col-span-4 lg:self-end">
               <TitleBlock
                 data={titleBlock}

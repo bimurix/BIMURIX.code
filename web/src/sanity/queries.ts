@@ -6,13 +6,14 @@ const cta = `{label, style, "link": link${link}}`;
 const asset = `asset->{url, "width": metadata.dimensions.width, "height": metadata.dimensions.height}`;
 const image = `{alt, caption, illustrative, ${asset}}`;
 // Cible d'un lien vers un service (adresse FR/EN) ; un service masqué ne donne aucun lien.
-const serviceRef = `{_id, _type, slug, title, shortTitle}`;
+const serviceRef = `{_id, _type, slug, title, shortTitle, code, network}`;
 
 // Petits textes et page de soumission joints aux blocs de l'offre (forfaits : lien `?forfait=`).
 const uiRef = `*[_id == "uiStrings"][0]`;
 const quotePageRef = `*[_type == "page" && kind == "quote"][0]{_type, kind, slug}`;
 
 // Sections du constructeur de pages, avec leurs liens et images résolus.
+// Problèmes : le filtre « service visible » se fait dans le composant ; posé en GROQ après le déréférencement, il vidait la liste (S3b).
 const sections = `sections[]{
   ...,
   _type == "heroSheet" => { ..., ctas[]{_key, ...${cta}}, "illustration": illustration${image} },
@@ -28,7 +29,7 @@ const sections = `sections[]{
       _id, _type, code, network, title, shortTitle, family, slug
     }
   },
-  _type == "problems" => { ..., "image": image${image}, items[]{..., "services": services[]->[visible != false]${serviceRef}} },
+  _type == "problems" => { ..., "image": image${image}, items[]{..., "services": services[]->{_id, _type, slug, title, shortTitle, code, network, visible}} },
   _type == "scenarios" => { ..., items[]{..., "image": image${image}, "service": select(service->visible == false => null, service->${serviceRef})} },
   _type == "packages" => {
     ...,

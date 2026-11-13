@@ -82,6 +82,7 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
   return (
     <form
       ref={formRef}
+      data-quote-form
       noValidate
       onSubmit={(e) => {
         e.preventDefault();

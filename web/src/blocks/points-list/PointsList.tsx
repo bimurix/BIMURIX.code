@@ -14,6 +14,23 @@ export function PointsList({ data, locale }: { data: PointsListData; locale: Loc
   const items = data.items ?? [];
   const intro = pick(data.intro, locale, "");
 
+  // Points sans texte (ex. : pièces à envoyer) : liste compacte, pas des titres empilés.
+  if (items.every((item) => !pick(item.text, locale, ""))) {
+    return (
+      <Section>
+        <SectionHeading intro={intro}>{pick(data.heading, locale, "")}</SectionHeading>
+        <ul className="grid gap-x-10 border-t-[1.5px] border-ink sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((item) => (
+            <li key={item._key} className="flex min-h-14 items-center gap-4 border-b border-rule py-3 text-[16px] font-semibold text-ink">
+              <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full border-2 border-blue bg-paper" />
+              {pick(item.title, locale, "")}
+            </li>
+          ))}
+        </ul>
+      </Section>
+    );
+  }
+
   if (data.layout === "list") {
     return (
       <Section>
@@ -35,7 +52,7 @@ export function PointsList({ data, locale }: { data: PointsListData; locale: Loc
       <SectionHeading intro={intro}>{pick(data.heading, locale, "")}</SectionHeading>
       <ul className="grid gap-x-10 border-t-[1.5px] border-ink sm:grid-cols-2">
         {items.map((item) => (
-          <li key={item._key} className="border-b border-rule py-6">
+          <li key={item._key} className="border-b border-rule py-5">
             <h3 className="font-display text-xl font-bold text-ink">{pick(item.title, locale, "")}</h3>
             <p className="mt-2 max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{pick(item.text, locale, "")}</p>
           </li>

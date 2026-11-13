@@ -35,53 +35,65 @@ type Props = {
 const linkClass = "inline-flex min-h-(--bx-tap-min) items-center text-[15px] text-ink underline underline-offset-4 hover:text-blue";
 
 /**
- * Situations types en bandes de feuille de plan : une situation = quatre cellules séparées par des traits fins,
- * empilées avec leur étiquette sur mobile. Pas de cartes ni d'icônes. Une cellule vide n'est pas rendue.
+ * Situations types en bandes de feuille de plan : le titre à gauche, puis quatre temps repérables d'un coup d'œil
+ * (situation, ce que fait Bimurix, ce que vous recevez, ce que ça évite), chacun sous son étiquette en gras et son
+ * trait fin ; deux par rangée dès sm, empilés sur mobile. Pas de cartes ni d'icônes. Une cellule vide n'est pas rendue.
  */
 export function ScenarioList({ items, locale, ui, quotePath }: Props) {
   return (
     <ol className="border-t-[1.5px] border-ink">
-      {items.map((item) => {
-        const servicePath = pathFor(item.service, locale);
-        const quoteHref = quotePath && item.service?._id ? `${quotePath}?service=${encodeURIComponent(item.service._id)}` : null;
-        const cells = CELLS.flatMap(([field, labelKey]) => {
-          const text = pick(item[field], locale, "");
-          return text ? [{ field, label: v5Label(ui, labelKey, locale), text }] : [];
-        });
-        return (
-          <li key={item._key} className="border-b border-rule py-7">
-            <article>
-              <h3 className="font-display max-w-[40ch] text-xl leading-snug font-bold text-ink">{pick(item.title, locale, "")}</h3>
-              <FigureImage image={item.image} locale={locale} ratio="3 / 2" sizes="(min-width: 640px) 384px, 100vw" className="mt-4 max-w-sm" />
-              {cells.length > 0 && (
-                <dl className="mt-5 grid gap-y-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0 lg:divide-x lg:divide-rule">
-                  {cells.map((cell) => (
-                    <div key={cell.field} className="lg:px-5 lg:first:ps-0 lg:last:pe-0">
-                      <dt className="text-[13px] font-semibold text-ink-2">{cell.label}</dt>
-                      <dd className="mt-1 max-w-[44ch] text-[16px] leading-relaxed text-ink">{cell.text}</dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-              {(servicePath || quoteHref) && (
-                <p className="mt-3 flex flex-wrap gap-x-6">
-                  {servicePath && (
-                    <Link href={servicePath} className={linkClass}>
-                      {v5Label(ui, "scenarioServiceLink", locale)}
-                      <span className="sr-only"> — {item.service ? shortName(item.service, locale) : ""}</span>
-                    </Link>
-                  )}
-                  {quoteHref && (
-                    <Link href={quoteHref} className={linkClass}>
-                      {v5Label(ui, "scenarioQuoteLink", locale)}
-                    </Link>
-                  )}
-                </p>
-              )}
-            </article>
-          </li>
-        );
-      })}
+      {items.map((item) => (
+        <ScenarioItem key={item._key} item={item} locale={locale} ui={ui} quotePath={quotePath} />
+      ))}
     </ol>
+  );
+}
+
+function ScenarioLinks({ item, locale, ui, quotePath }: Omit<Props, "items"> & { item: ScenarioData }) {
+  const servicePath = pathFor(item.service, locale);
+  const quoteHref = quotePath && item.service?._id ? `${quotePath}?service=${encodeURIComponent(item.service._id)}` : null;
+  if (!servicePath && !quoteHref) return null;
+  return (
+    <p className="flex flex-wrap gap-x-6 lg:col-start-2">
+      {servicePath && (
+        <Link href={servicePath} className={linkClass}>
+          {v5Label(ui, "scenarioServiceLink", locale)}
+          <span className="sr-only"> — {item.service ? shortName(item.service, locale) : ""}</span>
+        </Link>
+      )}
+      {quoteHref && (
+        <Link href={quoteHref} className={linkClass}>
+          {v5Label(ui, "scenarioQuoteLink", locale)}
+        </Link>
+      )}
+    </p>
+  );
+}
+
+function ScenarioItem({ item, locale, ui, quotePath }: Omit<Props, "items"> & { item: ScenarioData }) {
+  const cells = CELLS.flatMap(([field, labelKey]) => {
+    const text = pick(item[field], locale, "");
+    return text ? [{ field, label: v5Label(ui, labelKey, locale), text }] : [];
+  });
+  return (
+    <li className="border-b border-rule py-6">
+      <article className="grid gap-x-10 gap-y-3 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
+        <div>
+          <h3 className="font-display max-w-[28ch] text-xl leading-snug font-bold text-balance text-ink">{pick(item.title, locale, "")}</h3>
+          <FigureImage image={item.image} locale={locale} ratio="3 / 2" sizes="(min-width: 640px) 384px, 100vw" className="mt-4 max-w-sm" />
+        </div>
+        {cells.length > 0 && (
+          <dl className="grid gap-x-10 sm:grid-cols-2">
+            {cells.map((cell) => (
+              <div key={cell.field} className="border-t border-rule py-3.5 lg:nth-[-n+2]:border-t-0 lg:nth-[-n+2]:pt-0">
+                <dt className="font-display text-[15px] font-bold text-ink">{cell.label}</dt>
+                <dd className="mt-1 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">{cell.text}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        <ScenarioLinks item={item} locale={locale} ui={ui} quotePath={quotePath} />
+      </article>
+    </li>
   );
 }

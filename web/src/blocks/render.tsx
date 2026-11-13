@@ -60,7 +60,7 @@ function renderSection(section: Section, ctx: RenderContext) {
     case "pointsList":
       return <PointsList data={section as PointsListData} locale={locale} />;
     case "deliverables":
-      return <Deliverables data={section as DeliverablesData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "")} purposeLabel={v5Label(shell?.ui, "purposeLabel", locale)} />;
+      return <Deliverables data={section as DeliverablesData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "")} labels={{ item: v5Label(shell?.ui, "deliverableLabel", locale), purpose: v5Label(shell?.ui, "purposeLabel", locale) }} />;
     case "richText":
       return <RichText data={section as RichTextData} locale={locale} />;
     case "quoteCta":

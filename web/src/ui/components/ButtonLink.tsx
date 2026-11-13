@@ -16,7 +16,7 @@ const variants = {
 
 // Bouton d'action : pleine largeur sur mobile, cible tactile ≥ 44 px (CLAUDE.md §5).
 export function ButtonLink({ href, children, variant = "primary", className = "" }: Props) {
-  const classes = `inline-flex min-h-(--bx-tap-min) w-full items-center justify-center px-5 text-[15px] font-semibold transition-colors sm:w-auto ${variants[variant]} ${className}`;
+  const classes = `inline-flex min-h-(--bx-tap-min) w-full items-center justify-center px-5 py-2 text-center text-[15px] leading-snug font-semibold transition-colors sm:w-auto ${variants[variant]} ${className}`;
   if (isExternalHref(href)) {
     return (
       <a href={href} className={classes}>

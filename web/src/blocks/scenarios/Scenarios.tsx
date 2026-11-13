@@ -21,9 +21,9 @@ export function Scenarios({ data, locale, ui, quotePath, quoteLink }: Props) {
   if (items.length === 0) return null;
   const note = pick(data.note, locale, "") || v5Label(ui, "scenariosNote", locale);
   return (
-    <Section id="situations">
+    <Section id="situations" band>
       <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "") || v5Label(ui, "scenariosHeading", locale)}</SectionHeading>
-      <p className="-mt-6 mb-8 max-w-[62ch] text-[15px] text-ink-3">{note}</p>
+      <p className="-mt-4 mb-(--bx-space-head) max-w-[62ch] text-[15px] text-ink-2">{note}</p>
       <ScenarioList items={items} locale={locale} ui={ui} quotePath={quotePath} />
       {quoteLink && (
         <p className="mt-4">

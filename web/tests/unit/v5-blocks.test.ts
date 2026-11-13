@@ -113,7 +113,10 @@ describe("DeliverableRows", () => {
     const html = render(h(DeliverableRows, { heading: { fr: "Ce que vous recevez" }, rows, locale: "fr", ui: null }));
     expect(html).toContain("Listes de coupe");
     expect(html).toContain("À quoi ça sert");
+    // S3b : l'étiquette est un en-tête de colonne, dit une seule fois quel que soit le nombre de livrables.
     expect((html.match(/À quoi ça sert/g) ?? []).length).toBe(1);
+    expect(html).toContain('<th role="columnheader" scope="col"');
+    expect(html).toContain("Livrable");
     expect(render(h(DeliverableRows, { rows: [], locale: "fr", ui: null }))).toBe("");
   });
 });

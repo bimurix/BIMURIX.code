@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { hasLocale, htmlLang, locales } from "@/lib/i18n/locales";
 import { fetchPublished } from "@/sanity/fetch";
 import { SanityLive } from "@/sanity/live";
@@ -41,6 +42,14 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[lo
           {children}
         </main>
         <SiteFooter shell={shell} locale={locale} />
+        {/* Barre d'action du mobile (plan v5 § 6.1) : CSS seulement, voir .bx-actionbar dans globals.css. */}
+        {model.cta && (
+          <div className="bx-actionbar border-t-[1.5px] border-ink bg-paper px-4 py-2">
+            <Link href={model.cta.href} className="flex min-h-(--bx-tap-min) items-center justify-center bg-blue px-5 text-[15px] font-semibold text-paper hover:bg-blue-deep">
+              {model.cta.label}
+            </Link>
+          </div>
+        )}
         {/* Rafraîchit la page dès qu'un contenu est publié dans Studio. Brouillons : L4 (édition visuelle). */}
         <SanityLive includeDrafts={false} />
       </body>

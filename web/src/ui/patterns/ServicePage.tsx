@@ -18,7 +18,7 @@ import { serviceQuoteCta } from "@/lib/services/quote-cta";
 import type { Cta, NetworkColor, Shell, TitleBlockData } from "@/sanity/types-content";
 import type { FigureImageData } from "@/ui/components/FigureImage";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
-import { NetworkList, Note, type Keyed } from "./service-sections";
+import { NetworkList, type Keyed } from "./service-sections";
 
 export type ServiceDoc = {
   _id: string;
@@ -85,6 +85,14 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
     </p>
   );
   const rows = doc.deliverableRows ?? [];
+  // « Pour qui » tient dans la bande basse de la feuille, à gauche du cartouche : une réponse courte n'a pas besoin d'une section (S3b).
+  const audience = pick(doc.audience, locale, "");
+  const forWhom = audience ? (
+    <div className="max-w-[62ch]">
+      <h2 className="text-[13px] font-semibold text-ink-2">{pick(ui?.forWhom, locale, "")}</h2>
+      <p className="mt-1 text-[16px] leading-relaxed text-ink">{audience}</p>
+    </div>
+  ) : undefined;
 
   return (
     <>
@@ -94,8 +102,8 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
         shell={shell}
         titleBlock={doc.titleBlock}
         meta={meta}
+        aside={forWhom}
       />
-      <Note heading={ui?.forWhom} text={doc.audience} locale={locale} />
       <Scenarios
         data={{ items: doc.scenarios ?? [] }}
         locale={locale}

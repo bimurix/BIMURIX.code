@@ -42,9 +42,15 @@ describe("ServicePage : nouveaux champs", () => {
   const html = render(doc);
 
   it("affiche les nouvelles sections dans l'ordre du plan (P3, P4, P5, P6, P8, P10, P11)", () => {
-    const order = ["Des dessins qui ne se fabriquent pas", "Skids", "Listes de coupe", "Les dessins approuvés", "<table", "Faut-il SysQue ?", "Prêt ?"].map((t) => html.indexOf(t));
+    // S3b : les livrables sont aussi un tableau ; « Qui fait quoi » se repère à sa légende.
+    const order = ["Des dessins qui ne se fabriquent pas", "Skids", "Listes de coupe", "Les dessins approuvés", '<caption class="sr-only">Qui fait quoi', "Faut-il SysQue ?", "Prêt ?"].map((t) => html.indexOf(t));
     expect(order.every((i) => i >= 0)).toBe(true);
     expect([...order].sort((a, b) => a - b)).toEqual(order);
+  });
+
+  it("« Pour qui » reste un titre de niveau 2, dans la bande basse du premier écran (S3b)", () => {
+    expect(html).toMatch(/<h2[^>]*>Pour qui<\/h2>/);
+    expect(html.indexOf("Pour qui")).toBeLessThan(html.indexOf("Des dessins qui ne se fabriquent pas"));
   });
 
   it("remplace la liste simple des livrables par les livrables avec usage", () => {

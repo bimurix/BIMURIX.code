@@ -88,3 +88,58 @@ body {
 .bx-run:focus-visible .bx-pipe:last-of-type {
   stroke-width: 8;
 }
+
+/* ---------- Bande teintée pleine largeur (sans carte) : sépare une section sans changer sa grille ---------- */
+.bx-band {
+  background: var(--bx-paper-2);
+  box-shadow: 0 0 0 100vmax var(--bx-paper-2);
+  clip-path: inset(0 -100vmax);
+}
+
+/* ---------- Barre d'action fixe du mobile (plan de contenu v5 § 6.1), en CSS seulement ---------- */
+.bx-actionbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 20;
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+}
+/* La page réserve la hauteur de la barre : le pied de page reste lisible en entier. */
+body:has(.bx-actionbar) {
+  padding-bottom: calc(var(--bx-actionbar-h) + env(safe-area-inset-bottom));
+}
+html:has(.bx-actionbar) {
+  scroll-padding-bottom: calc(var(--bx-actionbar-h) + 1rem);
+}
+/* Sur la page du formulaire, l'action est déjà à l'écran : pas de barre. */
+body:has([data-quote-form]) .bx-actionbar {
+  display: none;
+}
+body:has([data-quote-form]) {
+  padding-bottom: 0;
+}
+@media (min-width: 64rem) {
+  .bx-actionbar { display: none; }
+  body:has(.bx-actionbar) { padding-bottom: 0; }
+  html:has(.bx-actionbar) { scroll-padding-bottom: 0; }
+}
+/*
+ * Un seul bouton principal par écran : tant que le bouton du premier écran est visible, la barre reste cachée.
+ * Navigateurs sans animation liée au défilement : la barre est simplement toujours visible.
+ */
+@supports (animation-timeline: scroll()) {
+  .bx-actionbar {
+    animation: bx-actionbar-in linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 32rem;
+  }
+  @keyframes bx-actionbar-in {
+    0%, 85% { visibility: hidden; transform: translateY(100%); }
+    100% { visibility: visible; transform: translateY(0); }
+  }
+}
+
+/* Pas de délai de double-tape sur les éléments d'action (plan de contenu v5 § 8 n° 11). */
+a, button, summary, label {
+  touch-action: manipulation;
+}

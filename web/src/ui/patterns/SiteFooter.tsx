@@ -22,7 +22,7 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
 
   return (
     <footer className="bg-ink text-paper">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(4,1fr)]">
         <div className="max-w-sm space-y-4">
           <Logo image={settings?.logoInverse} alt={pick(settings?.logoAlt, locale, "Bimurix")} wordmark={settings?.wordmark ?? "bimurix"} inverse />
           <p className="text-[15px] leading-relaxed text-paper/75">{pick(footer?.blurb, locale, "")}</p>
