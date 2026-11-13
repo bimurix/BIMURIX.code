@@ -153,3 +153,13 @@ describe("S-13 : clé Turnstile de test en ligne", () => {
     fetchSpy.mockRestore();
   });
 });
+
+describe("S-05 : limite d'envois du lien de connexion", () => {
+  it("sixième demande en dix minutes depuis la même IP : refusée", async () => {
+    const { loginAllowed, LOGIN_MAX_PER_IP, LOGIN_MAX_GLOBAL_PER_HOUR } = await import("@/lib/admin/login-limit");
+    expect(LOGIN_MAX_PER_IP).toBe(5);
+    expect([0, 1, 2, 3, 4, 5].map((n) => loginAllowed({ perIp: n, global: n }))).toEqual([true, true, true, true, true, false]);
+    expect(loginAllowed({ perIp: null, global: LOGIN_MAX_GLOBAL_PER_HOUR })).toBe(false);
+    expect(loginAllowed({ perIp: null, global: 3 })).toBe(true);
+  });
+});

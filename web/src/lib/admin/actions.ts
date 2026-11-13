@@ -5,6 +5,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { adminCallbackUrl } from "./callback-url";
+import { LOGIN_WINDOW_MS, loginAllowed } from "./login-limit";
+import { clientIpFrom, hashIp } from "@/lib/quote/client-ip";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { errorSummary } from "@/lib/safe-log";
 import { createMailer } from "@/lib/mail/mailer";
 import { oneLine, textToHtml } from "@/lib/quote/templates";
@@ -25,13 +28,32 @@ export async function sendMagicLink(_prev: ActionResult, form: FormData): Promis
   // S-04 : adresse de retour issue de la configuration, jamais des en-têtes de la requête (voir callback-url.ts).
   const callback = adminCallbackUrl({ origin: h.get("origin"), host: h.get("host") });
   try {
+    if (!(await withinLoginLimit(h))) return { ok: true, message: NEUTRAL }; // même réponse : rien n'indique le refus
     const supabase = await createUserClient();
     // shouldCreateUser: false — seuls les comptes créés par « pnpm admin:add » reçoivent un lien.
     await supabase.auth.signInWithOtp({ email: email.data, options: { shouldCreateUser: false, emailRedirectTo: callback } });
   } catch (error) {
     console.error(`[admin] lien magique : ${errorSummary(error)}`);
   }
-  return { ok: true, message: "Si cette adresse est autorisée, un lien de connexion vient d'être envoyé." };
+  return { ok: true, message: NEUTRAL };
+}
+
+const NEUTRAL = "Si cette adresse est autorisée, un lien de connexion vient d'être envoyé.";
+
+/** Compte puis enregistre la tentative (S-05). Fail-closed : si le décompte échoue, aucun lien n'est envoyé. */
+async function withinLoginLimit(h: Awaited<ReturnType<typeof headers>>): Promise<boolean> {
+  const ipHash = hashIp(clientIpFrom(h), process.env.IP_HASH_SALT);
+  const db = createAdminClient();
+  const count = async (since: number, hash?: string) => {
+    let q = db.from("admin_login_attempts").select("id", { count: "exact", head: true }).gte("created_at", new Date(Date.now() - since).toISOString());
+    if (hash) q = q.eq("ip_hash", hash);
+    const { count: n, error } = await q;
+    if (error) throw error;
+    return n ?? 0;
+  };
+  const allowed = loginAllowed({ perIp: ipHash ? await count(LOGIN_WINDOW_MS, ipHash) : null, global: await count(60 * 60 * 1000) });
+  if (allowed) await db.from("admin_login_attempts").insert({ ip_hash: ipHash });
+  return allowed;
 }
 
 export async function signOut() {
