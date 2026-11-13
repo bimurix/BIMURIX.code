@@ -78,7 +78,7 @@ export const serviceTuyauterie = {
   methodSteps: keyed([
     l("Vous demandez une soumission : zone ou systèmes à préfabriquer, fabricants retenus, échéancier.", "You request a quote: zone or systems to prefabricate, selected manufacturers, schedule."),
     l("Vous envoyez les dessins d'atelier approuvés ou le modèle de l'ingénieur.", "You send the approved shop drawings or the engineer's model."),
-    l("Nous modélisons, nous vérifions, puis vous recevez le paquet d'atelier.", "We model, we check, then you receive the shop package."),
+    l("Nous modélisons, nous vérifions, puis vous recevez le dossier d'atelier.", "We model, we check, then you receive the shop drawing set."),
   ]),
   proof: brennanProof(),
   faq: faqEntries("sysque", "seismic", "signs", "makers"),

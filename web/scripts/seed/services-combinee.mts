@@ -42,7 +42,7 @@ export const serviceCombinee = {
     titled(l("Une zone, deux disciplines", "One zone, two disciplines"), l("La tuyauterie dans SysQue et les gicleurs dans AutoSPRINK, dans le même modèle de coordination.", "Piping in SysQue and sprinklers in AutoSPRINK, in the same coordination model.")),
     titled(l("Détection de conflits avant la fabrication", "Clash detection before fabrication"), l("Les croisements entre tuyauterie, gicleurs et autres corps de métier sont détectés et réglés au modèle, pas sur le chantier.", "Crossings between piping, sprinklers and other trades are detected and resolved in the model, not on site.")),
     titled(l("Dessins d'atelier des deux disciplines", "Shop drawings for both disciplines"), l("Spools de tuyauterie et dessins de gicleurs issus du même modèle coordonné.", "Piping spools and sprinkler drawings from the same coordinated model.")),
-    titled(l("Un seul interlocuteur", "One contact"), l("Un seul interlocuteur maîtrise les deux outils : moins d'allers-retours.", "One contact masters both tools: fewer back-and-forths.")),
+    titled(l("Un seul interlocuteur", "One contact"), l("Un seul interlocuteur maîtrise les deux outils : moins d'allers-retours.", "One contact works in both tools: fewer back-and-forths.")),
   ]),
   deliverablesHeading: l("Ce que vous recevez", "What you receive"),
   deliverableRows: deliverableRows([

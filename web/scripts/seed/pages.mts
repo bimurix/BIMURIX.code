@@ -63,7 +63,7 @@ const about = {
       ),
     }),
     block("responsibilityTable", { heading: l("Qui fait quoi", "Who does what"), rows: allResponsibilityRows(), note: engineerSentence }),
-    block("quoteCta", { heading: l("Un projet à nous confier ?", "A project to entrust to us?"), button: internalCta(l("Demander une soumission", "Request a quote"), "page-quote") }),
+    block("quoteCta", { heading: l("Un projet à nous confier ?", "Have a project for us?"), button: internalCta(l("Demander une soumission", "Request a quote"), "page-quote") }),
   ],
 };
 
