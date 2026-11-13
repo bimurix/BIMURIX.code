@@ -66,10 +66,10 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
           <h2 className="mb-3 text-[13px] font-semibold text-paper/60">{t.contact}</h2>
           <ul className="space-y-2 text-[15px]">
             {settings?.email && (
-              <li><a href={`mailto:${settings.email}`} className="hover:underline">{settings.email}</a></li>
+              <li><a href={`mailto:${settings.email}`} className="inline-flex min-h-(--bx-tap-min) items-center hover:underline">{settings.email}</a></li>
             )}
             {settings?.phone && (
-              <li><a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="font-mono text-[14px] hover:underline">{settings.phone}</a></li>
+              <li><a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="inline-flex min-h-(--bx-tap-min) items-center font-mono text-[14px] hover:underline">{settings.phone}</a></li>
             )}
             {settings?.serviceArea && <li className="text-paper/75">{pick(settings.serviceArea, locale, "")}</li>}
             {settings?.neq && <li className="font-mono text-[13px] text-paper/60">{t.neq} {settings.neq}</li>}
