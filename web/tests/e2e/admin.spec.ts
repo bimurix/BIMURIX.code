@@ -14,8 +14,21 @@ const ADMIN = "contact@bimurix.com";
 test.describe.configure({ mode: "serial", timeout: 120_000 });
 test.skip(!ready, "pile Supabase locale non configurée");
 
+const serverClient = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, { auth: { persistSession: false } });
+
+/**
+ * T6 : la limite d'envois du lien (S-05 : 30 par heure au total, car hors Netlify l'IP n'est pas connue) est un comportement voulu.
+ * Les relances répétées de la suite l'atteignaient (le lien n'arrivait plus) : le test vide le compteur de SA base locale
+ * avant de se connecter. Le code de la limite n'est pas touché ; le test « limite d'envois » plus bas la vérifie.
+ */
+async function resetLoginLimit() {
+  const { error } = await serverClient().from("admin_login_attempts").delete().gte("id", 0);
+  expect(error).toBeNull();
+}
+
 /** Connexion par lien magique : le lien est lu dans Mailpit (aucun courriel réel). */
 async function magicLogin(page: Page, email: string) {
+  await resetLoginLimit();
   const since = Date.now();
   await page.goto("/admin/connexion");
   await expect(async () => {
@@ -54,6 +67,29 @@ test("la clé publique n'appelle aucune fonction de la base", async () => {
   for (const [fn, args] of [["anonymize_expired_quotes", { months: 0 }], ["admin_stats", {}], ["is_admin", {}]] as const) {
     const { error } = await anon.rpc(fn, args);
     expect(error, fn).not.toBeNull();
+  }
+});
+
+// S-05 : au-delà de 30 envois dans l'heure, même réponse neutre mais aucun courriel n'est envoyé.
+test("limite d'envois : 30 liens dans l'heure, le suivant n'envoie rien", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "une fois par exécution");
+  await resetLoginLimit();
+  const { error } = await serverClient().from("admin_login_attempts").insert(Array.from({ length: 30 }, () => ({ ip_hash: null })));
+  expect(error).toBeNull();
+  const since = Date.now();
+  try {
+    await page.goto("/admin/connexion");
+    await expect(async () => {
+      await page.locator("#email").fill(ADMIN);
+      await page.getByRole("button", { name: "Recevoir un lien de connexion" }).click();
+      await expect(page.getByRole("status")).toContainText("Si cette adresse est autorisée", { timeout: 3000 });
+    }).toPass({ timeout: 20_000 });
+    await page.waitForTimeout(3000);
+    const res = await page.request.get(`${MAILPIT}/api/v1/search?query=${encodeURIComponent(`to:"${ADMIN}"`)}`);
+    const { messages } = (await res.json()) as { messages: Array<{ Created: string }> };
+    expect(messages.filter((m) => new Date(m.Created).getTime() >= since - 2000)).toHaveLength(0);
+  } finally {
+    await resetLoginLimit();
   }
 });
 
