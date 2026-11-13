@@ -29,8 +29,8 @@ ci-dessus reste valable pour le code ; le contenu est revu.
 | Étape | État | Contenu |
 |---|---|---|
 | R1 Contenu | ✅ 2026-11-12 | Contenu d'origine restauré dans `development` + 6 services, forfaits, conditions, preuve intégrés ; plus d'appel de 20 minutes ; `patch-content-r1.mts` ; ADR-007 |
-| R2 Formulaire | en cours (autre session) | Formulaire et courriels sans appel de 20 minutes (réglage Studio `callEnabled`, faux par défaut) |
-| R3 Vérification | à faire | Revue finale, rapport, relecture par le client |
+| R2 Formulaire | ✅ 2026-11-12 | Formulaire et courriels sans appel de 20 minutes (réglage Studio `callEnabled`, faux par défaut) ; `patch-form-r2.mts` |
+| R3 Vérification | ✅ 2026-11-12 | Audit indépendant après R1 et R2 : `docs/audits/2026-11-12_audit-r3.md` ; 3 corrections (accusé sans forfait, menu, tests instables) ; reste à faire relire par le client |
 
 Les sections 3 (pages) et 4 (formulaire) plus bas décrivent l'état N4/N5 ; elles sont remplacées par ADR-007 pour le contenu.
 

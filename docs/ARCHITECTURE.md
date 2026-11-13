@@ -1,6 +1,6 @@
 # Architecture — Bimurix
 
-> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-10.
+> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-12.
 
 ## 1. Le dossier de travail
 
@@ -49,7 +49,7 @@ web/
 │  ├─ styles/tokens.css       Seule source des couleurs, tailles et traits
 │  └─ proxy.ts                Routage FR / EN et garde de /admin
 ├─ scripts/                   seed-sanity.mts + seed/*.mts, db-env, add-admin, check-placeholders,
-│                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset)
+│                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset), capture-pages.mjs (captures pour le client)
 ├─ supabase/migrations/       SQL versionné, appliqué par `pnpm db:reset`
 └─ tests/unit · tests/e2e     Vitest · Playwright (mobile et bureau ; warm-up.ts préchauffe les routes en dev)
 ```
@@ -71,7 +71,7 @@ web/
 | Une colonne en base | Nouvelle migration dans `supabase/migrations/` (jamais modifier une ancienne) |
 
 ### Limites
-Fichier ≤ 300 lignes, fonction ≤ 40 lignes (au 2026-11-10 : plus gros fichier 165 lignes).
+Fichier ≤ 300 lignes, fonction ≤ 40 lignes (au 2026-11-12 : plus gros fichier de `src/` 168 lignes).
 Server Components par défaut ; `"use client"` seulement pour l'interaction.
 
 ## 3. Les données
