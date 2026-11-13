@@ -52,7 +52,7 @@ export function organizationLd(shell: Shell, locale: Locale): Json {
     telephone: s.phone,
     logo: s.logo?.asset?.url,
     image: s.logo?.asset?.url,
-    identifier: s.neq ? { "@type": "PropertyValue", propertyID: "NEQ", value: s.neq } : undefined,
+    identifier: s.neq && !isPlaceholder(s.neq) ? { "@type": "PropertyValue", propertyID: "NEQ", value: s.neq } : undefined,
     areaServed: pick(s.serviceArea, locale, ""),
     knowsLanguage: [htmlLang.fr, htmlLang.en],
     inLanguage: htmlLang[locale],

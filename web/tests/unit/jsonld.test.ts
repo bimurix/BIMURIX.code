@@ -29,6 +29,7 @@ describe("T6-A données structurées", () => {
     expect(json).toContain("ProfessionalService");
     expect(json).toContain("fr-CA");
     expect(json).toContain("en-CA");
+    expect(json).not.toContain("PropertyValue"); // T7 : un NEQ d'exemple ne laisse pas un identifiant vide
   });
 
   it("l'organisation garde téléphone, nom légal et NEQ quand ils sont réels", () => {
