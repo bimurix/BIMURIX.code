@@ -1,3 +1,4 @@
+import { createHash, randomUUID } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { NOT_FOUND_SLUG } from "./route-table";
 
@@ -5,6 +6,20 @@ type Locale = "fr" | "en";
 
 /** En-tête de la lecture interne du gabarit : le proxy la laisse passer telle quelle (pas de boucle). */
 export const INTERNAL_HEADER = "x-bimurix-404-template";
+
+// S-09 : la simple présence de l'en-tête ne suffit plus (un visiteur pouvait l'envoyer pour sauter la décision 404 / 308).
+// La valeur est dérivée d'un secret du serveur (même valeur sur toutes les instances, sans rien exposer) ;
+// à défaut de secret, une valeur aléatoire par instance.
+const instanceFallback = randomUUID();
+export function internalHeaderValue(env: NodeJS.ProcessEnv = process.env): string {
+  const secret = env.IP_HASH_SALT || env.SUPABASE_SECRET_KEY || instanceFallback;
+  return createHash("sha256").update(`bimurix-404-template:${secret}`).digest("hex");
+}
+
+/** Vrai seulement pour la lecture interne faite par notFoundResponse (valeur secrète comparée). */
+export function isInternalRequest(headers: { get(name: string): string | null }, env: NodeJS.ProcessEnv = process.env): boolean {
+  return headers.get(INTERNAL_HEADER) === internalHeaderValue(env);
+}
 
 /**
  * Réponse 404 complète (page « introuvable » éditée dans Studio) dont le statut est connu avant l'envoi.
@@ -20,7 +35,7 @@ async function readCopy(origin: string, locale: Locale): Promise<string | null> 
   const hit = copies.get(locale);
   if (hit && Date.now() - hit.at < TTL_MS) return hit.html;
   try {
-    const res = await fetch(`${origin}${locale === "en" ? "/en" : ""}/${NOT_FOUND_SLUG}`, { headers: { accept: "text/html", [INTERNAL_HEADER]: "1" }, signal: AbortSignal.timeout(5_000) });
+    const res = await fetch(`${origin}${locale === "en" ? "/en" : ""}/${NOT_FOUND_SLUG}`, { headers: { accept: "text/html", [INTERNAL_HEADER]: internalHeaderValue() }, signal: AbortSignal.timeout(5_000) });
     if (!res.ok && res.status !== 404) return hit?.html ?? null;
     const html = await res.text();
     copies.set(locale, { at: Date.now(), html });

@@ -139,3 +139,17 @@ describe("S-08, S-11, S-12", () => {
     expect(to).toEqual(["contact@bimurix.com"]);
   });
 });
+
+describe("S-13 : clé Turnstile de test en ligne", () => {
+  it("refusée sur Netlify, tolérée en local", async () => {
+    const { vi: v } = await import("vitest");
+    v.mock("server-only", () => ({}));
+    const { verifyTurnstile, isTestTurnstileSecret } = await import("@/lib/quote/turnstile");
+    expect(isTestTurnstileSecret("1x0000000000000000000000000000000AA")).toBe(true);
+    expect(isTestTurnstileSecret("0x4AAAAAAAreelle")).toBe(false);
+    const fetchSpy = v.spyOn(globalThis, "fetch");
+    expect(await verifyTurnstile("jeton", undefined, "1x0000000000000000000000000000000AA", { NETLIFY: "true" } as unknown as NodeJS.ProcessEnv)).toBe(false);
+    expect(fetchSpy).not.toHaveBeenCalled();
+    fetchSpy.mockRestore();
+  });
+});

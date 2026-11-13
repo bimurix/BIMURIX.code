@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { resolveRoute } from "@/lib/i18n/resolve-route";
-import { INTERNAL_HEADER, notFoundResponse } from "@/lib/not-found-response";
+import { isInternalRequest, notFoundResponse } from "@/lib/not-found-response";
 import { decideContentRoute, NOT_FOUND_SLUG } from "@/lib/route-table";
 import { getRouteTable } from "@/lib/route-table-source";
 import { refreshAdminSession } from "@/lib/supabase/proxy-session";
@@ -26,7 +26,7 @@ export async function proxy(request: NextRequest) {
   };
   if (decision.action === "next" && !english) return NextResponse.next();
   // Lecture interne du gabarit 404 par notFoundResponse : servi tel quel, sans retrier l'adresse.
-  if (request.headers.has(INTERNAL_HEADER)) return serve();
+  if (isInternalRequest(request.headers)) return serve();
 
   // decision: S4 — le statut (404, 308 + Location) est décidé ici, avant le rendu en streaming (qui répondrait 200).
   const content = decideContentRoute(await getRouteTable(), pathname);

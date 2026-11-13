@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { projectId } from "./src/sanity/env";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -6,7 +7,8 @@ const isDev = process.env.NODE_ENV !== "production";
  * Politique de sécurité du contenu (site public et tableau de bord). Studio a la sienne, plus large.
  * - scripts : 'unsafe-inline' requis par les scripts d'hydratation de Next sans nonce (pages statiques) ;
  *   'unsafe-eval' seulement en développement (rechargement à chaud).
- * - Sanity : images (cdn.sanity.io) et mises à jour en direct (api/apicdn, WebSocket).
+ * - Sanity : images (cdn.sanity.io) et mises à jour en direct (hôtes du projet seulement, WebSocket).
+ * - 'unsafe-inline' gardé pour les scripts (un nonce rendrait toutes les pages dynamiques) : choix assumé, ADR-009 / S-06.
  * - Cloudflare Turnstile : script et iframe du contrôle antispam.
  */
 const csp = [
@@ -15,7 +17,8 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://cdn.sanity.io",
   "font-src 'self'",
-  `connect-src 'self' https://*.sanity.io wss://*.sanity.io${isDev ? " ws: http://127.0.0.1:*" : ""}`,
+  // S-06 : seulement les hôtes du projet Sanity (contenu en direct), plus de joker *.sanity.io.
+  `connect-src 'self' https://${projectId}.api.sanity.io https://${projectId}.apicdn.sanity.io wss://${projectId}.api.sanity.io${isDev ? " ws: http://127.0.0.1:*" : ""}`,
   "frame-src https://challenges.cloudflare.com",
   "frame-ancestors 'self'",
   "form-action 'self'",
@@ -40,7 +43,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       // Tout sauf Studio : CSP stricte et pas d'intégration dans un site tiers.
-      { source: "/((?!studio).*)", headers: [...common, { key: "Content-Security-Policy", value: csp }, { key: "X-Frame-Options", value: "SAMEORIGIN" }] },
+      { source: "/((?!studio).*)", headers: [...common, { key: "Content-Security-Policy", value: csp }, { key: "X-Frame-Options", value: "SAMEORIGIN" }, { key: "Cross-Origin-Opener-Policy", value: "same-origin" }] },
       // Studio charge ses propres ressources Sanity : seulement les en-têtes communs et l'anti-iframe.
       { source: "/studio/:path*", headers: [...common, { key: "X-Frame-Options", value: "SAMEORIGIN" }] },
       // Tableau de bord : jamais mis en cache par un intermédiaire.
