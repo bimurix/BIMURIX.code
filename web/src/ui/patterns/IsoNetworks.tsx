@@ -37,7 +37,6 @@ export function IsoNetworks({ runs, title }: { runs: IsoRun[]; title: string }) 
     <svg viewBox="0 14 548 306" role="group" aria-label={title} className="h-auto w-full overflow-visible">
       {shown.map((run, i) => {
         const pts = PATHS[i];
-        const [sx, sy] = pts[0];
         return (
           <a key={run.id} href={run.href} className="bx-run" data-net-i={i} style={{ "--i": i } as React.CSSProperties} aria-label={`${run.code} · ${run.label}`}>
             {/* Halo couleur papier : crée la coupure au croisement. */}
@@ -46,9 +45,8 @@ export function IsoNetworks({ runs, title }: { runs: IsoRun[]; title: string }) 
             {pts.slice(1, -1).map(([x, y]) => (
               <circle key={`${x}-${y}`} className="bx-fitting" cx={x} cy={y} r={5} fill="var(--bx-paper)" stroke={networkVar[run.network]} strokeWidth={2} />
             ))}
-            <text x={sx - 12} y={sy + 4} textAnchor="end" className="bx-fitting font-mono max-sm:hidden" fontSize={12} fill="var(--bx-ink)">
-              {run.code}
-            </text>
+            {/* T7 : les codes écrits à l’extrémité se chevauchaient (six départs espacés de 8 px) ; ils restent dans le nom accessible et l’info-bulle. */}
+            <title>{run.code} · {run.label}</title>
             {/* Zone de clic plus large que le tuyau. */}
             <path d={d(pts)} fill="none" stroke="transparent" strokeWidth={28} strokeLinecap="round" />
           </a>
