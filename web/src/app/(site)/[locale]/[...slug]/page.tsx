@@ -10,6 +10,7 @@ import { getAllSlugParams, getDocumentBySlug, getNotFoundPage, getRedirect } fro
 import { fetchPublished } from "@/sanity/fetch";
 import { SHELL_QUERY } from "@/sanity/queries";
 import type { Shell } from "@/sanity/types-content";
+import { PageJsonLd } from "@/ui/patterns/jsonld/PageJsonLd";
 import { ServicePage } from "@/ui/patterns/ServicePage";
 import NotFoundContent from "../not-found";
 
@@ -59,13 +60,17 @@ export default async function SlugPage({ params }: PageProps<"/[locale]/[...slug
   if (isNotFoundSlug((await params).slug)) return <NotFoundContent />;
   const { locale, shell, doc } = await load(params);
 
-  if (doc._type === "service") return <ServicePage doc={doc} locale={locale} shell={shell} />;
+  const jsonLd = <PageJsonLd doc={doc} shell={shell} locale={locale} />;
+  if (doc._type === "service") return <>{jsonLd}<ServicePage doc={doc} locale={locale} shell={shell} /></>;
 
   const updated = pick(doc.updatedLabel, locale, "");
   return (
+    <>
+      {jsonLd}
     <RenderSections
       sections={doc.sections}
       ctx={{ locale, shell, titleBlock: doc.titleBlock, heroAside: updated ? <p className="font-mono text-[13px] text-ink-2">{updated}</p> : undefined }}
     />
+    </>
   );
 }

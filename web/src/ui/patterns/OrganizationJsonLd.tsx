@@ -1,31 +1,9 @@
 import type { Locale } from "@/lib/i18n/locales";
-import { pick } from "@/lib/i18n/pick";
-import { pathFor } from "@/lib/links";
-import { isPlaceholder } from "@/lib/placeholders";
-import { siteUrl } from "@/lib/seo";
+import { organizationLd } from "@/lib/jsonld";
 import type { Shell } from "@/sanity/types-content";
+import { JsonLd } from "./jsonld/JsonLd";
 
-/** Données structurées de l'entreprise (schema.org ProfessionalService) pour les moteurs de recherche. */
+/** Organisation (schema.org ProfessionalService), sur toutes les pages (R-01). Aucune valeur d'exemple : voir `cleanJsonLd`. */
 export function OrganizationJsonLd({ shell, locale }: { shell: Shell; locale: Locale }) {
-  const s = shell?.settings;
-  const services = (shell?.services ?? []).flatMap((service) => {
-    const path = pathFor(service, locale);
-    return path ? [{ "@type": "Service", name: pick(service.title, locale, ""), url: `${siteUrl}${path}` }] : [];
-  });
-  const data = {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: s?.siteName ?? "Bimurix",
-    url: `${siteUrl}${locale === "fr" ? "/" : "/en"}`,
-    description: pick(s?.descriptor, locale, "") || undefined,
-    email: s?.email,
-    // Jamais une valeur d'exemple dans les données structurées (ADR-009 n° 4).
-    telephone: s?.phone && !isPlaceholder(s.phone) ? s.phone : undefined,
-    logo: s?.logo?.asset?.url,
-    areaServed: pick(s?.serviceArea, locale, "") || "Québec",
-    inLanguage: locale === "fr" ? "fr-CA" : "en-CA",
-    makesOffer: services.map((itemOffered) => ({ "@type": "Offer", itemOffered })),
-  };
-  // « < » échappé : le JSON ne peut pas fermer la balise <script>.
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }} />;
+  return <JsonLd data={organizationLd(shell, locale)} />;
 }

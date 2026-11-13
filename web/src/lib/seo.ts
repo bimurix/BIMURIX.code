@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { urlForImage } from "@/sanity/image";
 import type { Seo } from "@/sanity/content";
 import type { Shell } from "@/sanity/types-content";
-import { htmlLang, type Locale } from "./i18n/locales";
+import { htmlLang, locales, type Locale } from "./i18n/locales";
 import { pick, type Localized } from "./i18n/pick";
 import { pathFor, type RouteTarget } from "./links";
 
@@ -31,7 +31,8 @@ export function buildMetadata({ doc, shell, locale }: Input): Metadata {
   if (fr) languages["x-default"] = fr;
 
   const shareImage = seo?.image?.asset?.url ? seo.image : settings?.defaultSeo?.image;
-  const ogImage = shareImage?.asset?.url ? urlForImage(shareImage).width(1200).height(630).fit("crop").url() : "/og-image-clair-1200x630.png";
+  // Image de la page : celle téléversée dans Studio, sinon l'image « feuille de plan » générée par /og (R-12).
+  const ogImage = shareImage?.asset?.url ? urlForImage(shareImage).width(1200).height(630).fit("crop").url() : shareImagePath(doc, locale);
 
   return {
     metadataBase: new URL(siteUrl),
@@ -42,10 +43,18 @@ export function buildMetadata({ doc, shell, locale }: Input): Metadata {
       type: "website",
       siteName: settings?.siteName ?? "Bimurix",
       locale: htmlLang[locale].replace("-", "_"),
+      alternateLocale: locales.filter((l) => l !== locale && pathFor(doc, l)).map((l) => htmlLang[l].replace("-", "_")),
       title,
       description,
-      images: [{ url: ogImage, width: 1200, height: 630 }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage] },
     robots: seo?.noIndex ? { index: false, follow: true } : undefined,
   };
+}
+
+/** Adresse de l'image de partage générée : /og/fr (accueil) ou /og/en/services/... (même adresse que la page, sans préfixe de langue). */
+export function shareImagePath(doc: RouteTarget, locale: Locale): string {
+  const slug = doc?.kind === "home" ? "" : (doc?.slug?.[locale] ?? "");
+  return `/og/${locale}${slug ? `/${slug}` : ""}`;
 }

@@ -8,13 +8,18 @@ import { SanityLive } from "@/sanity/live";
 import { SHELL_QUERY } from "@/sanity/queries";
 import type { Shell } from "@/sanity/types-content";
 import { buildNavModel } from "@/ui/patterns/nav-model";
+import { OrganizationJsonLd } from "@/ui/patterns/OrganizationJsonLd";
 import { LaunchBanner } from "@/ui/patterns/LaunchBanner";
 import { SiteFooter } from "@/ui/patterns/SiteFooter";
 import { SiteHeader } from "@/ui/patterns/SiteHeader";
 import "../../globals.css";
 
-const archivo = Archivo({ subsets: ["latin", "latin-ext"], axes: ["wdth"], variable: "--font-archivo" });
-const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
+// decision: T6-C (R-22) — voir docs/audits/2026-11-13_seo-perf-t6.md.
+const liveUpdates = process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_SANITY_LIVE === "1";
+
+// R-23 : « latin » couvre le français (é, à, ç, œ) ; « latin-ext » (86 Ko, préchargé) n'est jamais utilisé. JetBrains Mono ne sert qu'aux données : pas de préchargement.
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo" });
+const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", preload: false });
 
 // Valeurs de secours : titres et descriptions réels par page (SEO Sanity) en L4.
 export const metadata: Metadata = {
@@ -36,6 +41,7 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[lo
   return (
     <html lang={htmlLang[locale]} className={`${archivo.variable} ${jetbrains.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
+        <OrganizationJsonLd shell={shell} locale={locale} />
         <SiteHeader shell={shell} locale={locale} model={model} />
         <LaunchBanner shell={shell} locale={locale} />
         <main id="contenu" className="flex-1">
@@ -50,8 +56,9 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[lo
             </Link>
           </div>
         )}
-        {/* Rafraîchit la page dès qu'un contenu est publié dans Studio. Brouillons : L4 (édition visuelle). */}
-        <SanityLive includeDrafts={false} />
+        {/* R-22 / S-07 : mises à jour en direct réservées au développement (ou à NEXT_PUBLIC_SANITY_LIVE=1). Pour les visiteurs,
+            elles coûtent du script et gardent une connexion ouverte vers Sanity ; le contenu se renouvelle seul (cache de 15 min). */}
+        {liveUpdates && <SanityLive includeDrafts={false} />}
       </body>
     </html>
   );

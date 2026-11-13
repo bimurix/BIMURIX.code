@@ -55,6 +55,8 @@ export type Shell = {
   quotePage?: RouteTarget;
   routes?: RouteTarget[];
 } | null;
+  /** Titre de l’accueil (premier maillon du fil d’Ariane en données structurées). */
+  home?: { title?: Localized } | null;
 
 export type TitleBlockData = { sheet?: string; revision?: string; date?: string } | null | undefined;
 

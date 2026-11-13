@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { isIndexable } from "./src/lib/indexing";
 import { projectId } from "./src/sanity/env";
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -27,7 +28,11 @@ const csp = [
   ...(isDev ? [] : ["upgrade-insecure-requests"]),
 ].join("; ");
 
+// R-13 : un aperçu de déploiement ou un domaine provisoire ne s’indexe pas (le domaine final seul est indexable).
+const noindex = isIndexable() ? [] : [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
+
 const common = [
+  ...noindex,
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },

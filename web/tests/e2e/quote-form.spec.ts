@@ -17,6 +17,11 @@ test("formulaire vide : erreurs sous les champs, rien n'est envoyé", async ({ p
   }).toPass({ timeout: 20_000 });
   await expect(page.locator("#fullName")).toHaveAttribute("aria-invalid", "true");
   await expect(page.locator("#fullName-error")).toHaveText("Ce champ est obligatoire.");
+  // T6 (R-35) : résumé annoncé (role="alert") avec un lien par champ, et focus sur le premier champ en erreur.
+  const summary = page.locator("form").getByRole("alert");
+  await expect(summary.getByRole("link", { name: /Nom complet.*obligatoire/ })).toHaveAttribute("href", "#fullName");
+  await expect(summary.getByRole("link")).toHaveCount(await page.locator("form [aria-invalid='true']").count());
+  await expect(page.locator("#fullName")).toBeFocused();
 });
 
 test("le service choisi sur l'accueil est pré-sélectionné", async ({ page }) => {

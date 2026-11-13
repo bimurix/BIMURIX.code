@@ -51,11 +51,13 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
     if (detailsRef.current) detailsRef.current.open = requestType === "quote";
   }, [requestType]);
 
-  // Après une réponse : jeton antispam renouvelé (usage unique) et message annoncé aux lecteurs d'écran.
+  // Après une réponse : jeton antispam renouvelé (usage unique) ; en cas d'erreurs de saisie, le focus va au premier champ en erreur
+  // (le résumé ci-dessous est annoncé par role="alert") ; sinon au message d'état. R-35.
   useEffect(() => {
     if (!state) return;
     if (!state.ok) window.turnstile?.reset();
-    statusRef.current?.focus();
+    const firstInvalid = state.ok ? null : formRef.current?.querySelector<HTMLElement>('input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"]');
+    (firstInvalid ?? statusRef.current)?.focus();
   }, [state]);
 
   if (state?.ok) {
@@ -78,6 +80,13 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
     ? state.code === "RATE_LIMITED" ? t.rateLimited : state.code === "CAPTCHA_FAILED" ? t.captcha : t.failureBody
     : null;
   const common = { optionalLabel: t.optional };
+  // Résumé des erreurs (R-35) : chaque ligne mène au champ ; mêmes libellés et mêmes messages que sous les champs.
+  const labels: Record<string, string> = {
+    fullName: t.fullName, company: t.company, email: t.email, phone: t.phone, preferredLanguage: t.preferredLanguage, service: t.service,
+    description: t.description, consent: t.consent, requestType: t.requestType, packageCode: t.package,
+    projectType: t.projectType, region: t.region, phase: t.phase, timeline: t.timeline, budget: t.budget, software: t.software,
+  };
+  const summary = Object.keys(fields).flatMap((name) => (labels[name] && err(name) ? [{ name, label: labels[name], message: err(name) as string }] : []));
 
   return (
     <form
@@ -105,6 +114,15 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
           <div className="border-[1.5px] border-error p-4 text-[15px]">
             <p className="font-semibold text-error">{t.failureTitle}</p>
             {failure && <p className="mt-1 text-ink-2">{failure}</p>}
+            {summary.length > 0 && (
+              <ul className="mt-2 list-disc space-y-1 ps-5">
+                {summary.map((item) => (
+                  <li key={item.name}>
+                    <a href={`#${item.name}`} className="text-error underline underline-offset-4">{item.label} : {item.message}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
       </div>
@@ -149,7 +167,7 @@ export function QuoteForm({ model, locale, siteKey }: Props) {
 
       <div className="space-y-5">
         <label className="flex items-start gap-3 text-[15px] text-ink-2">
-          <input type="checkbox" name="consent" required aria-invalid={err("consent") ? true : undefined} aria-describedby={err("consent") ? "consent-error" : undefined} className="mt-1 size-5 shrink-0 accent-(--bx-blue)" />
+          <input id="consent" type="checkbox" name="consent" required aria-invalid={err("consent") ? true : undefined} aria-describedby={err("consent") ? "consent-error" : undefined} className="mt-1 size-5 shrink-0 accent-(--bx-blue)" />
           <span>
             {t.consent}{" "}
             {model.privacyHref && <Link href={model.privacyHref} className="text-blue underline underline-offset-4">{t.privacy}</Link>}

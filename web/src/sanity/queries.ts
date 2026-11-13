@@ -68,6 +68,7 @@ export const SHELL_QUERY = defineQuery(`{
   "launch": *[_id == "launchSettings"][0]{bannerEnabled, bannerText, deadline},
   "services": *[_type == "service" && visible != false] | order(order asc){_id, _type, code, network, title, shortTitle, family, slug, cardTitle},
   "quotePage": *[_type == "page" && kind == "quote"][0]{_type, kind, slug},
+  "home": *[_type == "page" && kind == "home"][0]{title},
   "routes": *[_type in ["page", "service"] && visible != false && (defined(slug.fr) || kind == "home")]{_type, kind, slug, "noIndex": seo.noIndex, _updatedAt}
 }`);
 

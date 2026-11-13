@@ -7,7 +7,7 @@ import { getHome } from "@/sanity/content";
 import { fetchPublished } from "@/sanity/fetch";
 import { SHELL_QUERY } from "@/sanity/queries";
 import type { Shell } from "@/sanity/types-content";
-import { OrganizationJsonLd } from "@/ui/patterns/OrganizationJsonLd";
+import { HomeJsonLd } from "@/ui/patterns/jsonld/PageJsonLd";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
@@ -23,7 +23,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
   return (
     <>
-      <OrganizationJsonLd shell={shell} locale={locale} />
+      <HomeJsonLd doc={(home ?? {}) as Parameters<typeof HomeJsonLd>[0]["doc"]} shell={shell} locale={locale} />
       <RenderSections sections={home?.sections} ctx={{ locale, shell, titleBlock: home?.titleBlock, isHome: true }} />
     </>
   );

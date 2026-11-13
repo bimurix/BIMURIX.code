@@ -26,7 +26,7 @@ describe("resolveRoute (ADR-003)", () => {
   });
 
   it("laisse passer Studio, admin, API et fichiers statiques", () => {
-    for (const path of ["/studio", "/studio/structure", "/admin", "/admin/demandes", "/api/revalidate", "/favicon.ico", "/robots.txt"]) {
+    for (const path of ["/studio", "/studio/structure", "/admin", "/admin/demandes", "/api/revalidate", "/og/fr", "/og/en/services/x", "/favicon.ico", "/robots.txt"]) {
       expect(resolveRoute(path)).toEqual({ action: "next" });
     }
   });

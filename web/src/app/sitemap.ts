@@ -14,9 +14,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return routes.flatMap((route) => {
     const fr = pathFor(route, "fr");
     const en = pathFor(route, "en");
-    const languages = { ...(fr ? { "fr-CA": `${siteUrl}${fr}` } : {}), ...(en ? { "en-CA": `${siteUrl}${en}` } : {}) };
+    const languages = { ...(fr ? { "fr-CA": `${siteUrl}${fr === "/" ? "" : fr}` } : {}), ...(en ? { "en-CA": `${siteUrl}${en}` } : {}) };
     return [fr, en].flatMap((path) =>
-      path ? [{ url: `${siteUrl}${path}`, lastModified: route._updatedAt, alternates: { languages } }] : [],
+      path ? [{ url: `${siteUrl}${path === "/" ? "" : path}`, lastModified: route._updatedAt, alternates: { languages } }] : [],
     );
   });
 }

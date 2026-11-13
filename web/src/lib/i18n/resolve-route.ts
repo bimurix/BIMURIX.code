@@ -6,7 +6,8 @@ export type RouteDecision =
   | { action: "redirect"; pathname: string };
 
 // Routes hors site public : pas de préfixe de langue.
-const UNLOCALIZED_PREFIXES = ["/studio", "/admin", "/api", "/_next"];
+// /og : images de partage générées par une route (T6-B).
+const UNLOCALIZED_PREFIXES = ["/studio", "/admin", "/api", "/og", "/_next"];
 
 function startsWithSegment(pathname: string, prefix: string): boolean {
   return pathname === prefix || pathname.startsWith(`${prefix}/`);
