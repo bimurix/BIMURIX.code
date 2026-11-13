@@ -48,10 +48,10 @@ test("22 adresses : titre et description uniques par langue, longueurs, langue d
       expect(h.description, label).toBeTruthy();
       expect(h.description!.length, `${label} description`).toBeLessThanOrEqual(155);
       expect(h.lang, label).toBe(lang === "fr" ? "fr-CA" : "en-CA");
-      expect(h.canonical, label).toBe(`https://bimurix.com${path === "/" ? "" : path}`);
+      expect(h.canonical, label).toBe(`https://www.bimurix.com${path === "/" ? "" : path}`);
       // R-11 : chaque page pointe vers son équivalent, et réciproquement.
-      expect(h.hreflang["fr-CA"], label).toBe(`https://bimurix.com${pair.fr === "/" ? "" : pair.fr}`);
-      expect(h.hreflang["en-CA"], label).toBe(`https://bimurix.com${pair.en}`);
+      expect(h.hreflang["fr-CA"], label).toBe(`https://www.bimurix.com${pair.fr === "/" ? "" : pair.fr}`);
+      expect(h.hreflang["en-CA"], label).toBe(`https://www.bimurix.com${pair.en}`);
       expect(h.hreflang["x-default"], label).toBe(h.hreflang["fr-CA"]);
       expect(h.twitterCard, label).toBe("summary_large_image");
       expect(h.html, label).toContain(lang === "fr" ? 'property="og:locale:alternate" content="en_CA"' : 'property="og:locale:alternate" content="fr_CA"');
@@ -106,7 +106,7 @@ test("plan du site : les 22 adresses avec leurs équivalents, sans /admin, /stud
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   expect(locs).toHaveLength(22);
   for (const pair of pairs) {
-    for (const path of [pair.fr, pair.en]) expect(locs, path).toContain(`https://bimurix.com${path === "/" ? "" : path}`);
+    for (const path of [pair.fr, pair.en]) expect(locs, path).toContain(`https://www.bimurix.com${path === "/" ? "" : path}`);
   }
   expect(xml).not.toMatch(/\/admin|\/studio|_404|introuvable|not-found/);
   expect(xml).toContain('hreflang="en-CA"');
@@ -115,7 +115,7 @@ test("plan du site : les 22 adresses avec leurs équivalents, sans /admin, /stud
   const robots = await (await request.get("/robots.txt")).text();
   expect(robots).toContain("Disallow: /studio");
   expect(robots).toContain("Disallow: /admin");
-  expect(robots).toContain("Sitemap: https://bimurix.com/sitemap.xml");
+  expect(robots).toContain("Sitemap: https://www.bimurix.com/sitemap.xml");
   // 404 non indexée ; domaine final : aucun en-tête noindex.
   const missing = await head(request, "/page-inexistante");
   expect(missing.html).toMatch(/<meta name="robots" content="noindex/);

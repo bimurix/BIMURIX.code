@@ -47,10 +47,10 @@ describe("T6-A données structurées", () => {
 
   it("le service pointe vers l'organisation et porte le nom complet, sans prix", () => {
     const fr = serviceLd(service, shell, "fr") as Record<string, unknown>;
-    expect(fr).toMatchObject({ "@type": "Service", name: "Dessins d'atelier de tuyauterie", serviceType: "Tuyauterie", provider: { "@id": "https://bimurix.com/#organization" }, areaServed: "Grand Montréal" });
-    expect(fr.url).toBe("https://bimurix.com/services/prefabrication-tuyauterie");
+    expect(fr).toMatchObject({ "@type": "Service", name: "Dessins d'atelier de tuyauterie", serviceType: "Tuyauterie", provider: { "@id": "https://www.bimurix.com/#organization" }, areaServed: "Grand Montréal" });
+    expect(fr.url).toBe("https://www.bimurix.com/services/prefabrication-tuyauterie");
     const en = serviceLd(service, shell, "en") as Record<string, unknown>;
-    expect(en.url).toBe("https://bimurix.com/en/services/pipe-prefabrication");
+    expect(en.url).toBe("https://www.bimurix.com/en/services/pipe-prefabrication");
     expect(en.name).toBe("Pipe shop drawings");
   });
 
@@ -72,7 +72,7 @@ describe("T6-A données structurées", () => {
     const crumbs = breadcrumbsFor(service, shell, "en") as { itemListElement: Array<{ name: string; position: number; item?: string }> };
     expect(crumbs.itemListElement.map((c) => c.name)).toEqual(["Home", "Services", "Pipe shop drawings"]);
     expect(crumbs.itemListElement.map((c) => c.position)).toEqual([1, 2, 3]);
-    expect(crumbs.itemListElement[0].item).toBe("https://bimurix.com/en");
+    expect(crumbs.itemListElement[0].item).toBe("https://www.bimurix.com/en");
     expect(crumbs.itemListElement[2].item).toBeUndefined();
     const page = breadcrumbsFor({ _type: "page", slug: { fr: "a-propos" }, title: { fr: "À propos" } }, shell, "fr") as typeof crumbs;
     expect(page.itemListElement.map((c) => c.name)).toEqual(["Accueil", "À propos"]);

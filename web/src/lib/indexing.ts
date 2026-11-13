@@ -1,5 +1,5 @@
 // R-13 : seul le domaine de production s'indexe. Fichier sans import d'alias : next.config.ts le lit aussi.
-export const PRODUCTION_SITE = "https://bimurix.com";
+export const PRODUCTION_SITE = "https://www.bimurix.com";
 
 /**
  * Le déploiement peut-il être indexé ? Faux pour un aperçu de déploiement Netlify (variable CONTEXT autre que « production »)

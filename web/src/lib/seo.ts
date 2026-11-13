@@ -7,7 +7,7 @@ import { pick, type Localized } from "./i18n/pick";
 import { pathFor, type RouteTarget } from "./links";
 
 // Adresse publique du site (domaine définitif par défaut ; NEXT_PUBLIC_SITE_URL pour une préproduction).
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bimurix.com";
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bimurix.com";
 
 type Input = { doc: RouteTarget & { title?: Localized; seo?: Seo }; shell: Shell; locale: Locale };
 
