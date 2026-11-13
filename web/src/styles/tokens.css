@@ -33,6 +33,11 @@
   --bx-line-frame: 1.5px;
 
   --bx-tap-min: 44px;
+
+  /* Symboles au trait (cahier v6 T3-A) : dans une phrase, dans une liste, en tête de section ou d'étape. */
+  --bx-icon-sm: 20px;
+  --bx-icon-md: 24px;
+  --bx-icon-lg: 40px;
   --bx-header-h: 64px;
 
   /*
