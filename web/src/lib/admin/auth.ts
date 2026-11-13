@@ -1,4 +1,5 @@
 import "server-only";
+import { errorSummary } from "@/lib/safe-log";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { createUserClient } from "@/lib/supabase/server";
@@ -23,7 +24,7 @@ export async function requireAdmin(): Promise<AdminContext> {
       if (!error && admin) ctx = { supabase, userId: user.id, email: user.email ?? "" };
     }
   } catch (error) {
-    console.error(`[admin] contrôle d'accès : ${(error as Error).message}`);
+    console.error(`[admin] contrôle d'accès : ${errorSummary(error)}`);
   }
   if (!ctx) redirect("/admin/connexion");
   return ctx;

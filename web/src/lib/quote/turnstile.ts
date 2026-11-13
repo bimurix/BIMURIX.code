@@ -1,4 +1,5 @@
 import "server-only";
+import { errorSummary } from "@/lib/safe-log";
 
 // S-13 : clés de test publiées par Cloudflare (1x… accepte tout, 2x… refuse tout, 3x… jeton déjà utilisé).
 // En ligne (Netlify), une clé de test rendrait l'antispam inopérant : demande refusée et alerte.
@@ -27,7 +28,7 @@ export async function verifyTurnstile(token: string | undefined, ip: string | un
     const data = (await res.json()) as { success?: boolean };
     return data.success === true;
   } catch (error) {
-    console.error(`[turnstile] vérification impossible : ${(error as Error).message}`);
+    console.error(`[turnstile] vérification impossible : ${errorSummary(error)}`);
     return false;
   }
 }

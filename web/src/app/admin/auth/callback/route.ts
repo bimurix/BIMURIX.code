@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { errorSummary } from "@/lib/safe-log";
 import { createUserClient } from "@/lib/supabase/server";
 
 // Retour du lien magique : échange le code contre une session, puis ouvre le tableau de bord.
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) throw error;
   } catch (error) {
-    console.error(`[admin] connexion : ${(error as Error).message}`);
+    console.error(`[admin] connexion : ${errorSummary(error)}`);
     return NextResponse.redirect(new URL("/admin/connexion?erreur=lien", request.nextUrl.origin));
   }
   return NextResponse.redirect(target);

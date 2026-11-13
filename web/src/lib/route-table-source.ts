@@ -1,4 +1,5 @@
 import { client } from "@/sanity/client";
+import { errorSummary } from "./safe-log";
 import type { RouteTable } from "./route-table";
 
 // Même filtre que DOCUMENT_BY_SLUG_QUERY (pages et services visibles), sans l'accueil ni la page introuvable.
@@ -19,7 +20,7 @@ async function load(): Promise<RouteTable | null> {
     cached = { at: Date.now(), table };
     return table;
   } catch (error) {
-    console.error(`[proxy] table des adresses illisible : ${(error as Error).message}`);
+    console.error(`[proxy] table des adresses illisible : ${errorSummary(error)}`);
     return cached?.table ?? null; // à défaut : dernière table connue, sinon on ne tranche pas
   } finally {
     inflight = null;
