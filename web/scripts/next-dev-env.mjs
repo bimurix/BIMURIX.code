@@ -10,5 +10,5 @@ process.loadEnvFile(new URL("../.env.development.local", import.meta.url));
 const [command, ...rest] = process.argv.slice(2);
 if (!["build", "start"].includes(command)) throw new Error("Usage : node scripts/next-dev-env.mjs build|start");
 const next = createRequire(import.meta.url).resolve("next/dist/bin/next");
-process.argv = [process.argv[0], next, command, ...(command === "start" ? ["-p", "3100"] : []), ...rest];
+process.argv = [process.argv[0], next, command, ...(command === "start" && !rest.includes("-p") ? ["-p", "3100"] : []), ...rest];
 await import(pathToFileURL(next).href);

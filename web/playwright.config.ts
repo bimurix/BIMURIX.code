@@ -1,7 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 // decision: ADR-004 — port 3100 réservé à Bimurix.
-const baseURL = "http://localhost:3100";
+// PLAYWRIGHT_BASE_URL : tester un autre port (ex. build de production à côté du serveur de dev, S4).
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3100";
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -19,7 +20,7 @@ export default defineConfig({
   // Préalable : node scripts/next-dev-env.mjs build (même dataset et clés locales qu'en dev).
   webServer: {
     command: process.env.PLAYWRIGHT_PROD
-      ? "node scripts/next-dev-env.mjs start"
+      ? `node scripts/next-dev-env.mjs start -p ${new URL(baseURL).port}`
       : "pnpm dev",
     url: baseURL,
     reuseExistingServer: !process.env.CI,

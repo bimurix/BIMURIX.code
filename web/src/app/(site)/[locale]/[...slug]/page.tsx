@@ -1,20 +1,26 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { RenderSections } from "@/blocks/render";
-import { hasLocale } from "@/lib/i18n/locales";
+import { hasLocale, locales } from "@/lib/i18n/locales";
 import { pick } from "@/lib/i18n/pick";
 import { safeRedirectTarget } from "@/lib/redirect-target";
+import { NOT_FOUND_SLUG } from "@/lib/route-table";
 import { buildMetadata } from "@/lib/seo";
 import { getAllSlugParams, getDocumentBySlug, getRedirect } from "@/sanity/content";
 import { fetchPublished } from "@/sanity/fetch";
 import { SHELL_QUERY } from "@/sanity/queries";
 import type { Shell } from "@/sanity/types-content";
 import { ServicePage } from "@/ui/patterns/ServicePage";
+import NotFoundContent from "../not-found";
 
 // Pages et services : l'adresse vient de Sanity (ex. « a-propos », « services/prefabrication-mep »).
 export async function generateStaticParams() {
-  return getAllSlugParams();
+  const known = await getAllSlugParams();
+  // Page 404 pré-générée : le proxy y envoie les adresses inconnues pour répondre 404 sans rendu en streaming (S4).
+  return [...known, ...locales.map((locale) => ({ locale, slug: [NOT_FOUND_SLUG] }))];
 }
+
+const isNotFoundSlug = (slug: string[]) => slug.length === 1 && slug[0] === NOT_FOUND_SLUG;
 
 async function load(params: PageProps<"/[locale]/[...slug]">["params"]) {
   const { locale, slug } = await params;
@@ -34,6 +40,7 @@ async function load(params: PageProps<"/[locale]/[...slug]">["params"]) {
 }
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/[...slug]">): Promise<Metadata> {
+  if (isNotFoundSlug((await params).slug)) return { title: "404", robots: { index: false } };
   const { locale, shell, doc } = await load(params);
   return buildMetadata({ doc, shell, locale });
 }
@@ -43,6 +50,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/[...slug
 export const instant = false;
 
 export default async function SlugPage({ params }: PageProps<"/[locale]/[...slug]">) {
+  // Gabarit de la réponse 404 du proxy (src/lib/not-found-response.ts) : HTML complet pré-généré, jamais indexé. decision: S4
+  if (isNotFoundSlug((await params).slug)) return <NotFoundContent />;
   const { locale, shell, doc } = await load(params);
 
   if (doc._type === "service") return <ServicePage doc={doc} locale={locale} shell={shell} />;

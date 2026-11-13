@@ -26,10 +26,16 @@ for (const { fr, en } of pages) {
   });
 }
 
-test("une adresse inconnue répond 404 avec la page introuvable", async ({ page }) => {
+test("une adresse inconnue répond 404 avec la page introuvable, en FR et en EN, dès la première visite", async ({ page, request }) => {
   const res = await page.goto("/cette-page-n-existe-pas");
   expect(res?.status()).toBe(404);
   await expect(page.locator("h1")).toHaveCount(1);
+  const en = await page.goto("/en/this-page-does-not-exist");
+  expect(en?.status()).toBe(404);
+  await expect(page.locator("h1")).toHaveCount(1);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-CA");
+  // S4 : la page « gabarit » du 404 n'est jamais servie avec un 200.
+  expect((await request.get("/_404")).status()).toBe(404);
 });
 
 test("le sélecteur de langue garde la page courante", async ({ page, isMobile }) => {
