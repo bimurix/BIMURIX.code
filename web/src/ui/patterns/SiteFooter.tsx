@@ -24,7 +24,7 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
 
   return (
     <footer className="bg-ink text-paper">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-8 px-4 py-10 sm:px-6 md:gap-10 md:py-10 lg:grid-cols-[1.5fr_repeat(4,1fr)]">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-3 px-4 py-6 sm:px-6 sm:gap-y-8 md:gap-10 md:py-10 lg:grid-cols-[1.5fr_repeat(4,1fr)]">
         <div className="col-span-2 max-w-sm space-y-4 lg:col-span-1">
           <Logo image={settings?.logoInverse} alt={pick(settings?.logoAlt, locale, "Bimurix")} wordmark={settings?.wordmark ?? "bimurix"} inverse />
           <p className="text-[15px] leading-relaxed text-paper/75">{pick(footer?.blurb, locale, "")}</p>
@@ -32,7 +32,9 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
 
         {columns.map((col) => (
           <nav key={col._key} aria-label={pick(col.title, locale, "")}>
-            <h2 className="mb-3 text-[13px] font-semibold text-paper/60">{pick(col.title, locale, "")}</h2>
+            {/* T7 : repli natif sous 640 px (fold.css) ; le titre h2 reste dans le summary. */}
+            <details className="bx-fold">
+            <summary className="mb-1 text-paper/60 sm:mb-3"><h2 className="text-[13px] font-semibold">{pick(col.title, locale, "")}</h2></summary>
             {col.listServices && groups.map((group) => (
               <div key={group.key} className="mb-2">
                 {group.label && <p className="mt-2 text-[13px] text-paper/60">{group.label}</p>}
@@ -61,6 +63,7 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
                 );
               })}
             </ul>
+            </details>
           </nav>
         ))}
 

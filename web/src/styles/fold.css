@@ -1,0 +1,31 @@
+/*
+ * Repli natif sur petit écran (T7, ADR-011) : un <details class="bx-fold"> est fermé sous 640 px (le titre du <summary> reste
+ * visible, le contenu est dans la page et accessible) et toujours déployé dès 640 px. Aucun script.
+ * Le déploiement forcé utilise ::details-content ; un navigateur qui ne le connaît pas garde le repli à toute largeur
+ * (accordéon cliquable, contenu complet) : rien ne disparaît.
+ */
+.bx-fold > summary {
+  display: flex;
+  min-block-size: var(--bx-tap-min);
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  list-style: none;
+}
+.bx-fold > summary::-webkit-details-marker { display: none; }
+.bx-fold > summary::after {
+  content: "+";
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+.bx-fold[open] > summary::after { content: "−"; }
+
+@media (min-width: 640px) {
+  @supports selector(::details-content) {
+    .bx-fold::details-content { content-visibility: visible; }
+    .bx-fold > summary { min-block-size: 0; cursor: default; pointer-events: none; }
+    .bx-fold > summary::after { content: none; }
+  }
+}

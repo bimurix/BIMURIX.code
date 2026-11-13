@@ -41,10 +41,14 @@ export function Problems({ data, locale, illustrativeLabel }: { data: ProblemsDa
           });
           return (
             <li key={item._key} className="bx-reveal border-b border-rule py-3 lg:py-4">
+              {/* T7 : repli natif sous 640 px (fold.css) : l’énoncé du problème reste visible, la réponse et les liens se déplient. */}
+              <details className="bx-fold">
+              <summary className="items-start">
               <h3 className="font-display flex max-w-[40ch] items-start gap-3 text-lg leading-snug font-bold text-ink">
                 <Icon name={item.icon} className="mt-0.5 text-blue" />
                 {pick(item.title, locale, "")}
               </h3>
+              </summary>
               <p className="mt-1.5 max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{pick(item.text, locale, "")}</p>
               {links.length > 0 && (
                 <ul className="mt-0.5 flex flex-wrap gap-x-6">
@@ -60,6 +64,7 @@ export function Problems({ data, locale, illustrativeLabel }: { data: ProblemsDa
                   ))}
                 </ul>
               )}
+              </details>
             </li>
           );
         })}
