@@ -1,9 +1,11 @@
 import { block, internalCta, keyed, l, ref, titled } from "./helpers.mts";
-import { allResponsibilityRows, deliverableRows, engineerSentence, faqEntries } from "./v5-common.mts";
+import { allResponsibilityRows, deliverableRows, engineerSentence, faqEntries, shortResponsibilityRows } from "./v5-common.mts";
 import { brennanProof } from "./v5-proof.mts";
 import { homeScenarios } from "./v5-scenarios.mts";
+import { whyBimurix } from "./v5-why.mts";
 
-// Plan de contenu v5 § 2b et § 3.1 (ADR-008) : accueil en 11 sections, de la question du lecteur à l'action.
+// Plan de contenu v5 § 2b et § 3.1 (ADR-008), puis cahier v6 T2 (ADR-009) : accueil en 12 sections, du problème à l'action
+// (premier écran, problèmes, services, pourquoi Bimurix, livrables, situations, projets, preuve, qui fait quoi, déroulement, questions, appel final).
 // Les blocs « forfaits » et « conditions » ne sont plus posés (ils restent codés). Aucun prix ni délai fixe. Images : session S3b.
 const requestQuote = l("Demander une soumission", "Request a quote");
 
@@ -16,6 +18,43 @@ export const needsList = [
 ];
 
 const problem = (title: [string, string], text: [string, string], services: string[]) => ({ title: l(...title), text: l(...text), services: keyed(services.map((s) => ref(s))) });
+
+const SAMPLE_BADGE = l("Exemple — à remplacer", "Example — to be replaced");
+const sample = (title: [string, string], service: string, delivered: Array<[string, string]>, tools: [string, string]) => ({
+  title: l(...title),
+  badge: SAMPLE_BADGE,
+  discipline: ref(service),
+  delivered: keyed(delivered.map(([fr, en]) => l(fr, en))),
+  tools: l(...tools),
+});
+
+/** C-16 — registre de projets : trois fiches d'exemple, marquées « Exemple — à remplacer » (bloquées par check:placeholders). Aucun client, lieu ni chiffre. */
+const projects = () =>
+  block("projects", {
+    enabled: true,
+    heading: l("Projets", "Projects"),
+    note: l("Fiches d'exemple — elles seront remplacées par des projets réels.", "Sample entries — they will be replaced by real projects."),
+    items: keyed([
+      sample(
+        ["Immeuble résidentiel de moyenne hauteur (exemple)", "Mid-rise residential building (example)"],
+        "service-gicleurs",
+        [["Dessins d'atelier par étage", "Shop drawings by floor"], ["Listes de coupe", "Cut lists"], ["Export NWC pour la coordination", "NWC export for coordination"]],
+        ["AutoSPRINK", "AutoSPRINK"],
+      ),
+      sample(
+        ["Salle mécanique d'un bâtiment institutionnel (exemple)", "Mechanical room of an institutional building (example)"],
+        "service-prefabrication",
+        [["Modèle SysQue", "SysQue model"], ["Dessins de spool numérotés", "Numbered spool drawings"], ["Listes de coupe et de matériel", "Cut and material lists"], ["Étiquettes", "Labels"]],
+        ["SysQue (Revit)", "SysQue (Revit)"],
+      ),
+      sample(
+        ["Bâtiment modulaire (exemple)", "Modular building (example)"],
+        "service-combinee",
+        [["Une zone coordonnée dans les deux disciplines", "One zone coordinated across both disciplines"], ["Dessins d'atelier des deux", "Shop drawings for both"]],
+        ["SysQue et AutoSPRINK", "SysQue and AutoSPRINK"],
+      ),
+    ]),
+  });
 
 export const home = {
   _id: "page-home",
@@ -32,23 +71,23 @@ export const home = {
   },
   sections: [
     block("heroSheet", {
-      heading: l("Des modèles BIM fiables. Moins de surprises au chantier.", "Reliable BIM models. Fewer surprises on site."),
+      heading: l("Des modèles BIM qui se fabriquent. Moins de surprises au chantier.", "BIM models you can build from. Fewer surprises on site."),
       intro: l(
-        "Bimurix modélise, coordonne et dessine pour les entrepreneurs, les firmes de génie-conseil et les propriétaires. Les conflits se règlent au modèle. La tuyauterie et les gicleurs arrivent prêts à fabriquer. Les plans tel que construit et les données sont prêts à remettre.",
-        "Bimurix models, coordinates and draws for contractors, engineering firms and owners. Clashes are resolved in the model. Piping and sprinklers arrive ready to fabricate. As-built drawings and data are ready to hand over.",
+        "Bimurix modélise, coordonne et dessine la mécanique du bâtiment pour les entrepreneurs, les firmes de génie-conseil et les propriétaires du Grand Montréal. Tuyauterie dans SysQue, gicleurs dans AutoSPRINK, en français et en anglais.",
+        "Bimurix models, coordinates and draws building mechanical (MEP) systems for contractors, engineering firms and owners in Greater Montreal. Piping in SysQue, sprinklers in AutoSPRINK, in French and in English.",
       ),
       ctas: keyed([internalCta(requestQuote, "page-quote"), { label: l("Voir les six services", "See the six services"), style: "secondary", link: { kind: "external", external: "#services" } }]),
-      specialties: l("Modéliser et coordonner · Préfabriquer · Livrer et exploiter", "Model and coordinate · Prefabricate · Deliver and operate"),
+      specialties: l("Réponse d'ici un jour ouvrable · Grand Montréal · Français et anglais", "Reply within one business day · Greater Montreal · French and English"),
     }),
     block("problems", {
-      heading: l("Les problèmes qu'on règle avant le chantier.", "The problems we solve before the site."),
+      heading: l("Les problèmes qu'on règle avant le chantier.", "Problems we solve before they reach the site."),
       intro: l(
-        "Un modèle BIM vaut ce qu'il apporte au chantier : moins de conflits entre les corps de métier, moins d'imprévus à l'installation, des informations fiables à la remise. Pour les directeurs de construction, les chargés de projet, les estimateurs, les entrepreneurs généraux et spécialisés, les firmes de génie-conseil et les propriétaires.",
-        "A BIM model is worth what it brings to the site: fewer clashes between trades, fewer surprises at installation, reliable information at handover. For construction directors, project managers, estimators, general and specialty contractors, engineering firms and owners.",
+        "Un modèle BIM vaut ce qu'il apporte au chantier. Voici six problèmes de chantier, et le service qui y répond.",
+        "A BIM model is worth what it brings to the site. Here are six site problems, and the service that answers each.",
       ),
       items: keyed([
         problem(["Les tuyaux, les gicleurs et les conduits se croisent au même endroit.", "Pipes, sprinklers and ducts cross in the same place."], ["On détecte les conflits au modèle et on les règle en réunion de coordination, avant l'installation.", "We detect the clashes in the model and resolve them in the coordination meeting, before installation."], ["service-modelisation", "service-combinee"]),
-        problem(["Le chantier perd du temps à mesurer et à couper sur place.", "The site loses time measuring and cutting on the spot."], ["La tuyauterie se fabrique en atelier, avec des spools numérotés et des listes de coupe.", "Piping is built in the shop, with numbered spools and cut lists."], ["service-prefabrication"]),
+        problem(["Le chantier perd du temps à mesurer et à couper sur place.", "The site loses time measuring and cutting on site."], ["La tuyauterie se fabrique en atelier, avec des spools numérotés et des listes de coupe.", "Piping is built in the shop, with numbered spools and cut lists."], ["service-prefabrication"]),
         problem(["Vos dessinateurs de gicleurs sont débordés.", "Your sprinkler drafters are swamped."], ["Nous dessinons étage par étage, dans AutoSPRINK.", "We draw floor by floor, in AutoSPRINK."], ["service-gicleurs"]),
         problem(["Deux fournisseurs, deux modèles, des allers-retours.", "Two suppliers, two models, back-and-forth."], ["Un seul interlocuteur pour la tuyauterie et les gicleurs.", "One contact for piping and sprinklers."], ["service-combinee"]),
         problem(["Les plans de remise montrent la conception, pas ce qui a été construit.", "The handover drawings show the design, not what was built."], ["Nous intégrons les demandes de changement et les relevés de chantier.", "We integrate the change orders and the site surveys."], ["service-tqc"]),
@@ -57,12 +96,14 @@ export const home = {
     }),
     // S3b : les services sont présentés une seule fois, dans l'ordre d'un projet ; le bloc « projectCycle » (schéma du cycle) est fondu ici, avec son introduction.
     block("serviceNetworks", {
-      heading: l("Six services, du modèle à l'exploitation.", "Six services, from the model to operations."),
+      heading: l("Six services, du modèle à l'exploitation", "Six services, from the model to operations"),
       intro: l(
         "Du modèle de conception à la remise du bâtiment, chaque service prend la suite du précédent. Un mandat peut couvrir une étape ou plusieurs.",
-        "From the design model to building handover, each service picks up where the previous one ends. A mandate can cover one stage or several.",
+        "From the design model to building handover, each service picks up where the previous one ends. A project can cover one stage or several.",
       ),
     }),
+    // T2 (C-14) : la différenciation monte sur l'accueil, sur fond teinté.
+    whyBimurix(true),
     block("deliverables", {
       heading: l("Ce que vous recevez, et à quoi ça sert.", "What you receive, and what it is for."),
       items: deliverableRows([
@@ -79,12 +120,21 @@ export const home = {
     block("scenarios", {
       heading: l("Trois situations types de chantier.", "Three typical site situations."),
       note: l("Ce sont des situations types, pas des projets réalisés.", "These are typical situations, not completed projects."),
+      short: true,
       items: homeScenarios(),
     }),
+    projects(),
     block("proof", brennanProof()),
-    block("responsibilityTable", { heading: l("Qui fait quoi.", "Who does what."), rows: allResponsibilityRows(), note: engineerSentence }),
+    block("responsibilityTable", {
+      heading: l("Qui fait quoi", "Who does what"),
+      short: true,
+      shortRows: shortResponsibilityRows(),
+      detailLink: internalCta(l("Voir le détail", "See the detail"), "page-about", "secondary"),
+      rows: allResponsibilityRows(),
+      note: engineerSentence,
+    }),
     block("method", {
-      heading: l("Comment se déroule un mandat.", "How a mandate unfolds."),
+      heading: l("Comment se déroule un mandat", "How a project unfolds"),
       steps: keyed([
         titled(l("Vous demandez une soumission", "You request a quote"), l("Dites-nous le projet, la discipline et ce que vous voulez recevoir. Nous vous répondons d'ici un jour ouvrable.", "Tell us the project, the discipline and what you want to receive. We reply within one business day.")),
         titled(l("Nous clarifions la portée", "We clarify the scope"), l("Exigences du projet, disciplines, formats attendus et critères d'acceptation.", "Project requirements, disciplines, expected formats and acceptance criteria.")),
@@ -92,10 +142,9 @@ export const home = {
         titled(l("Nous livrons", "We deliver"), l("Les fichiers et documents convenus, avec la liste des points à confirmer.", "The agreed files and documents, with the list of points to confirm.")),
       ]),
     }),
-    block("pointsList", { heading: l("Ce qu'il faut nous envoyer", "What to send us"), layout: "list", items: keyed(needsList) }),
     block("faq", {
       heading: l("Questions fréquentes", "Frequently asked questions"),
-      items: faqEntries("sysque", "seismic", "signs", "makers", "documents", "price", "soon", "region"),
+      items: faqEntries("sysque", "seismic", "signs", "makers", "documents", "price", "soon", "region", "english", "zone", "transfer"),
     }),
     block("quoteCta", {
       heading: l("Envoyez-nous votre projet.", "Send us your project."),

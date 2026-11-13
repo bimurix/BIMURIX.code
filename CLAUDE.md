@@ -15,6 +15,7 @@ avec SysQue, gicleurs avec AutoSPRINK, coordination tuyauterie + gicleurs) ; **L
 tel que construit TQC). **Aucun prix, aucun type de forfait ni aucun délai fixe n'est publié** : le site montre le problème de
 chantier, ce que Bimurix fait, ce que le client reçoit et à quoi ça sert (ADR-008) ; le prix se donne sur soumission. Les
 forfaits F-01 à F-05 restent dans Studio, **masqués** (`visible: false`), et leur code reste : les cocher les fait réapparaître.
+Accueil à douze sections (T2, ADR-009) ; la section « Projets » présente trois fiches d'exemple à remplacer.
 Seul engagement de délai publié : « Nous vous répondons d'ici un jour ouvrable » (réponse à la demande). Règle : on intègre les offres au site existant, on ne le
 remplace pas. Site **FR par défaut** (`/`), **EN** sous `/en`.
 Objectif : demande de soumission → Supabase → tableau de bord `/admin` → réponse par courriel.
@@ -41,7 +42,8 @@ Hébergement plus tard : Netlify. Code dans `web/`.
   ou « à confirmer » du document d'offres n'est pas publié sans accord du client (ADR-006).
 - Chiffre d'un tiers : seulement avec le nom et le lien de la source, attribué à ce tiers.
 - Conception, calculs, signature et sceau : toujours attribués à l'ingénieur ou à l'entrepreneur, jamais à Bimurix.
-- Valeurs génériques (téléphone 555, NEQ fictif…) toujours marquées comme exemples.
+- Valeurs génériques (téléphone 555, NEQ fictif, nom légal, fiches de projet…) toujours marquées comme exemples (« (exemple) », « Exemple — à remplacer ») : affichées en texte simple,
+  **jamais en lien `tel:`, jamais en données structurées** (`isPlaceholder`, `src/lib/placeholders.ts`) ; `pnpm check:placeholders` les bloque avant la mise en ligne (ADR-009 n° 1 à 5).
 - Lexique de chantier québécois : **soumission** (le prix) et **devis** (le cahier des charges), jamais l'inverse ;
   **dessins d'atelier** ; donneur d'ouvrage ; entrepreneur général, entrepreneur spécialisé ; chargé de projet,
   surintendant, contremaître ; mécanique du bâtiment, tuyauterie, gicleurs, parasismique ; tel que construit (TQC) ;

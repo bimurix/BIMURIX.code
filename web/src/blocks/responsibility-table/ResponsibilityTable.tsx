@@ -1,6 +1,9 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
 import { v5Label, type UiLabels } from "@/lib/i18n/v5-labels";
+import { resolveLink } from "@/lib/links";
+import type { Cta } from "@/sanity/types-content";
+import Link from "next/link";
 import { Section, SectionHeading } from "../section";
 
 export type ResponsibilityRowData = {
@@ -14,7 +17,16 @@ export type ResponsibilityRowData = {
   contractorNote?: Localized;
 };
 
-export type ResponsibilityTableData = { heading?: Localized; intro?: Localized; note?: Localized; rows?: ResponsibilityRowData[] };
+export type ResponsibilityTableData = {
+  heading?: Localized;
+  intro?: Localized;
+  note?: Localized;
+  rows?: ResponsibilityRowData[];
+  /** Version courte (accueil) : une ligne par partie au lieu du tableau, puis le lien « Voir le détail ». */
+  short?: boolean | null;
+  shortRows?: Array<{ _key: string; title?: Localized; text?: Localized }> | null;
+  detailLink?: Cta | null;
+};
 
 const PARTIES = [
   ["bimurix", "respColBimurix"],
@@ -30,6 +42,7 @@ type Props = { data: ResponsibilityTableData; locale: Locale; ui: UiLabels };
  * La phrase sous le tableau (conception, calculs, signature, sceau) est un champ de Studio.
  */
 export function ResponsibilityTable({ data, locale, ui }: Props) {
+  if (data.short && (data.shortRows ?? []).length > 0) return <ShortVersion data={data} locale={locale} ui={ui} />;
   const rows = (data.rows ?? []).filter((r) => pick(r.label, locale, ""));
   const note = pick(data.note, locale, "");
   if (rows.length === 0) {
@@ -97,6 +110,35 @@ function NoteOnly({ heading, note }: { heading: string; note: string }) {
     <Section>
       <SectionHeading>{heading}</SectionHeading>
       <p className="max-w-[62ch] border-t-[1.5px] border-ink pt-5 text-[17px] leading-relaxed text-ink">{note}</p>
+    </Section>
+  );
+}
+
+/** Trois lignes : Bimurix, l'ingénieur, l'entrepreneur. La phrase d'origine sous le tableau reste mot pour mot ; le détail est sur la page À propos. */
+function ShortVersion({ data, locale, ui }: Props) {
+  const rows = (data.shortRows ?? []).filter((r) => pick(r.title, locale, ""));
+  const note = pick(data.note, locale, "");
+  const href = resolveLink(data.detailLink?.link, locale);
+  const linkLabel = pick(data.detailLink?.label, locale, "") || v5Label(ui, "shortDetailLink", locale);
+  return (
+    <Section id="qui-fait-quoi">
+      <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "")}</SectionHeading>
+      <dl className="border-t-[1.5px] border-ink">
+        {rows.map((row) => (
+          <div key={row._key} className="grid gap-1 border-b border-rule py-4 md:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] md:gap-8">
+            <dt className="font-display text-lg font-bold text-ink">{pick(row.title, locale, "")}</dt>
+            <dd className="max-w-[62ch] text-[16px] leading-relaxed text-ink-2">{pick(row.text, locale, "")}</dd>
+          </div>
+        ))}
+      </dl>
+      {note && <p className="mt-6 max-w-[62ch] text-[16px] leading-relaxed text-ink">{note}</p>}
+      {href && (
+        <p className="mt-2">
+          <Link href={href} className="inline-flex min-h-(--bx-tap-min) items-center text-[16px] font-semibold text-blue underline underline-offset-4 hover:text-blue-deep">
+            {linkLabel}
+          </Link>
+        </p>
+      )}
     </Section>
   );
 }

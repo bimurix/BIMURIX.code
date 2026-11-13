@@ -36,3 +36,14 @@ export function NetworkList({ heading, items, note, network, locale, id }: { hea
     </Section>
   );
 }
+
+/** Phrase de confiance d'un service (ex. « Les données manquantes sont signalées, jamais inventées. ») : seule, encadrée de deux filets. */
+export function Pledge({ text, locale }: { text?: Localized; locale: Locale }) {
+  const body = pick(text, locale, "");
+  if (!body) return null;
+  return (
+    <div className="mx-auto max-w-7xl px-4 pt-(--bx-space-section) sm:px-6 lg:pt-(--bx-space-section-lg)">
+      <p className="font-display max-w-[40ch] border-y-[1.5px] border-ink py-5 text-xl leading-snug font-bold text-balance text-ink sm:text-2xl">{body}</p>
+    </div>
+  );
+}

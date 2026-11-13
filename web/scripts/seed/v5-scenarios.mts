@@ -23,7 +23,7 @@ export const scenarioByKey = {
   mod2: sc(
     ["Situation type 2 — Un modèle de conception incomplet", "Typical situation 2 — An incomplete design model"],
     ["Le modèle reçu a des niveaux de détail inégaux, des paramètres vides et des nomenclatures qui ne concordent pas. L'entrepreneur général doit pourtant s'en servir pour planifier.", "The model received has uneven levels of detail, empty parameters and schedules that do not match. The general contractor still has to plan from it."],
-    ["Revoit le modèle selon vos exigences, met à jour l'architecture, la structure ou la mécanique du bâtiment selon le mandat, vérifie les paramètres et les nomenclatures.", "Reviews the model against your requirements, updates architecture, structure or building mechanical as per the mandate, and checks parameters and schedules."],
+    ["Revoit le modèle selon vos exigences, met à jour l'architecture, la structure ou la mécanique du bâtiment selon le mandat, vérifie les paramètres et les nomenclatures.", "Reviews the model against your requirements, updates architecture, structure or mechanical as per the project, and checks parameters and schedules."],
     ["Le modèle mis à jour, la liste de vérification de la qualité, la liste des points à confirmer auprès du concepteur.", "The updated model, the quality checklist, the list of points to confirm with the designer."],
     ["Bâtir une planification et des quantités sur des données qui ne concordent pas.", "Building a schedule and quantities on data that do not match."],
     "service-modelisation",
@@ -87,7 +87,7 @@ export const scenarioByKey = {
   d2: sc(
     ["Situation type 2 — Retrouver une vanne dans le plafond", "Typical situation 2 — Finding a valve in the ceiling"],
     ["L'équipe d'entretien du propriétaire cherche une vanne : où est-elle, de quel type, quelle est sa position normale ?", "The owner's maintenance team is looking for a valve: where is it, what type is it, what is its normal position?"],
-    ["Numérote les robinets (code d'équipement et code de système), renseigne leur fonction et leur position normale, repère chaque élément dans son local.", "Numbers the valves (equipment code and system code), fills in their function and normal position, and locates each element in its room."],
+    ["Numérote les vannes (code d'équipement et code de système), renseigne leur fonction et leur position normale, repère chaque élément dans son local.", "Numbers the valves (equipment code and system code), fills in their function and normal position, and locates each element in its room."],
     ["Un modèle renseigné, avec les données prêtes pour les manuels d'exploitation et d'entretien et la maintenance.", "A populated model, with data ready for the operation and maintenance (O&M) manuals and for maintenance."],
     ["Chercher les équipements avec des plans qui ne les identifient pas.", "Hunting for equipment with drawings that do not identify it."],
     "service-bim-7d",

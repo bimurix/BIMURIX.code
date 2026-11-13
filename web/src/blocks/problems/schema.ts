@@ -1,6 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { requireFr } from "@/sanity/schemas/objects/locale";
-import { blockPreview, headingField } from "../shared";
+import { blockPreview, headingField, iconField } from "../shared";
 
 // decision: plan de contenu v5 § 2b (H2) — les problèmes de chantier avant les services.
 export const problems = defineType({
@@ -23,6 +23,7 @@ export const problems = defineType({
           fields: [
             defineField({ name: "title", title: "Le problème (une phrase)", type: "localeString", validation: requireFr }),
             defineField({ name: "text", title: "Ce que fait Bimurix", type: "localeText" }),
+            iconField,
             defineField({ name: "services", title: "Services qui répondent", type: "array", of: [defineArrayMember({ type: "reference", to: [{ type: "service" }] })] }),
           ],
           preview: { select: { title: "title.fr", subtitle: "text.fr" } },

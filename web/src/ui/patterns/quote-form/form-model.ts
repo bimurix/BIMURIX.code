@@ -42,6 +42,8 @@ export type FormModel = {
   privacyHref: string | null;
   /** Appel de 20 minutes proposé (réglage Studio, faux par défaut). */
   callEnabled: boolean;
+  /** Champ « Budget approximatif » affiché (réglage Studio, faux par défaut ; ADR-009 n° 11). */
+  showBudget: boolean;
 };
 
 /** Libellés et listes du formulaire dans la langue de la page (Sanity, sinon valeurs de secours). */
@@ -76,10 +78,12 @@ export function buildFormModel(content: QuoteFormContent, locale: Locale): FormM
       region: choices(f.regions),
       phase: choices(f.phases),
       timeline: choices(f.timelines),
-      budget: choices(f.budgets),
+      // Budget masqué (ADR-009 n° 11) : les choix ne sont même pas envoyés au navigateur.
+      budget: f.showBudget === true ? choices(f.budgets) : [],
       software: choices(f.softwareOptions),
     },
     privacyHref: pathFor(content?.privacyPage, locale),
     callEnabled: callEnabled(content),
+    showBudget: f.showBudget === true,
   };
 }

@@ -3,7 +3,7 @@ import { pick, type Localized } from "@/lib/i18n/pick";
 
 export type QuoteNeedsData = { heading?: Localized; items?: Array<Localized & { _key?: string }>; note?: Localized };
 
-/** Encart « Ce qu'il faut nous envoyer » au-dessus du formulaire. Texte de Studio (Formulaire de soumission) ; sans ligne, rien. */
+/** Encart « Utile, si vous l'avez sous la main » (ex-« Ce qu'il faut nous envoyer »), dans la colonne à côté du formulaire. Texte de Studio (Formulaire de soumission) ; sans ligne, rien. */
 export function QuoteNeeds({ data, locale }: { data: QuoteNeedsData; locale: Locale }) {
   const items = (data.items ?? []).flatMap((item, i) => {
     const text = pick(item, locale, "");
@@ -13,9 +13,9 @@ export function QuoteNeeds({ data, locale }: { data: QuoteNeedsData; locale: Loc
   const heading = pick(data.heading, locale, "");
   const note = pick(data.note, locale, "");
   return (
-    <aside aria-label={heading || undefined} className="mb-10 max-w-3xl border-[1.5px] border-ink bg-paper-2 p-5 sm:p-6">
-      {heading && <h3 className="font-display text-xl font-bold text-ink">{heading}</h3>}
-      <ul className={`${heading ? "mt-3 " : ""}grid gap-x-8 sm:grid-cols-2`}>
+    <aside aria-label={heading || undefined} className="border-[1.5px] border-ink bg-paper-2 p-5 sm:p-6">
+      {heading && <h2 className="font-display text-xl font-bold text-ink">{heading}</h2>}
+      <ul className={heading ? "mt-3" : ""}>
         {items.map((item) => (
           <li key={item.key} className="flex gap-3 border-b border-rule py-2.5 text-[16px] text-ink">
             <span aria-hidden="true" className="mt-2 size-2 shrink-0 rounded-full border-2 border-blue bg-paper" />

@@ -1,9 +1,11 @@
 import { internalCta, keyed, l, ref } from "./helpers.mts";
 import { uiStringsN3 } from "./ui-strings-n3.mts";
+import { uiStringsT2 } from "./ui-strings-t2.mts";
 import { uiStringsV5 } from "./v5-common.mts";
 
 // ADR-007 : descriptif, SEO par défaut, menu, pied de page et textes de l'interface d'origine restaurés (production), adaptés aux 6 services.
-// Coordonnées : ADR-006 n° 14 à 18 (courriel réel ; téléphone, NEQ et nom légal non saisis : le site n'affiche rien).
+// Coordonnées : ADR-006 n° 14 à 18 (courriel réel). T2 (ADR-009 n° 1 à 4) : téléphone, nom légal et NEQ sont des valeurs d'exemple,
+// marquées « (exemple) » : texte simple sur le site, jamais en lien ni en données structurées ; `pnpm check:placeholders` les bloque.
 const settings = {
   _id: "settings",
   _type: "settings",
@@ -13,6 +15,9 @@ const settings = {
   tagline: l("Structure. Numérisez. Avancez.", "Structure. Digitalize. Advance."),
   descriptor: l("Services BIM et construction numérique pour l'industrie de la construction.", "BIM and digital construction services for the construction industry."),
   email: "contact@bimurix.com",
+  phone: "514 555-0199 (exemple)",
+  legalName: "Bimurix inc. (exemple)",
+  neq: "1234567890 (exemple)",
   serviceArea: l("Grand Montréal", "Greater Montreal"),
   privacyOfficer: "Fondateur de Bimurix",
   privacyEmail: "contact@bimurix.com",
@@ -83,6 +88,7 @@ const uiStrings = {
   backHome: l("Retour à l'accueil", "Back to home"),
   ...uiStringsN3,
   ...uiStringsV5,
+  ...uiStringsT2,
 };
 
 export const singletons = [settings, navigation, footer, uiStrings];

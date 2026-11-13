@@ -4,7 +4,7 @@ import { v5Label, type UiLabels } from "@/lib/i18n/v5-labels";
 import { Section, SectionHeading } from "../section";
 import { ScenarioList, type ScenarioData } from "./ScenarioList";
 
-export type ScenariosData = { heading?: Localized; intro?: Localized; note?: Localized; items?: ScenarioData[] };
+export type ScenariosData = { heading?: Localized; intro?: Localized; note?: Localized; short?: boolean | null; items?: ScenarioData[] };
 
 type Props = {
   data: ScenariosData;
@@ -24,7 +24,7 @@ export function Scenarios({ data, locale, ui, quotePath, quoteLink }: Props) {
     <Section id="situations" band>
       <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "") || v5Label(ui, "scenariosHeading", locale)}</SectionHeading>
       <p className="-mt-4 mb-(--bx-space-head) max-w-[62ch] text-[15px] text-ink-2">{note}</p>
-      <ScenarioList items={items} locale={locale} ui={ui} quotePath={quotePath} />
+      <ScenarioList items={items} locale={locale} ui={ui} quotePath={quotePath} short={data.short === true} />
       {quoteLink && (
         <p className="mt-4">
           <a href={quoteLink.href} className="inline-flex min-h-(--bx-tap-min) items-center text-[16px] font-semibold text-blue underline underline-offset-4 hover:text-blue-deep">

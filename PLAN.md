@@ -46,6 +46,21 @@ Le client ne publie plus de prix, de type de forfait ni de délai fixe : six ser
 | S3b Design et images | ✅ 2026-11-12 | Accueil raccourci (services présentés une fois, cycle fondu, livrables en tableau, situations en quatre temps), barre d'action mobile en CSS, tokens de rythme, six schémas au trait et quatre photos Unsplash dans `development` (`patch-design-s3b.mts`) ; critique : `docs/audits/2026-11-12_critique-s3b.md` ; images : `docs/source/2026-11-12_images-s3b.md` |
 | S5 Audit | ✅ 2026-11-13 | Audit indépendant sur le build de production : `docs/audits/2026-11-13_audit-s5.md` ; 6 corrections (numérotation des situations, source de la preuve en anglais, traductions, photo conservée par S2, cible tactile du pied de page, captures) ; décisions et relectures restantes listées dans le rapport |
 
+### Révision T (2026-11-13) — améliorations v6 (ADR-009)
+
+Critique complète du site, puis améliorations par parties. Cahier : `docs/source/2026-11-13_cahier-ameliorations-v6.md` ; décisions : ADR-009.
+Une ligne par session ; T2 passe seule et d'abord, T3 puis T4 ensuite, T5 et T6 en parallèle, T7 clôt.
+
+| Étape | État | Contenu |
+|---|---|---|
+| T1 Critique | ✅ 2026-11-13 | Critique de l'ensemble du site (`docs/audits/2026-11-13_critique-t1.md`), ADR-009, cahier d'améliorations v6 (T2 à T6) ; rien modifié dans `web/` ni dans Sanity |
+| T2 Contenu et idées | ✅ 2026-11-13 | Valeurs d'exemple (téléphone, nom légal, NEQ) marquées « (exemple) », jamais en lien ni en données structurées (`lib/placeholders.ts`, `check:placeholders` les bloque) ; accueil à douze sections (nouveau titre, « Pourquoi Bimurix », registre « Projets » de trois fiches d'exemple, situations et « Qui fait quoi » en version courte, « Ce qu'il faut nous envoyer » retiré, trois questions de plus) ; services (groupes de prestations, phrase de confiance, titres, « vanne ») ; À propos (fiche « L'entreprise ») ; Soumission (réassurance, budget masqué, encart renommé) ; 404 ; promesse « d'ici un jour ouvrable » près des boutons ; champs `icon` vides pour T3 ; `patch-content-t2.mts` |
+| T3 Icônes et photos | à faire | Jeu de symboles au trait et sept photos d'illustration (cahier T3) |
+| T4 Mouvement | à faire (après T3) | Animations CSS seulement, zéro script de plus (cahier T4) |
+| T5 Sécurité et Loi 25 | en cours | Quinze constats de sécurité et pages légales (cahier T5) |
+| T6 Référencement | à faire | Données structurées, titres, hreflang, images de partage, vitesse, accessibilité (cahier T6) |
+| T7 Audit | à faire | Contrôle final selon la liste du cahier (« Ce que T7 vérifiera ») |
+
 Les sections 3 (pages) et 4 (formulaire) plus bas décrivent l'état N4/N5 ; elles sont remplacées par ADR-007 pour le contenu.
 
 ## 1. Règles de travail (toutes les sessions)
@@ -136,8 +151,8 @@ Fichiers partagés, à modifier **un à la fois** : `src/blocks/schemas.ts`, `sr
 
 ## 6. Phase M — déploiement (plus tard, sur feu vert du client)
 
-1. Remplacer les valeurs d'exemple dans Studio ; `pnpm check:placeholders` à zéro.
-2. Saisir la date limite (mise en ligne + 60 jours) ; client : téléphone, NEQ et nom légal s'il veut les afficher.
+1. Remplacer les valeurs d'exemple dans Studio (téléphone, nom légal, NEQ, trois fiches « Projets » ou section coupée, dates des pages légales) ; `pnpm check:placeholders` à zéro.
+2. Saisir la date limite (mise en ligne + 60 jours) ; client : téléphone, NEQ et nom légal réels (un champ vidé n'affiche rien) ; nom, photo et mot du fondateur s'il les veut (À propos › L'entreprise) ; ouvrir la Search Console (cahier R-15).
 3. Copier le contenu `development` → `production` (export puis import), déployer les schémas.
 4. Migration Supabase sur `bimurix-prod`, variables Netlify, déploiement, GitHub (push sur demande).
 5. Checklist `shipping-and-launch`, test de retour arrière.

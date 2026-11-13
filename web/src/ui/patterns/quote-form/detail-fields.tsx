@@ -14,7 +14,7 @@ export function DetailFields({ model, err, optionalLabel }: Props) {
         <SelectField {...common} name="region" label={t.region} placeholder={t.choose} options={options.region} error={err("region")} />
         <SelectField {...common} name="phase" label={t.phase} placeholder={t.choose} options={options.phase} error={err("phase")} />
         <SelectField {...common} name="timeline" label={t.timeline} placeholder={t.choose} options={options.timeline} error={err("timeline")} />
-        <SelectField {...common} name="budget" label={t.budget} placeholder={t.choose} options={options.budget} error={err("budget")} />
+        {model.showBudget && <SelectField {...common} name="budget" label={t.budget} placeholder={t.choose} options={options.budget} error={err("budget")} />}
       </div>
       <ChoiceGroup {...common} name="software" type="checkbox" label={t.software} options={options.software} error={err("software")} />
     </div>

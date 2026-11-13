@@ -39,5 +39,5 @@ export const internalCta = (label: { fr: string; en: string }, pageId: string, s
 export const quoteLabel = l("Demander une soumission", "Request a quote");
 export const quoteCta = (serviceId?: string) => internalCta(quoteLabel, "page-quote", "primary", serviceId);
 
-// Valeurs génériques à remplacer avant la mise en ligne (decision: D12, PLAN.md §1).
-export const PLACEHOLDER_MARKERS = ["555-01", "1234567890", "(exemple)", "(example)"];
+// Valeurs génériques à remplacer avant la mise en ligne : une seule liste, dans le code du site (decision: ADR-009 n° 4).
+export { PLACEHOLDER_MARKERS } from "../../src/lib/placeholders.ts";

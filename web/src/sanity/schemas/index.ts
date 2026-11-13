@@ -2,7 +2,7 @@ import { blockSchemas } from "@/blocks/schemas";
 import { page, redirect } from "./documents/page";
 import { packageDoc } from "./documents/package";
 import { service } from "./documents/service";
-import { localeRichText, localeSlug, localeString, localeText } from "./objects/locale";
+import { localeRichText, localeSlug, localeString, localeStringIcon, localeText } from "./objects/locale";
 import { cta, imageWithAlt, link, networkColor, seo, titleBlock } from "./objects/shared";
 import { deliverableRow, faqEntry, responsibilityRow, scenario } from "./objects/v5";
 import { emailTemplates } from "./singletons/email-templates";
@@ -16,6 +16,7 @@ export const singletonTypes = ["settings", "navigation", "footer", "uiStrings", 
 
 export const schemaTypes = [
   localeString,
+  localeStringIcon,
   localeText,
   localeRichText,
   localeSlug,

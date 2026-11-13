@@ -22,9 +22,9 @@ export const settings = defineType({
     defineField({ name: "descriptor", title: "Descripteur", type: "localeString", group: "brand" }),
 
     defineField({ name: "email", title: "Courriel public", type: "email", group: "contact", validation: (r) => r.required() }),
-    defineField({ name: "phone", title: "Téléphone", type: "string", group: "contact" }),
+    defineField({ name: "phone", title: "Téléphone", type: "string", group: "contact", description: "Une valeur marquée « (exemple) » s'affiche en texte simple (jamais en lien) et est bloquée par la liste de mise en ligne. Vide : rien ne s'affiche." }),
     defineField({ name: "serviceArea", title: "Région desservie", type: "localeString", group: "contact" }),
-    defineField({ name: "neq", title: "NEQ", type: "string", group: "contact", description: "Numéro d'entreprise du Québec (10 chiffres).", validation: (r) => r.regex(/^\d{10}$/).warning("Le NEQ compte 10 chiffres.") }),
+    defineField({ name: "neq", title: "NEQ", type: "string", group: "contact", description: "Numéro d'entreprise du Québec (10 chiffres). Une valeur marquée « (exemple) » reste bloquée par la liste de mise en ligne.", validation: (r) => r.regex(/^\d{10}( \(exemple\))?$/).warning("Le NEQ compte 10 chiffres (le suffixe « (exemple) » est permis tant que la valeur est un exemple).") }),
     defineField({ name: "legalName", title: "Nom légal", type: "string", group: "contact" }),
     defineField({
       name: "socialLinks",

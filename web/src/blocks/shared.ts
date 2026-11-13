@@ -1,5 +1,8 @@
 import { defineArrayMember, defineField } from "sanity";
+import { iconField } from "@/sanity/schemas/objects/icon";
 import { requireFr } from "@/sanity/schemas/objects/locale";
+
+export { iconField };
 
 /** Titre de section, commun à tous les blocs. */
 export const headingField = defineField({ name: "heading", title: "Titre de la section", type: "localeString" });
@@ -11,6 +14,7 @@ export const titledTextMember = defineArrayMember({
   fields: [
     defineField({ name: "title", title: "Titre", type: "localeString", validation: requireFr }),
     defineField({ name: "text", title: "Texte", type: "localeText" }),
+    iconField,
   ],
   preview: { select: { title: "title.fr", subtitle: "text.fr" } },
 });

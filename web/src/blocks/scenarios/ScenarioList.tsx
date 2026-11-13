@@ -17,6 +17,8 @@ export type ScenarioData = {
   service?: (RouteTarget & { _id?: string; title?: Localized; shortTitle?: Localized }) | null;
 };
 
+const SHORT_FIELDS: readonly string[] = ["situation", "receive"];
+
 const CELLS = [
   ["situation", "scenarioSituation"],
   ["action", "scenarioAction"],
@@ -30,6 +32,8 @@ type Props = {
   ui: UiLabels;
   /** Adresse de la page de soumission : active, sous chaque situation liée à un service, le lien de demande. */
   quotePath?: string | null;
+  /** Version courte (accueil) : « Situation » et « Ce que vous recevez » seulement ; le détail reste sur la page du service. */
+  short?: boolean;
 };
 
 const linkClass = "inline-flex min-h-(--bx-tap-min) items-center text-[15px] text-ink underline underline-offset-4 hover:text-blue";
@@ -39,19 +43,19 @@ const linkClass = "inline-flex min-h-(--bx-tap-min) items-center text-[15px] tex
  * (situation, ce que fait Bimurix, ce que vous recevez, ce que ça évite), chacun sous son étiquette en gras et son
  * trait fin ; deux par rangée dès sm, empilés sur mobile. Pas de cartes ni d'icônes. Une cellule vide n'est pas rendue.
  */
-export function ScenarioList({ items, locale, ui, quotePath }: Props) {
+export function ScenarioList({ items, locale, ui, quotePath, short }: Props) {
   return (
     <ol className="border-t-[1.5px] border-ink">
       {items.map((item) => (
-        <ScenarioItem key={item._key} item={item} locale={locale} ui={ui} quotePath={quotePath} />
+        <ScenarioItem key={item._key} item={item} locale={locale} ui={ui} quotePath={quotePath} short={short} />
       ))}
     </ol>
   );
 }
 
-function ScenarioLinks({ item, locale, ui, quotePath }: Omit<Props, "items"> & { item: ScenarioData }) {
+function ScenarioLinks({ item, locale, ui, quotePath, short }: Omit<Props, "items"> & { item: ScenarioData }) {
   const servicePath = pathFor(item.service, locale);
-  const quoteHref = quotePath && item.service?._id ? `${quotePath}?service=${encodeURIComponent(item.service._id)}` : null;
+  const quoteHref = !short && quotePath && item.service?._id ? `${quotePath}?service=${encodeURIComponent(item.service._id)}` : null;
   if (!servicePath && !quoteHref) return null;
   return (
     <p className="flex flex-wrap gap-x-6 lg:col-start-2">
@@ -70,14 +74,15 @@ function ScenarioLinks({ item, locale, ui, quotePath }: Omit<Props, "items"> & {
   );
 }
 
-function ScenarioItem({ item, locale, ui, quotePath }: Omit<Props, "items"> & { item: ScenarioData }) {
+function ScenarioItem({ item, locale, ui, quotePath, short }: Omit<Props, "items"> & { item: ScenarioData }) {
   const cells = CELLS.flatMap(([field, labelKey]) => {
+    if (short && !SHORT_FIELDS.includes(field)) return [];
     const text = pick(item[field], locale, "");
     return text ? [{ field, label: v5Label(ui, labelKey, locale), text }] : [];
   });
   return (
-    <li className="border-b border-rule py-6">
-      <article className="grid gap-x-10 gap-y-3 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
+    <li className={`border-b border-rule ${short ? "py-4" : "py-6"}`}>
+      <article className="grid gap-x-10 gap-y-2 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
         <div>
           <h3 className="font-display max-w-[28ch] text-xl leading-snug font-bold text-balance text-ink">{pick(item.title, locale, "")}</h3>
           <FigureImage image={item.image} locale={locale} ratio="3 / 2" sizes="(min-width: 640px) 384px, 100vw" className="mt-4 max-w-sm" />
@@ -85,14 +90,14 @@ function ScenarioItem({ item, locale, ui, quotePath }: Omit<Props, "items"> & { 
         {cells.length > 0 && (
           <dl className="grid gap-x-10 sm:grid-cols-2">
             {cells.map((cell) => (
-              <div key={cell.field} className="border-t border-rule py-3.5 lg:nth-[-n+2]:border-t-0 lg:nth-[-n+2]:pt-0">
+              <div key={cell.field} className={`border-t border-rule lg:nth-[-n+2]:border-t-0 lg:nth-[-n+2]:pt-0 ${short ? "py-2.5" : "py-3.5"}`}>
                 <dt className="font-display text-[15px] font-bold text-ink">{cell.label}</dt>
                 <dd className="mt-1 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">{cell.text}</dd>
               </div>
             ))}
           </dl>
         )}
-        <ScenarioLinks item={item} locale={locale} ui={ui} quotePath={quotePath} />
+        <ScenarioLinks item={item} locale={locale} ui={ui} quotePath={quotePath} short={short} />
       </article>
     </li>
   );

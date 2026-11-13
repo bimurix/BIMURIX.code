@@ -53,6 +53,20 @@ export const uiStringKeys = [
   ["respColContractor", "Qui fait quoi : en-tête « Entrepreneur »"],
   ["respYes", "Qui fait quoi : case cochée (« Oui »)"],
   ["respNo", "Qui fait quoi : case vide (« Non », lu par les lecteurs d'écran)"],
+  ["quoteCtaNote", "Appel final : promesse sous le bouton"],
+  ["quoteCtaPhone", "Appel final : « Ou appelez le {phone}. » ({phone} = téléphone du site)"],
+  ["projectColDiscipline", "Projets : en-tête « Discipline »"],
+  ["projectColDelivered", "Projets : en-tête « Livré »"],
+  ["projectColTools", "Projets : en-tête « Outils »"],
+  ["companyLegalName", "L'entreprise : « Nom légal »"],
+  ["companyNeq", "L'entreprise : « NEQ »"],
+  ["companyPhone", "L'entreprise : « Téléphone »"],
+  ["companyEmail", "L'entreprise : « Courriel »"],
+  ["companyArea", "L'entreprise : « Région desservie »"],
+  ["companyLanguages", "L'entreprise : « Langues de travail »"],
+  ["companyResponsible", "L'entreprise : « Responsable »"],
+  ["notFoundServices", "Page introuvable : titre de la liste des services"],
+  ["shortDetailLink", "Version courte : lien « Voir le détail » (secours)"],
 ] as const;
 
 export const uiStrings = defineType({

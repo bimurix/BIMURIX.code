@@ -8,8 +8,9 @@ const titledText = (name: string) =>
     fields: [
       defineField({ name: "title", title: "Titre", type: "localeString", validation: requireFr }),
       defineField({ name: "text", title: "Texte", type: "localeText" }),
+      defineField({ name: "group", title: "Sous-titre de groupe (facultatif)", type: "localeString", description: "Range les prestations sous un sous-titre (ex. : « Réseaux »). À poser sur la première prestation de chaque groupe ; les suivantes restent dans le même groupe. Vide partout : aucun sous-titre." }),
     ],
-    preview: { select: { title: "title.fr" } },
+    preview: { select: { title: "title.fr", subtitle: "group.fr" } },
   });
 
 export const service = defineType({
@@ -42,6 +43,7 @@ export const service = defineType({
     defineField({ name: "heroCta", title: "Bouton du haut", type: "cta", group: "page" }),
     defineField({ name: "quoteButtonLabel", title: "Libellé du bouton « Demander une soumission » de ce service", type: "localeString", group: "page", description: "Facultatif. Remplace le libellé du bouton du haut et du bouton final. Ex. : « Demander une soumission de gicleurs »." }),
     defineField({ name: "heroImage", title: "Image du haut", type: "imageWithAlt", group: "page", description: "Facultatif. Ratio 4:3. Photo d'illustration (légende « Photo d'illustration ») ou schéma ; jamais un projet de Bimurix. Sans image, rien ne s'affiche." }),
+    defineField({ name: "pledge", title: "Phrase de confiance", type: "localeString", group: "page", description: "Facultatif. Une phrase mise en évidence sous l'introduction (ex. : « Les données manquantes sont signalées, jamais inventées. »). Une fois par page." }),
     defineField({ name: "audience", title: "Pour qui", type: "localeText", group: "page", description: "À qui s'adresse cette offre." }),
     defineField({ name: "scenarios", title: "Situations types", type: "array", group: "page", of: [defineArrayMember({ type: "scenario" })], description: "Une ou deux situations de chantier. Vide : la section n'apparaît pas." }),
     defineField({ name: "offeringsHeading", title: "Titre des prestations", type: "localeString", group: "page" }),
@@ -52,10 +54,10 @@ export const service = defineType({
     defineField({ name: "figureImage", title: "Image de livrable (exemple)", type: "imageWithAlt", group: "page", description: "Facultatif. Schéma marqué « exemple » ou capture anonymisée d'un vrai livrable (nom du projet, du client, de l'entrepreneur retirés)." }),
     defineField({ name: "deliverablesNote", title: "Note sous les livrables", type: "localeText", group: "page" }),
     defineField({ name: "needsHeading", title: "Ce qu'il faut nous envoyer : titre", type: "localeString", group: "page" }),
-    defineField({ name: "needs", title: "Ce qu'il faut nous envoyer : lignes", type: "array", group: "page", of: [defineArrayMember({ type: "localeString" })], description: "Les documents et informations à joindre à la demande. Vide : la section n'apparaît pas." }),
+    defineField({ name: "needs", title: "Ce qu'il faut nous envoyer : lignes", type: "array", group: "page", of: [defineArrayMember({ type: "localeStringIcon" })], description: "Les documents et informations à joindre à la demande. Vide : la section n'apparaît pas." }),
     defineField({ name: "needsNote", title: "Ce qu'il faut nous envoyer : note", type: "localeText", group: "page" }),
     defineField({ name: "methodHeading", title: "Titre de la démarche", type: "localeString", group: "page" }),
-    defineField({ name: "methodSteps", title: "Étapes de la démarche", type: "array", group: "page", of: [defineArrayMember({ type: "localeString" })] }),
+    defineField({ name: "methodSteps", title: "Étapes de la démarche", type: "array", group: "page", of: [defineArrayMember({ type: "localeStringIcon" })] }),
     defineField({ name: "extraHeading", title: "Section libre : titre", type: "localeString", group: "page" }),
     defineField({ name: "extraItems", title: "Section libre : points", type: "array", group: "page", of: [defineArrayMember({ type: "localeString" })] }),
     defineField({ name: "extraNote", title: "Section libre : note", type: "localeText", group: "page" }),

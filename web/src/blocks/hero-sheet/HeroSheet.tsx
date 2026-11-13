@@ -59,7 +59,7 @@ export function HeroSheet({ data, locale, shell, titleBlock, runs = [], aside, m
           <div className={`grid gap-8 p-5 sm:p-8 lg:gap-6 lg:p-10 ${withDrawing ? "lg:grid-cols-12" : ""}`}>
             <div className={withDrawing ? "lg:col-span-6 lg:pt-4" : "max-w-4xl"}>
               {meta && <div className="mb-4">{meta}</div>}
-              <h1 className={`font-display leading-[1.04] font-bold tracking-[-0.02em] text-balance text-ink ${compact ? "text-[2rem] sm:text-[2.6rem] lg:text-[3rem]" : "text-[2.1rem] sm:text-5xl lg:text-[3.2rem] xl:text-[3.5rem]"}`}>
+              <h1 className={`font-display leading-[1.04] font-bold tracking-[-0.02em] text-balance text-ink ${compact ? "text-[2rem] sm:text-[2.6rem] lg:text-[3rem]" : "text-[1.75rem] sm:text-5xl lg:text-[3.2rem] xl:text-[3.5rem]"}`}>
                 {pick(data.heading, locale, "")}
               </h1>
               {data.intro && <p className="mt-5 max-w-[60ch] text-[17px] leading-relaxed text-ink-2">{pick(data.intro, locale, "")}</p>}

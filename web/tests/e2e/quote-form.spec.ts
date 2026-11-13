@@ -32,11 +32,12 @@ test("aucun forfait affiché : le champ « Forfait visé » est absent, même av
   // Appel désactivé dans Studio : aucun choix de type, tous les champs de la soumission sont visibles.
   await expect(page.getByRole("radio", { name: /appel/i })).toHaveCount(0);
   await expect(page.locator("form").getByText(/appel de 20|réserver un appel/i)).toHaveCount(0);
-  await expect(page.locator("#budget")).toBeVisible();
+  // ADR-009 n° 11 : le budget est masqué par le réglage « Afficher le budget » (Studio).
+  await expect(page.locator("#budget")).toHaveCount(0);
   await expect(page.locator("#region")).toBeVisible();
   await expect(page.getByRole("button", { name: "Envoyer ma demande" })).toBeVisible();
-  // Encart « Ce qu'il faut nous envoyer » à côté du formulaire.
-  await expect(page.getByRole("heading", { name: "Ce qu'il faut nous envoyer" })).toBeVisible();
+  // Encart « Utile, si vous l'avez sous la main » dans la colonne à côté du formulaire (C-41).
+  await expect(page.getByRole("heading", { name: "Utile, si vous l'avez sous la main" })).toBeVisible();
 });
 
 test("soumission par un ancien lien ?forfait=F-01 : demande enregistrée sans forfait, référence, 2 courriels avec le délai de réponse et sans mention de forfait ni d'appel", async ({ page, request }, info) => {

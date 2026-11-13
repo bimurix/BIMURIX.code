@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { iconField } from "./icon";
 import { requireFr } from "./locale";
 
 // Objets du plan de contenu v5 (valeur sans prix, ADR-008), partagés par les offres et les blocs de page.
@@ -54,6 +55,7 @@ export const deliverableRow = defineType({
   fields: [
     defineField({ name: "title", title: "Livrable", type: "localeString", validation: requireFr }),
     defineField({ name: "purpose", title: "À quoi ça sert", type: "localeText", description: "Une demi-phrase qui commence par un verbe. Ex. : « à couper et à commander les bonnes pièces »." }),
+    iconField,
   ],
   preview: { select: { title: "title.fr", subtitle: "purpose.fr" } },
 });

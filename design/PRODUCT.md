@@ -20,7 +20,7 @@ Croire : Bimurix comprend le chantier et livre des fichiers contrôlés et utili
 Faire : **demander une soumission** (ADR-007 : plus d'appel de 20 minutes), en disant le projet, la discipline et ce qu'il veut recevoir.
 
 ## Preuves disponibles
-Aucune référence client, certification ou chiffre à ce jour. Les preuves passent par la précision :
+Aucune référence client, certification ou chiffre à ce jour. Le registre « Projets » de l'accueil montre trois fiches **d'exemple**, chacune marquée « Exemple — à remplacer » (aucun client, lieu ni chiffre) ; elles seront remplacées par de vrais projets, sinon la section est coupée à la mise en ligne. Les preuves passent par la précision :
 livrables nommés avec leur usage, méthode, tableau « Qui fait quoi », **situations types étiquetées comme telles** (jamais des projets réalisés),
 exemples illustratifs **étiquetés comme tels**. Seul chiffre publié : celui d'un tiers (J.M. Brennan), avec le nom et le lien de sa source.
 

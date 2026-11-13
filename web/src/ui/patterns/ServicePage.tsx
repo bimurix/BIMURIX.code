@@ -18,7 +18,7 @@ import { serviceQuoteCta } from "@/lib/services/quote-cta";
 import type { Cta, NetworkColor, Shell, TitleBlockData } from "@/sanity/types-content";
 import type { FigureImageData } from "@/ui/components/FigureImage";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
-import { NetworkList, type Keyed } from "./service-sections";
+import { NetworkList, Pledge, type Keyed } from "./service-sections";
 
 export type ServiceDoc = {
   _id: string;
@@ -59,6 +59,8 @@ export type ServiceDoc = {
   ctaText?: Localized;
   ctaButton?: Cta;
   audience?: Localized;
+  /** Phrase de confiance mise en évidence sous l'introduction (facultative). */
+  pledge?: Localized;
   responsibilityNote?: Localized;
   taxNote?: Localized;
   creditText?: Localized;
@@ -104,6 +106,7 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
         meta={meta}
         aside={forWhom}
       />
+      <Pledge text={doc.pledge} locale={locale} />
       <Scenarios
         data={{ items: doc.scenarios ?? [] }}
         locale={locale}
@@ -124,7 +127,7 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
       <ResponsibilityTable data={{ heading: ui?.responsibilities, rows: doc.responsibilityRows ?? [], note: doc.responsibilityNote }} locale={locale} ui={ui} />
       {doc.proof && <Proof data={doc.proof} locale={locale} />}
       {doc.faq?.length ? <Faq data={{ heading: { [locale]: v5Label(ui, "serviceFaqHeading", locale) }, items: doc.faq }} locale={locale} /> : null}
-      <QuoteCta data={{ heading: doc.ctaHeading, text: doc.ctaText, button: serviceQuoteCta(doc.ctaButton, cta) }} locale={locale} />
+      <QuoteCta data={{ heading: doc.ctaHeading, text: doc.ctaText, button: serviceQuoteCta(doc.ctaButton, cta) }} locale={locale} ui={ui} phone={shell?.settings?.phone} />
     </>
   );
 }

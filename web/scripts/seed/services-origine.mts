@@ -21,13 +21,13 @@ export const servicesOrigine = [
     cardTitle: l("Des modèles à jour et des conflits réglés avant l'installation", "Up-to-date models and clashes resolved before installation"),
     cardText: l(
       "Architecture, structure et mécanique du bâtiment (MEP). Modèle fédéré, détection de conflits, contrôle des livrables.",
-      "Architecture, structure and building mechanical (MEP). Federated model, clash detection, deliverable checks.",
+      "Architecture, structure and mechanical (MEP). Federated model, clash detection, deliverable checks.",
     ),
     cardLinkLabel: l("Voir la modélisation et la coordination", "See modelling and coordination"),
     heroHeading: l("Des modèles BIM à jour et des conflits réglés avant l'installation.", "Up-to-date BIM models and clashes resolved before installation."),
     heroIntro: l(
-      "Bimurix produit, met à jour et coordonne les modèles d'architecture, de structure et de mécanique du bâtiment (MEP), selon la portée de chaque mandat. Les conflits entre corps de métier sont détectés et listés avant d'arriver au chantier.",
-      "Bimurix produces, updates and coordinates the architecture, structure and building mechanical (MEP) models, within the scope of each mandate. Clashes between trades are detected and listed before they reach the site.",
+      "Bimurix produit, met à jour et coordonne les modèles d'architecture, de structure et de mécanique du bâtiment (MEP). Avant chaque réunion de coordination, vous recevez la liste des conflits entre corps de métier, classée par étage et par discipline.",
+      "Bimurix produces, updates and coordinates the architecture, structure and mechanical (MEP) models. Before each coordination meeting, you receive the list of clashes between trades, sorted by floor and discipline.",
     ),
     quoteButtonLabel: l("Demander une soumission de modélisation", "Request a modelling quote"),
     audience: l(
@@ -44,7 +44,7 @@ export const servicesOrigine = [
     offerings: keyed([
       titled(l("Modélisation d'architecture", "Architectural modelling"), l("Production ou mise à jour des éléments architecturaux selon les documents de référence et le niveau de développement convenu.", "Production or update of architectural elements based on the reference documents and the agreed level of development.")),
       titled(l("Modélisation de structure", "Structural modelling"), l("Modélisation ou mise à jour des éléments structuraux à partir des documents fournis par l'ingénieur ou le concepteur.", "Modelling or update of structural elements from the documents provided by the engineer or designer.")),
-      titled(l("Modélisation de mécanique du bâtiment", "Building mechanical modelling"), l("Réseaux et équipements de plomberie, de chauffage et des autres disciplines du mandat : salle mécanique, colonnes montantes, distribution aux étages.", "Plumbing and heating systems and equipment, and the other disciplines of the mandate: mechanical room, risers, distribution to the floors.")),
+      titled(l("Modélisation de mécanique du bâtiment", "Building mechanical modelling"), l("Réseaux et équipements de plomberie, de chauffage et des autres disciplines du mandat : salle mécanique, colonnes montantes, distribution aux étages.", "Plumbing and heating systems and equipment, and the other disciplines of the project: mechanical room, risers, distribution to the floors.")),
       titled(l("Coordination et détection de conflits", "Coordination and clash detection"), l("Préparation du modèle fédéré, détection des conflits entre les corps de métier, liste des conflits pour la réunion de coordination et suivi jusqu'à leur résolution.", "Preparation of the federated model, detection of clashes between trades, clash list for the coordination meeting and follow-up until they are resolved.")),
       titled(l("Contrôle de la qualité", "Quality control"), l("Vérification de l'organisation du modèle, des propriétés, des paramètres, des nomenclatures et des exigences de livraison convenues.", "Checks on model organisation, properties, parameters, schedules and the agreed delivery requirements.")),
     ]),
@@ -105,9 +105,10 @@ export const servicesOrigine = [
     cardLinkLabel: l("Voir le tel que construit", "See as-built"),
     heroHeading: l("Des plans et des modèles tel que construit qui reflètent le chantier.", "As-built drawings and models that reflect the site."),
     heroIntro: l(
-      "Bimurix prépare les modèles et les plans tel que construit à partir de vos relevés, de vos annotations et des changements approuvés. Un élément n'est jamais présenté comme vérifié sur chantier sans les données qui le prouvent.",
-      "Bimurix prepares as-built models and drawings from your surveys, mark-ups and approved changes. Nothing is ever presented as site-verified without the data that proves it.",
+      "Bimurix prépare les modèles et les plans tel que construit à partir de vos relevés, de vos annotations et des changements approuvés.",
+      "Bimurix prepares as-built models and drawings from your surveys, mark-ups and approved changes.",
     ),
+    pledge: l("Un élément n'est jamais présenté comme vérifié sur chantier sans les données qui le prouvent.", "Nothing is ever presented as site-verified without the data that proves it."),
     quoteButtonLabel: l("Demander une soumission tel que construit", "Request an as-built quote"),
     audience: l(
       "Entrepreneurs généraux et entrepreneurs mécaniques qui livrent un modèle tel que construit, firmes de génie-conseil et propriétaires qui préparent la remise finale d'un projet.",
@@ -123,7 +124,7 @@ export const servicesOrigine = [
     offerings: keyed([
       titled(l("Mise à jour des modèles", "Model updates"), l("Intégration des demandes de changement documentées et approuvées dans les modèles concernés.", "Integrating documented, approved change orders into the relevant models.")),
       titled(l("Mise à jour des plans", "Drawing updates"), l("Révision des plans et vues pour refléter les changements confirmés et les informations disponibles.", "Revising drawings and views to reflect confirmed changes and available information.")),
-      titled(l("Intégration des informations de chantier", "Site information integration"), l("Organisation des relevés, des annotations et des photos référencées, quand leur utilisation est prévue au mandat.", "Organising surveys, mark-ups and referenced photos, when the mandate calls for them.")),
+      titled(l("Intégration des informations de chantier", "Site information integration"), l("Organisation des relevés, des annotations et des photos référencées, quand leur utilisation est prévue au mandat.", "Organising surveys, mark-ups and referenced photos, when the project calls for them.")),
       titled(l("Vérification de cohérence", "Consistency checks"), l("Comparaison des modèles, plans, nomenclatures et documents dans les limites des informations reçues.", "Comparing models, drawings, schedules and documents within the limits of the information received.")),
       titled(l("Préparation du dossier de remise", "Handover package preparation"), l("Organisation des fichiers, des versions et des documents convenus pour la livraison finale, par exemple les manuels d'exploitation et d'entretien fournis.", "Organising the agreed files, versions and documents for final delivery, for example the O&M manuals provided.")),
     ]),

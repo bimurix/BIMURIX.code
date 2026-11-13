@@ -34,6 +34,7 @@ web/
 │  │  │                         Blocs du plan v5 : problems · project-cycle · scenarios · responsibility-table
 │  │  │                         (+ deliverables/DeliverableRows et DeliverableTable, quote-form/QuoteNeeds) ; tous des Server Components
 │  │  │                         S3b : service-networks porte aussi l'ordre du projet (le bloc project-cycle reste disponible, hors accueil)
+│  │  │                         T2 : projects (registre de fiches, interrupteur `enabled`) · company-sheet (fiche « L'entreprise ») ; réglages « version courte » (scenarios, responsibility-table)
 │  │  ├─ schemas.ts           Liste des blocs (fichier partagé)
 │  │  └─ render.tsx           Type de bloc → composant (fichier partagé)
 │  ├─ sanity/                 Client, requêtes GROQ, types de contenu
@@ -42,6 +43,8 @@ web/
 │  │  ├─ quote/               Cas d'usage « demande » : schéma Zod, envoi, courriels
 │  │  ├─ admin/               Auth, lecture et actions du tableau de bord
 │  │  ├─ services/            Familles (groupByFamily, nom court), bouton « Demander une soumission » propre au service
+│  │  ├─ placeholders.ts      Valeurs d'exemple : marqueurs, `isPlaceholder`, `findPlaceholders` (seed, `check:placeholders` et site lisent la même liste)
+│  │  ├─ icon-names.ts        Liste fermée des symboles (champs `icon` de Studio ; T3 les dessine)
 │  │  ├─ i18n/v5-labels.ts    Valeurs de secours FR/EN des petits textes v5 (le texte public vit dans « Petits textes du site »)
 │  │  ├─ packages/            Forfaits : prix affiché ou « sur soumission », visibilité, date limite, garde de la preuve
 │  │  ├─ redirect-target.ts   Cible d'une redirection (interne seulement, sans boucle)

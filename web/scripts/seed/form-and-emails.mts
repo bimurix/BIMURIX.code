@@ -1,5 +1,6 @@
 import { emailTemplatesN5, formSettingsN5 } from "./form-n5.mts";
 import { formSettingsS2, emailTemplatesS2 } from "./form-s2.mts";
+import { formSettingsT2 } from "./form-t2.mts";
 import { keyed, l } from "./helpers.mts";
 
 const opt = (value: string, fr: string, en: string) => ({ value, label: l(fr, en) });
@@ -63,6 +64,7 @@ const formSettings = {
   ...formSettingsN5,
   ...formSettingsR2,
   ...formSettingsS2,
+  ...formSettingsT2,
   descriptionHelp: l("Une phrase suffit : ce que vous voulez préfabriquer ou faire vérifier.", "One sentence is enough: what you want prefabricated or checked."),
   filesHelp: l("Pour partager des fichiers, ajoutez un lien (ACC, Drive, WeTransfer) dans la description.", "To share files, add a link (ACC, Drive, WeTransfer) in the description."),
   includeServices: true,

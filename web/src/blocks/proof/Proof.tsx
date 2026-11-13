@@ -6,6 +6,8 @@ import { Section, SectionHeading } from "../section";
 export type ProofData = {
   enabled?: boolean | null;
   heading?: Localized;
+  /** Phrase qui dit pourquoi on montre le chiffre d'un tiers. */
+  intro?: Localized;
   attribution?: Localized;
   sourceName?: string | null;
   sourceNameEn?: string | null;
@@ -25,7 +27,7 @@ export function Proof({ data, locale }: { data: ProofData; locale: Locale }) {
   const sourceLabel = pick(data.ui?.sourceLabel, locale, "");
   return (
     <Section id="preuve">
-      <SectionHeading>{pick(data.heading, locale, "")}</SectionHeading>
+      <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "")}</SectionHeading>
       <figure className="border-[1.5px] border-ink bg-paper">
         <dl className="grid divide-y divide-rule sm:grid-cols-[repeat(auto-fit,minmax(0,1fr))] sm:divide-x sm:divide-y-0">
           {figures.map((f) => (

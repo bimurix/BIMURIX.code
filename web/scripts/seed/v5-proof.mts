@@ -4,6 +4,7 @@ import { keyed, l } from "./helpers.mts";
 export const brennanProof = () => ({
   enabled: true,
   heading: l("Ce que donne la préfabrication, selon un entrepreneur", "What prefabrication delivers, according to one contractor"),
+  intro: l("Un exemple publié par un tiers, pour situer ce que la préfabrication permet.", "An example published by a third party, to show what prefabrication makes possible."),
   figures: keyed([
     { value: "≈ 90 %", label: l("de préfabrication", "prefabricated") },
     { value: "≈ 15 %", label: l("d'économies globales", "in overall savings") },

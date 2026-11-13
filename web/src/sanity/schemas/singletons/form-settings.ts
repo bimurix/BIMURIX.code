@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { iconField } from "../objects/icon";
 import { requireFr } from "../objects/locale";
 
 const option = defineArrayMember({
@@ -67,8 +68,32 @@ export const formSettings = defineType({
     defineField({ name: "descriptionHelp", title: "Aide sous « Description »", type: "localeText", group: "texts" }),
     // decision: plan de contenu v5 § 3.8 et § 10 n° 9 — encart au-dessus du formulaire, vide = rien d'affiché.
     defineField({ name: "needsHeading", title: "Encart « Ce qu'il faut nous envoyer » : titre", type: "localeString", group: "texts" }),
-    defineField({ name: "needsItems", title: "Encart « Ce qu'il faut nous envoyer » : lignes", type: "array", group: "texts", of: [defineArrayMember({ type: "localeString" })], description: "Les documents et informations utiles à une soumission juste. Vide : l'encart n'apparaît pas." }),
+    defineField({ name: "needsItems", title: "Encart « Ce qu'il faut nous envoyer » : lignes", type: "array", group: "texts", of: [defineArrayMember({ type: "localeStringIcon" })], description: "Les documents et informations utiles à une soumission juste. Vide : l'encart n'apparaît pas." }),
     defineField({ name: "needsNote", title: "Encart « Ce qu'il faut nous envoyer » : note", type: "localeText", group: "texts", description: "Ex. : comment transmettre les documents." }),
+    // decision: ADR-009 n° 11 — le budget n'est plus demandé ; la colonne en base, le schéma Zod et les courriels ne changent pas.
+    defineField({ name: "showBudget", title: "Afficher le budget", type: "boolean", initialValue: false, group: "texts", description: "Décoché (cas normal) : le champ « Budget approximatif » disparaît du formulaire. Coché : il revient avec ses choix (liste « Budgets »)." }),
+    defineField({ name: "assuranceHeading", title: "Colonne de réassurance : titre", type: "localeString", group: "texts", description: "Vide : pas de titre. La colonne est à droite du formulaire sur bureau, sous le formulaire sur téléphone." }),
+    defineField({
+      name: "assuranceRows",
+      title: "Colonne de réassurance : lignes",
+      type: "array",
+      group: "texts",
+      validation: (r) => r.max(6),
+      description: "Libellé et texte de chaque ligne. « Téléphone » reprend le téléphone de Identité et coordonnées (rien s'il est vide) ; « Confidentialité » ajoute le lien vers la politique.",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "assuranceRow",
+          fields: [
+            defineField({ name: "label", title: "Libellé", type: "localeString", validation: requireFr }),
+            defineField({ name: "text", title: "Texte", type: "localeText" }),
+            defineField({ name: "source", title: "Contenu", type: "string", initialValue: "text", options: { list: [{ title: "Texte", value: "text" }, { title: "Téléphone du site", value: "phone" }, { title: "Lien vers la politique de confidentialité", value: "privacy" }], layout: "radio" } }),
+            iconField,
+          ],
+          preview: { select: { title: "label.fr", subtitle: "text.fr" } },
+        }),
+      ],
+    }),
     defineField({ name: "filesHelp", title: "Aide pour les fichiers", type: "localeText", group: "texts", description: "Ex. : partagez un lien (ACC, Drive, WeTransfer) dans la description." }),
 
     defineField({ name: "includeServices", title: "Proposer les services publiés", type: "boolean", initialValue: true, group: "lists" }),

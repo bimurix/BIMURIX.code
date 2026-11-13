@@ -30,6 +30,10 @@ const sections = `sections[]{
     }
   },
   _type == "problems" => { ..., "image": image${image}, items[]{..., "services": services[]->{_id, _type, slug, title, shortTitle, code, network, visible}} },
+  _type == "projects" => { ..., items[]{..., "image": image${image}, "discipline": select(discipline->visible == false => null, discipline->${serviceRef})} },
+  _type == "companySheet" => { ..., "founderPhoto": founderPhoto${image} },
+  _type == "pointsList" => { ..., "image": image${image} },
+  _type == "responsibilityTable" => { ..., "detailLink": detailLink${cta} },
   _type == "scenarios" => { ..., items[]{..., "image": image${image}, "service": select(service->visible == false => null, service->${serviceRef})} },
   _type == "packages" => {
     ...,
@@ -72,7 +76,7 @@ export const HOME_QUERY = defineQuery(`*[_type == "page" && kind == "home"][0]{
 }`);
 
 export const NOT_FOUND_QUERY = defineQuery(`*[_type == "page" && kind == "notFound"][0]{
-  _id, _type, kind, title, titleBlock, ${sections}
+  _id, _type, kind, title, titleBlock, ${seo}, ${sections}
 }`);
 
 // Une page ou un service selon son adresse dans la langue demandée (ex. « services/prefabrication-mep »).
@@ -83,7 +87,7 @@ export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"
     code, network, heroHeading, heroIntro, "heroCta": heroCta${cta}, "heroImage": heroImage${image},
     offeringsHeading, offerings, deliverablesHeading, deliverables, deliverablesNote,
     methodHeading, methodSteps, extraHeading, extraItems, extraNote, moreHeading, moreItems, moreNote,
-    audience, responsibilityNote, quoteButtonLabel,
+    audience, pledge, responsibilityNote, quoteButtonLabel,
     scenarios[]{..., "image": image${image}},
     deliverableRows, "figureImage": figureImage${image}, needsHeading, needs, needsNote,
     responsibilityRows, "proof": proof{..., "ui": ${uiRef}}, faq,
@@ -106,7 +110,8 @@ export const QUOTE_FORM_QUERY = defineQuery(`{
   "services": *[_type == "service" && visible != false] | order(order asc){_id, title, shortTitle, code, network},
   "packages": *[_type == "package"]{_id, code, title, visible, order, "service": service->{_id, visible}},
   "privacyPage": *[_type == "page" && kind == "privacy"][0]{_type, kind, slug},
-  "fromEmail": *[_id == "settings"][0].email
+  "fromEmail": *[_id == "settings"][0].email,
+  "phone": *[_id == "settings"][0].phone
 }`);
 
 // Adresses à pré-générer : une entrée par document et par langue disponible.

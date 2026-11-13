@@ -107,7 +107,7 @@ describe("contenu de départ Sanity", () => {
   it("le BIM 7D garde ses faits d'origine (en 9 blocs) et ceux du v3.1", () => {
     const d = docs.find((x) => x._id === "service-bim-7d") as Doc;
     const titles = (d.offerings as Array<{ title: { fr: string } }>).map((o) => o.title.fr);
-    for (const t of ["Structuration des paramètres", "Contrôle de complétude", "Préparation à la remise et à l'exploitation-maintenance", "Audit des données", "Codification des équipements", "Robinets", "Lien avec les dessins d'atelier", "Local de chaque élément"]) {
+    for (const t of ["Structuration des paramètres", "Contrôle de complétude", "Préparation à la remise et à l'exploitation-maintenance", "Audit des données", "Codification des équipements", "Vannes (robinets)", "Lien avec les dessins d'atelier", "Local de chaque élément"]) {
       expect(titles, t).toContain(t);
     }
     expect((d.heroHeading as { fr: string }).fr).toBe("Des données d'équipements complètes à la remise du bâtiment.");
@@ -119,11 +119,11 @@ describe("contenu de départ Sanity", () => {
     expect(text).not.toMatch(/20 minutes|20-minute|appel de 20|book a (20-minute )?call|réserver un appel|réservez un appel/i);
   });
 
-  // S3b : le schéma du cycle (H4) est fondu dans la section des services (H3) ; l'accueil compte onze sections.
-  it("accueil : onze sections dans l'ordre du plan v5 (§ 2b), sans forfaits ni conditions, preuve limitée aux 2 chiffres sourcés", () => {
+  // S3b : le schéma du cycle (H4) est fondu dans la section des services (H3). T2 (cahier v6) : douze sections, « Pourquoi Bimurix » et « Projets » ajoutés, « Ce qu'il faut nous envoyer » retiré.
+  it("accueil : douze sections dans l'ordre du cahier v6 (choix n° 30), sans forfaits ni conditions, preuve limitée aux 2 chiffres sourcés", () => {
     const home = docs.find((d) => d.kind === "home") as unknown as { sections: Array<{ _type: string } & Record<string, unknown>> };
     expect(home.sections.map((x) => x._type)).toEqual([
-      "heroSheet", "problems", "serviceNetworks", "deliverables", "scenarios", "proof", "responsibilityTable", "method", "pointsList", "faq", "quoteCta",
+      "heroSheet", "problems", "serviceNetworks", "pointsList", "deliverables", "scenarios", "projects", "proof", "responsibilityTable", "method", "faq", "quoteCta",
     ]);
     const proof = home.sections.find((x) => x._type === "proof") as Record<string, unknown>;
     expect((proof.figures as Array<{ value: string }>).map((f) => f.value)).toEqual(["≈ 90 %", "≈ 15 %"]);
@@ -135,10 +135,13 @@ describe("contenu de départ Sanity", () => {
     expect(scenarios.note.fr).toMatch(/situations types, pas des projets réalisés/);
   });
 
-  it("coordonnées et lancement (ADR-006 n° 13 à 18)", () => {
+  it("coordonnées (valeurs d'exemple, ADR-009) et lancement (ADR-006 n° 13 à 18)", () => {
     const settings = docs.find((d) => d._id === "settings") as Record<string, unknown>;
     expect(settings.email).toBe("contact@bimurix.com");
-    for (const k of ["phone", "neq", "legalName"]) expect(settings[k], k).toBeUndefined();
+    // T2 (ADR-009 n° 1 à 3) : valeurs d'exemple marquées, bloquées par `pnpm check:placeholders`.
+    expect(settings.phone).toBe("514 555-0199 (exemple)");
+    expect(settings.legalName).toBe("Bimurix inc. (exemple)");
+    expect(settings.neq).toBe("1234567890 (exemple)");
     expect(settings.serviceArea).toEqual({ fr: "Grand Montréal", en: "Greater Montreal" });
     expect(settings.privacyOfficer).toBe("Fondateur de Bimurix");
     expect(launchSettingsDoc.bannerEnabled).toBe(false);

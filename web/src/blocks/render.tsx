@@ -6,6 +6,7 @@ import { pathFor } from "@/lib/links";
 import { shortName } from "@/lib/services/families";
 import type { Shell, TitleBlockData } from "@/sanity/types-content";
 import type { IsoRun } from "@/ui/patterns/IsoNetworks";
+import { CompanySheet, type CompanySheetData } from "./company-sheet/CompanySheet";
 import { Conditions, type ConditionsData } from "./conditions/Conditions";
 import { Deliverables, type DeliverablesData } from "./deliverables/Deliverables";
 import { Faq, type FaqData } from "./faq/Faq";
@@ -16,6 +17,7 @@ import { Packages, type PackagesData } from "./packages/Packages";
 import { PointsList, type PointsListData } from "./points-list/PointsList";
 import { Problems, type ProblemsData } from "./problems/Problems";
 import { ProjectCycle, type ProjectCycleData } from "./project-cycle/ProjectCycle";
+import { Projects, type ProjectsData } from "./projects/Projects";
 import { Proof, type ProofData } from "./proof/Proof";
 import { QuoteCta, type QuoteCtaData } from "./quote-cta/QuoteCta";
 import { QuoteFormBlock, type QuoteFormData } from "./quote-form/QuoteFormBlock";
@@ -58,13 +60,13 @@ function renderSection(section: Section, ctx: RenderContext) {
     case "method":
       return <Method data={section as MethodData} locale={locale} />;
     case "pointsList":
-      return <PointsList data={section as PointsListData} locale={locale} />;
+      return <PointsList data={section as PointsListData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "") || undefined} />;
     case "deliverables":
       return <Deliverables data={section as DeliverablesData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "")} labels={{ item: v5Label(shell?.ui, "deliverableLabel", locale), purpose: v5Label(shell?.ui, "purposeLabel", locale) }} />;
     case "richText":
       return <RichText data={section as RichTextData} locale={locale} />;
     case "quoteCta":
-      return <QuoteCta data={section as QuoteCtaData} locale={locale} />;
+      return <QuoteCta data={section as QuoteCtaData} locale={locale} ui={shell?.ui} phone={shell?.settings?.phone} />;
     case "faq":
       return <Faq data={section as FaqData} locale={locale} />;
     case "imageFigure":
@@ -85,6 +87,10 @@ function renderSection(section: Section, ctx: RenderContext) {
       return <Scenarios data={section as ScenariosData} locale={locale} ui={shell?.ui} quotePath={pathFor(shell?.quotePage, locale)} />;
     case "responsibilityTable":
       return <ResponsibilityTable data={section as ResponsibilityTableData} locale={locale} ui={shell?.ui} />;
+    case "projects":
+      return <Projects data={section as ProjectsData} locale={locale} ui={shell?.ui} />;
+    case "companySheet":
+      return <CompanySheet data={section as CompanySheetData} locale={locale} ui={shell?.ui} settings={shell?.settings} />;
     default:
       return null;
   }

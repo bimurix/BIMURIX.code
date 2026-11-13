@@ -1,4 +1,5 @@
 import { defineField, defineType, type Rule, type StringRule } from "sanity";
+import { iconField } from "./icon";
 
 // decision: ADR-003 — un seul document par page, champs { fr, en }.
 // Le FR est obligatoire ; l'EN est facultatif (une page EN incomplète n'est pas publiée).
@@ -25,6 +26,20 @@ export const localeString = defineType({
     defineField({ name: "fr", title: "Français", type: "string", fieldset: "langs" }),
     defineField({ name: "en", title: "English", type: "string", fieldset: "langs" }),
   ],
+});
+
+/** Texte court FR / EN avec un symbole facultatif (lignes « à envoyer » et étapes) : les anciennes valeurs { fr, en } restent valides. */
+export const localeStringIcon = defineType({
+  name: "localeStringIcon",
+  title: "Texte court FR / EN avec symbole",
+  type: "object",
+  fieldsets,
+  fields: [
+    defineField({ name: "fr", title: "Français", type: "string", fieldset: "langs" }),
+    defineField({ name: "en", title: "English", type: "string", fieldset: "langs" }),
+    iconField,
+  ],
+  preview: { select: { title: "fr", subtitle: "en" } },
 });
 
 export const localeText = defineType({

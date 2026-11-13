@@ -6,7 +6,7 @@ import { pick } from "@/lib/i18n/pick";
 import { safeRedirectTarget } from "@/lib/redirect-target";
 import { NOT_FOUND_SLUG } from "@/lib/route-table";
 import { buildMetadata } from "@/lib/seo";
-import { getAllSlugParams, getDocumentBySlug, getRedirect } from "@/sanity/content";
+import { getAllSlugParams, getDocumentBySlug, getNotFoundPage, getRedirect } from "@/sanity/content";
 import { fetchPublished } from "@/sanity/fetch";
 import { SHELL_QUERY } from "@/sanity/queries";
 import type { Shell } from "@/sanity/types-content";
@@ -40,7 +40,12 @@ async function load(params: PageProps<"/[locale]/[...slug]">["params"]) {
 }
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/[...slug]">): Promise<Metadata> {
-  if (isNotFoundSlug((await params).slug)) return { title: "404", robots: { index: false } };
+  const { locale: rawLocale, slug } = await params;
+  if (isNotFoundSlug(slug)) {
+    // Titre d'onglet de la page introuvable : champ SEO de la page « Page introuvable » dans Studio (C-44).
+    const seoTitle = hasLocale(rawLocale) ? pick((await getNotFoundPage())?.seo?.title, rawLocale, "") : "";
+    return { title: { absolute: seoTitle || (rawLocale === "en" ? "Page not found | Bimurix" : "Page introuvable | Bimurix") }, robots: { index: false } };
+  }
   const { locale, shell, doc } = await load(params);
   return buildMetadata({ doc, shell, locale });
 }

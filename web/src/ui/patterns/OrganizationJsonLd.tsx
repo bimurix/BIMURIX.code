@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick } from "@/lib/i18n/pick";
 import { pathFor } from "@/lib/links";
+import { isPlaceholder } from "@/lib/placeholders";
 import { siteUrl } from "@/lib/seo";
 import type { Shell } from "@/sanity/types-content";
 
@@ -18,7 +19,8 @@ export function OrganizationJsonLd({ shell, locale }: { shell: Shell; locale: Lo
     url: `${siteUrl}${locale === "fr" ? "/" : "/en"}`,
     description: pick(s?.descriptor, locale, "") || undefined,
     email: s?.email,
-    telephone: s?.phone,
+    // Jamais une valeur d'exemple dans les données structurées (ADR-009 n° 4).
+    telephone: s?.phone && !isPlaceholder(s.phone) ? s.phone : undefined,
     logo: s?.logo?.asset?.url,
     areaServed: pick(s?.serviceArea, locale, "") || "Québec",
     inLanguage: locale === "fr" ? "fr-CA" : "en-CA",

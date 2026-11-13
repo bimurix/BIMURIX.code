@@ -32,9 +32,19 @@ const rows = {
 };
 type RowKey = keyof typeof rows;
 
+// T2 (C-18) : les lignes de Bimurix d'abord, quel que soit l'ordre demandé.
+const ROW_ORDER: RowKey[] = ["models", "clashes", "design", "approval", "supplied", "survey", "build"];
 export const responsibilityRows = (...keys: RowKey[]) =>
-  keyed(keys.map((k) => ({ bimurix: false, engineer: false, contractor: false, ...rows[k] })));
-export const allResponsibilityRows = () => responsibilityRows("design", "approval", "models", "clashes", "supplied", "survey", "build");
+  keyed([...keys].sort((a, b) => ROW_ORDER.indexOf(a) - ROW_ORDER.indexOf(b)).map((k) => ({ bimurix: false, engineer: false, contractor: false, ...rows[k] })));
+
+/** C-18 — version courte de l'accueil : une ligne par partie (Bimurix d'abord). La phrase sous le tableau reste celle d'origine. */
+export const shortResponsibilityRows = () =>
+  keyed([
+    { title: l("Bimurix", "Bimurix"), text: l("Modèles, dessins d'atelier, listes de coupe et de matériel, détection de conflits.", "Models, shop drawings, cut and material lists, clash detection.") },
+    { title: l("L'ingénieur", "The engineer"), text: l("Conception, calculs (y compris parasismique), signature et sceau.", "Design, calculations (including seismic), signature and seal.") },
+    { title: l("L'entrepreneur", "The contractor"), text: l("Approbation des dessins d'atelier, fabricants retenus, fabrication et installation.", "Approval of the shop drawings, selected manufacturers, fabrication and installation.") },
+  ]);
+export const allResponsibilityRows = () => responsibilityRows("models", "clashes", "design", "approval", "supplied", "survey", "build");
 
 /** Phrase sous le tableau, mot pour mot (plan § 3.9 ; mention de l'ingénieur, CLAUDE.md § 4). */
 export const engineerSentence = l(
@@ -76,6 +86,18 @@ export const faqPool = {
   region: q(
     ["Quelle région desservez-vous ?", "Which area do you serve?"],
     ["Le Grand Montréal. Nous travaillons en français et en anglais.", "Greater Montreal. We work in French and in English."],
+  ),
+  english: q(
+    ["Travaillez-vous en anglais ?", "Do you work in English?"],
+    ["Oui, en français et en anglais.", "Yes, in French and in English."],
+  ),
+  zone: q(
+    ["Pouvez-vous prendre une seule zone ou un seul étage ?", "Can you take a single zone or a single floor?"],
+    ["Oui ; la portée se précise à la soumission.", "Yes; the scope is set out in the quote."],
+  ),
+  transfer: q(
+    ["Comment envoyer les plans et les modèles ?", "How do we send the drawings and models?"],
+    ["Ajoutez un lien de partage dans votre demande ; nous vous indiquons ensuite le moyen de transfert adapté.", "Add a share link to your request; we then tell you the most suitable way to transfer them."],
   ),
   missing: q(
     ["Que faites-vous si une donnée manque ?", "What do you do if data is missing?"],

@@ -1,0 +1,47 @@
+// Liste fermée des symboles au trait du site (cahier v6, T3-A). T2 crée les champs `icon` (Studio) avec cette liste ;
+// T3 dessine chaque symbole (`ui/components/icons/paths.ts`) et les branche. Un champ `icon` vide = rendu sans symbole.
+// decision: ADR-009 n° 14 à 18 — un symbole accompagne une ligne, jamais une carte.
+export const ICON_OPTIONS = [
+  { value: "vanne", title: "Vanne" },
+  { value: "pompe", title: "Pompe" },
+  { value: "tete-gicleur", title: "Tête de gicleur" },
+  { value: "tuyau-spool", title: "Tuyau (spool)" },
+  { value: "coude", title: "Coude" },
+  { value: "support", title: "Support" },
+  { value: "parasismique", title: "Parasismique" },
+  { value: "poutre", title: "Poutre" },
+  { value: "conduit", title: "Conduit" },
+  { value: "conflit", title: "Conflit" },
+  { value: "modele-federe", title: "Modèle fédéré" },
+  { value: "colonne-montante", title: "Colonne montante" },
+  { value: "manchon", title: "Manchon" },
+  { value: "skid", title: "Skid" },
+  { value: "isometrique", title: "Isométrique" },
+  { value: "dessin-atelier", title: "Dessin d'atelier" },
+  { value: "liste-coupe", title: "Liste de coupe" },
+  { value: "etiquette", title: "Étiquette" },
+  { value: "tablette", title: "Tablette" },
+  { value: "fiche-equipement", title: "Fiche d'équipement" },
+  { value: "donnee-manquante", title: "Donnée manquante" },
+  { value: "codification", title: "Codification" },
+  { value: "local", title: "Local" },
+  { value: "tel-que-construit", title: "Tel que construit" },
+  { value: "releve", title: "Relevé" },
+  { value: "changement", title: "Changement" },
+  { value: "dossier-remise", title: "Dossier de remise" },
+  { value: "sceau", title: "Sceau" },
+  { value: "atelier", title: "Atelier" },
+  { value: "chantier", title: "Chantier" },
+  { value: "interlocuteur", title: "Interlocuteur" },
+  { value: "region", title: "Région" },
+  { value: "reponse", title: "Réponse" },
+  { value: "courriel", title: "Courriel" },
+  { value: "telephone", title: "Téléphone" },
+  { value: "oui", title: "Oui (coche)" },
+  { value: "non", title: "Non (tiret)" },
+  { value: "plus", title: "Plus" },
+  { value: "lien-externe", title: "Lien externe" },
+] as const;
+
+export type IconName = (typeof ICON_OPTIONS)[number]["value"];
+export const ICON_NAMES: readonly IconName[] = ICON_OPTIONS.map((o) => o.value);

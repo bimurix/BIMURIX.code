@@ -10,6 +10,7 @@ export const proof = defineType({
   fields: [
     defineField({ name: "enabled", title: "Afficher ce bloc", type: "boolean", initialValue: false, description: "Le bloc ne s'affiche jamais sans le nom et le lien de la source." }),
     headingField,
+    defineField({ name: "intro", title: "Phrase d'introduction", type: "localeString", description: "Dit pourquoi on montre le chiffre d'un tiers. Ex. : « Un exemple publié par un tiers, pour situer ce que la préfabrication permet. »" }),
     defineField({
       name: "figures",
       title: "Chiffres",

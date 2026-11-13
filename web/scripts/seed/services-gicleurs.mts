@@ -20,7 +20,7 @@ export const serviceGicleurs = {
     "Shop drawings, cut lists and hangers, floor by floor, in AutoSPRINK, with Revit and NWC export.",
   ),
   cardLinkLabel: l("Voir les gicleurs", "See sprinklers"),
-  heroHeading: l("Des dessins d'atelier de gicleurs quand vos dessinateurs manquent.", "Sprinkler shop drawings when your drafters are stretched."),
+  heroHeading: l("Vos dessins d'atelier de gicleurs, quand vos dessinateurs manquent.", "Your sprinkler shop drawings, when your drafters are stretched."),
   heroIntro: l(
     "Bimurix dessine vos étages de gicleurs dans AutoSPRINK : dessins d'atelier, listes de coupe et supports, avec un export Revit et NWC pour la coordination. Un renfort de dessin quand la pointe arrive.",
     "Bimurix draws your sprinkler floors in AutoSPRINK: shop drawings, cut lists and hangers, with a Revit and NWC export for coordination. Extra drafting capacity when the peak hits.",

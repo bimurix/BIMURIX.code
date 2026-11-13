@@ -1,8 +1,10 @@
-import { block, internalCta, keyed, l, pt, titled } from "./helpers.mts";
+import { block, internalCta, keyed, l, quoteLabel, titled } from "./helpers.mts";
 import { home } from "./pages-home.mts";
 import { allResponsibilityRows, engineerSentence, faqEntries } from "./v5-common.mts";
+import { whyBimurix } from "./v5-why.mts";
 
-// Plan de contenu v5 § 3.8 (ADR-008) : À propos en 6 sections, Soumission avec son encart « Ce qu'il faut nous envoyer » (réglages du formulaire).
+// Plan de contenu v5 § 3.8 (ADR-008), puis cahier v6 T2 (ADR-009) : À propos en 7 sections (pourquoi Bimurix, l'entreprise, façon de travailler, services, qui fait quoi),
+// Soumission avec son encart « Utile, si vous l'avez sous la main » et sa colonne de réassurance (réglages du formulaire).
 // Aucun membre d'équipe, client, certification ni affiliation (CLAUDE.md §4, ADR-006 n° 12). Image de bande : session S3b.
 const tb = (sheet: string) => ({ sheet, revision: "0", date: "2026-11" });
 
@@ -22,48 +24,38 @@ const about = {
   },
   sections: [
     block("heroSheet", {
-      heading: l("Le BIM au service du chantier : qualité et coordination.", "BIM in the service of the site: quality and coordination."),
+      heading: l(
+        "Un spécialiste BIM de la mécanique du bâtiment et de la préfabrication, dans le Grand Montréal.",
+        "A BIM specialist in building mechanical (MEP) systems and prefabrication, in Greater Montreal.",
+      ),
       intro: l(
-        "Bimurix est une entreprise de services BIM et de construction numérique. Nous aidons les équipes de projet à produire, coordonner et structurer l'information du bâtiment, du modèle de conception à la remise.",
-        "Bimurix is a BIM and digital construction services company. We help project teams produce, coordinate and structure building information, from the design model to handover.",
+        "Bimurix modélise, coordonne et dessine pour les équipes de projet, du modèle de conception à la remise. Notre expérience en construction modulaire guide notre façon de travailler : ce qui est dessiné doit pouvoir se fabriquer.",
+        "Bimurix models, coordinates and draws for project teams, from the design model to handover. Our modular construction experience shapes how we work: what is drawn must be buildable.",
       ),
     }),
-    block("serviceNetworks", { heading: l("Ce que nous faisons", "What we do") }),
-    block("richText", {
-      heading: l("Notre positionnement en préfabrication", "Our prefabrication positioning"),
-      body: {
-        fr: pt([
-          ["normal", "Bimurix est un spécialiste BIM MEP et préfabrication. Notre expérience en construction modulaire guide notre façon de coordonner : ce qui est dessiné doit pouvoir se fabriquer."],
-          ["bullet", "Préfabrication de tuyauterie avec SysQue et de gicleurs avec AutoSPRINK"],
-          ["bullet", "Une automatisation maison avec Dynamo et pyRevit, pour livrer plus vite"],
-          ["bullet", "Un service bilingue, en français et en anglais"],
-          ["bullet", "Un interlocuteur local, dans le Grand Montréal"],
-        ]),
-        en: pt([
-          ["normal", "Bimurix is a BIM MEP and prefabrication specialist. Our modular construction experience shapes how we coordinate: what is drawn must be buildable."],
-          ["bullet", "Piping prefabrication with SysQue and sprinkler prefabrication with AutoSPRINK"],
-          ["bullet", "In-house automation with Dynamo and pyRevit, to deliver faster"],
-          ["bullet", "Bilingual service, in French and in English"],
-          ["bullet", "A local contact in Greater Montreal"],
-        ]),
-      },
+    whyBimurix(false),
+    block("companySheet", {
+      heading: l("L'entreprise", "The company"),
+      languages: l("Français, anglais", "French, English"),
+      responsible: l("Fondateur", "Founder"),
     }),
     block("pointsList", {
       heading: l("Notre façon de travailler", "How we work"),
       layout: "columns",
       items: keyed([
-        titled(l("Nous comprenons avant de produire", "We understand before we produce"), l("Objectifs, exigences, responsabilités, formats attendus.", "Objectives, requirements, responsibilities, expected formats.")),
-        titled(l("Nous structurons l'information", "We structure the information"), l("Selon les conventions du projet.", "To the project's conventions.")),
-        titled(l("Nous contrôlons les livrables", "We check the deliverables"), l("Et nous signalons les points à confirmer.", "And we flag the points to confirm.")),
-        titled(l("Nous travaillons avec vos décisions", "We work from your decisions"), l("Nous partons des informations que les responsables du projet nous transmettent.", "We start from the information the project's leads give us.")),
+        titled(l("La portée est écrite avant de commencer", "The scope is written before we start"), l("Ce qui est inclus, les formats et qui approuve quoi : tout est dans la soumission.", "What is included, the formats and who approves what: it is all in the quote.")),
+        titled(l("Nous suivons vos conventions", "We follow your conventions"), l("Nommage, gabarits et codification : ceux du projet ou de votre atelier.", "Naming, templates and coding: the project's or your shop's.")),
+        titled(l("Chaque livraison a sa liste de points à confirmer", "Each delivery comes with its list of points to confirm"), l("Rien n'est présenté comme vérifié sans la donnée qui le prouve.", "Nothing is presented as verified without the data that proves it.")),
+        titled(l("Les décisions restent les vôtres", "The decisions stay yours"), l("Nous partons des documents approuvés ; l'ingénieur conçoit et signe.", "We start from approved documents; the engineer designs and signs.")),
       ]),
       intro: l(
         "Chaque mandat est défini selon vos besoins, les responsabilités des intervenants et les critères d'acceptation du projet.",
-        "Each mandate is defined by your needs, the stakeholders' responsibilities and the project's acceptance criteria.",
+        "Each project is defined by your needs, the stakeholders' responsibilities and the project's acceptance criteria.",
       ),
     }),
+    block("serviceNetworks", { heading: l("Ce que nous faisons", "What we do") }),
     block("responsibilityTable", { heading: l("Qui fait quoi", "Who does what"), rows: allResponsibilityRows(), note: engineerSentence }),
-    block("quoteCta", { heading: l("Un projet à nous confier ?", "Have a project for us?"), button: internalCta(l("Demander une soumission", "Request a quote"), "page-quote") }),
+    block("quoteCta", { heading: l("Un projet à nous confier ?", "Have a project for us?"), button: internalCta(quoteLabel, "page-quote") }),
   ],
 };
 
@@ -83,10 +75,10 @@ const quote = {
   },
   sections: [
     block("heroSheet", {
-      heading: l("Parlez-nous de votre projet.", "Tell us about your project."),
+      heading: l("Demandez votre soumission.", "Request your quote."),
       intro: l(
-        "Décrivez votre projet et le service qui vous intéresse. Plus nous avons de détails (plans, disciplines, échéancier), plus la soumission est juste.",
-        "Describe your project and the service you are interested in. The more detail we have (drawings, disciplines, schedule), the more accurate the quote.",
+        "Décrivez le projet et le service voulu. Nous vous répondons d'ici un jour ouvrable.",
+        "Describe the project and the service you need. We reply within one business day.",
       ),
     }),
     block("quoteForm", {}),
@@ -100,12 +92,12 @@ const notFound = {
   kind: "notFound",
   title: l("Page introuvable", "Page not found"),
   titleBlock: tb("X-404"),
-  seo: { noIndex: true },
+  seo: { title: l("Page introuvable | Bimurix", "Page not found | Bimurix"), noIndex: true },
   sections: [
     block("heroSheet", {
       heading: l("Cette feuille n'existe pas.", "This sheet doesn't exist."),
       intro: l("La page demandée a peut-être été déplacée ou renommée.", "The page you requested may have been moved or renamed."),
-      ctas: keyed([internalCta(l("Retour à l'accueil", "Back to home"), "page-home")]),
+      ctas: keyed([internalCta(l("Retour à l'accueil", "Back to home"), "page-home"), internalCta(quoteLabel, "page-quote", "secondary")]),
     }),
   ],
 };
