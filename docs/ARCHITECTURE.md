@@ -1,6 +1,6 @@
 # Architecture — Bimurix
 
-> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-12.
+> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-12 (S3a : blocs du plan de contenu v5).
 
 ## 1. Le dossier de travail
 
@@ -31,20 +31,24 @@ web/
 │  │  ├─ studio/              Sanity Studio intégré
 │  │  ├─ sitemap.ts  robots.ts
 │  ├─ blocks/<bloc>/          Un bloc de page = un dossier : schema.ts + Composant.tsx
+│  │  │                         Blocs du plan v5 : problems · project-cycle · scenarios · responsibility-table
+│  │  │                         (+ deliverables/DeliverableRows, quote-form/QuoteNeeds) ; tous des Server Components
 │  │  ├─ schemas.ts           Liste des blocs (fichier partagé)
 │  │  └─ render.tsx           Type de bloc → composant (fichier partagé)
 │  ├─ sanity/                 Client, requêtes GROQ, types de contenu
-│  │  └─ schemas/             documents/ · singletons/ · objects/
+│  │  └─ schemas/             documents/ · singletons/ · objects/ (objects/v5.ts : scenario, responsibilityRow, deliverableRow, faqEntry)
 │  ├─ lib/                    Logique sans interface, testable
 │  │  ├─ quote/               Cas d'usage « demande » : schéma Zod, envoi, courriels
 │  │  ├─ admin/               Auth, lecture et actions du tableau de bord
+│  │  ├─ services/            Familles (groupByFamily, nom court), bouton « Demander une soumission » propre au service
+│  │  ├─ i18n/v5-labels.ts    Valeurs de secours FR/EN des petits textes v5 (le texte public vit dans « Petits textes du site »)
 │  │  ├─ packages/            Forfaits : prix affiché ou « sur soumission », visibilité, date limite, garde de la preuve
 │  │  ├─ redirect-target.ts   Cible d'une redirection (interne seulement, sans boucle)
 │  │  ├─ supabase/            Clients serveur, admin, session
 │  │  ├─ mail/  i18n/         Envoi (Mailpit / Resend) · langues et routage
 │  ├─ ui/
-│  │  ├─ components/          Petites pièces réutilisables (bouton, logo, pastille)
-│  │  ├─ patterns/            Assemblages du site (en-tête, pied, feuille, formulaire)
+│  │  ├─ components/          Petites pièces réutilisables (bouton, logo, pastille, FigureImage : image au rapport fixé + légende)
+│  │  ├─ patterns/            Assemblages du site (en-tête, pied, feuille, formulaire, ServicePage = gabarit P1 à P11 du plan v5)
 │  │  └─ admin/               Pièces du tableau de bord
 │  ├─ styles/tokens.css       Seule source des couleurs, tailles et traits
 │  └─ proxy.ts                Routage FR / EN et garde de /admin
@@ -63,6 +67,7 @@ web/
 | Je veux ajouter… | Ça va dans… |
 |---|---|
 | Une section de page éditable | `src/blocks/<nom>/` + une ligne dans `schemas.ts` et `render.tsx` |
+| Un objet réutilisé par une offre et un bloc | `src/sanity/schemas/objects/` (ex. `v5.ts`) + `index.ts` |
 | Un type de contenu (ex. forfait) | `src/sanity/schemas/documents/` + `index.ts`, `structure.ts`, `queries.ts` |
 | Un réglage unique | `src/sanity/schemas/singletons/` |
 | Une règle métier ou une validation | `src/lib/<domaine>/`, avec son test dans `tests/unit/` |
