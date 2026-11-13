@@ -43,7 +43,7 @@ Le client ne publie plus de prix, de type de forfait ni de délai fixe : six ser
 | S3a Champs et blocs | ✅ 2026-11-12 | Blocs `problems`, `projectCycle`, `scenarios`, `responsibilityTable`, champs de service (famille, nom court, situations, livrables avec usage, besoins, FAQ), gabarit P1 à P11 (commits `50d23cc` à `7d81717`) |
 | S4 Défauts de production | ✅ 2026-11-12 | 404 et 308 décidés avant le rendu par le proxy (commit `cf421b3`) |
 | S2 Contenu | ✅ 2026-11-12 | Plan v5 appliqué à `development` en FR et EN (`patch-content-s2.mts`, seed à jour) ; forfaits masqués, bandeau éteint, conditions retirées ; champ « Forfait visé » absent du formulaire ; tests transformés |
-| S3b Design et images | ⏳ | Tokens, nomenclature, situations en feuille, schéma du cycle, images (champs laissés vides par S2) |
+| S3b Design et images | ✅ 2026-11-12 | Accueil raccourci (services présentés une fois, cycle fondu, livrables en tableau, situations en quatre temps), barre d'action mobile en CSS, tokens de rythme, six schémas au trait et quatre photos Unsplash dans `development` (`patch-design-s3b.mts`) ; critique : `docs/audits/2026-11-12_critique-s3b.md` ; images : `docs/source/2026-11-12_images-s3b.md` |
 | S5 Audit | ⏳ | Audit indépendant : fidélité aux faits d'origine, aucun prix publié, FR et EN, 360 px et 1440 px, JS ≤ 150 Ko |
 
 Les sections 3 (pages) et 4 (formulaire) plus bas décrivent l'état N4/N5 ; elles sont remplacées par ADR-007 pour le contenu.

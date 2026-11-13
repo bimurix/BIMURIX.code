@@ -1,6 +1,6 @@
 # Architecture — Bimurix
 
-> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-12 (S3a : blocs du plan de contenu v5).
+> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-12 (S3b : finition visuelle et images).
 
 ## 1. Le dossier de travail
 
@@ -32,7 +32,8 @@ web/
 │  │  ├─ sitemap.ts  robots.ts
 │  ├─ blocks/<bloc>/          Un bloc de page = un dossier : schema.ts + Composant.tsx
 │  │  │                         Blocs du plan v5 : problems · project-cycle · scenarios · responsibility-table
-│  │  │                         (+ deliverables/DeliverableRows, quote-form/QuoteNeeds) ; tous des Server Components
+│  │  │                         (+ deliverables/DeliverableRows et DeliverableTable, quote-form/QuoteNeeds) ; tous des Server Components
+│  │  │                         S3b : service-networks porte aussi l'ordre du projet (le bloc project-cycle reste disponible, hors accueil)
 │  │  ├─ schemas.ts           Liste des blocs (fichier partagé)
 │  │  └─ render.tsx           Type de bloc → composant (fichier partagé)
 │  ├─ sanity/                 Client, requêtes GROQ, types de contenu
@@ -53,7 +54,8 @@ web/
 │  ├─ styles/tokens.css       Seule source des couleurs, tailles et traits
 │  └─ proxy.ts                Routage FR / EN et garde de /admin
 ├─ scripts/                   seed-sanity.mts + seed/*.mts, db-env, add-admin, check-placeholders,
-│                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset), capture-pages.mjs (captures pour le client)
+│                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset), capture-pages.mjs (captures pour le client),
+│                             assets/s3b/ (schémas au trait générés par make-schematics.mjs, photos d'illustration ; importés par patch-design-s3b.mts)
 ├─ supabase/migrations/       SQL versionné, appliqué par `pnpm db:reset`
 └─ tests/unit · tests/e2e     Vitest · Playwright (mobile et bureau ; warm-up.ts préchauffe les routes en dev)
 ```
@@ -72,7 +74,8 @@ web/
 | Un réglage unique | `src/sanity/schemas/singletons/` |
 | Une règle métier ou une validation | `src/lib/<domaine>/`, avec son test dans `tests/unit/` |
 | Un texte public | Sanity (seed dans `scripts/seed/`), jamais dans le code |
-| Une couleur ou une taille | `src/styles/tokens.css` |
+| Une couleur, une taille ou un espacement de section | `src/styles/tokens.css` (`--bx-space-*` : rythme vertical ; `--bx-actionbar-h` : barre d'action du mobile) |
+| Une image de page | Sanity (champ `imageWithAlt`), affichée par `ui/components/FigureImage` (rapport fixé, légende ; SVG servi tel quel) |
 | Une colonne en base | Nouvelle migration dans `supabase/migrations/` (jamais modifier une ancienne) |
 
 ### Limites
