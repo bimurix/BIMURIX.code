@@ -27,7 +27,7 @@ function requestLabels(content: QuoteFormContent, input: QuoteInput, lang: "fr" 
   const type = pick(input.requestType === "call" ? f.requestTypeCallShort : f.requestTypeQuoteShort, lang, typeFallback);
   const code = input.packageCode;
   const found = packageChoices(content).find((p) => p.code === code);
-  const pkg = !code ? "—" : code === PACKAGE_OTHER ? pick(f.packageOther, lang, "—") : `${code} — ${pick(found?.title, lang, "")}`.replace(/ — $/, "");
+  const pkg = !code ? "" : code === PACKAGE_OTHER ? pick(f.packageOther, lang, "—") : `${code} — ${pick(found?.title, lang, "")}`.replace(/ — $/, "");
   return { type, package: pkg };
 }
 
@@ -57,7 +57,7 @@ export async function sendQuoteEmails(
     ["Téléphone", input.phone ?? "—"],
     ["Langue", input.preferredLanguage === "fr" ? "Français" : "English"],
     ["Type de demande", internal.type],
-    ["Forfait visé", internal.package],
+    ["Forfait visé", internal.package || "—"],
     ["Service", pick(service?.label, "fr", input.service)],
     ["Type de projet", labelOf(content, "projectTypes", input.projectType)],
     ["Région", labelOf(content, "regions", input.region)],

@@ -1,8 +1,15 @@
 // Variables des modèles de courriel saisis dans Studio : {name}, {company}, {service}, {reference}, {type}, {package}.
 export type TemplateVars = { name: string; company: string; service: string; reference: string; type?: string; package?: string };
 
+/**
+ * Remplit les {variables}. Sans forfait choisi ({package} vide), la phrase qui contient {package}
+ * (ou le séparateur « · {package} » d'un objet) est retirée, jamais un tiret seul (R3).
+ */
 export function fillTemplate(template: string, vars: TemplateVars): string {
-  return template.replace(/\{(name|company|service|reference|type|package)\}/g, (_, key: keyof TemplateVars) => vars[key] ?? "");
+  const source = vars.package
+    ? template
+    : template.replace(/\s*[·—-]\s*\{package\}/g, "").replace(/[^.!?\n]*\{package\}[^.!?\n]*[.!?]\s?/g, "");
+  return source.replace(/\{(name|company|service|reference|type|package)\}/g, (_, key: keyof TemplateVars) => vars[key] ?? "");
 }
 
 /** Objet de courriel : une seule ligne, quelle que soit la saisie du visiteur (pas d'injection d'en-tête). */
