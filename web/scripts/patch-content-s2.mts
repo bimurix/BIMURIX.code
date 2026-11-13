@@ -3,7 +3,8 @@
  * six services en trois familles (noms, situations types, livrables avec usage, besoins, qui fait quoi, FAQ), accueil réordonné,
  * À propos, Soumission, menu et pied de page par famille, SEO, 20 petits textes, forfaits masqués, bandeau éteint, conditions retirées.
  * Les documents du seed sont remplacés (createOrReplace, donc idempotent) ; le logo et l'icône de `settings` et les images
- * des services (`heroImage`, `figureImage`) déjà téléversées sont conservés. `formSettings` et `emailTemplates` ne reçoivent
+ * des services (`heroImage`, `figureImage`) et la photo du premier écran des pages (`heroSheet.illustration`, ex. À propos) déjà téléversées sont conservés
+ * (S5 : on peut donc relancer ce script avant ou après `patch-design-s3b.mts`, sans perdre de photo). `formSettings` et `emailTemplates` ne reçoivent
  * que les champs S2 (message de succès, encart, accusé de réception) : le reste appartient à R2 et au client.
  * Refuse tout autre dataset que `development` (jamais `production`).
  *
@@ -25,7 +26,7 @@ if (dataset !== "development") {
   process.exit(1);
 }
 
-const existing = await client.fetch<Array<Record<string, unknown> & { _id: string }>>(`*[_id in $ids]{_id, logo, logoInverse, favicon, heroImage, figureImage}`, { ids: documents.map((d) => d._id) });
+const existing = await client.fetch<Array<Record<string, unknown> & { _id: string }>>(`*[_id in $ids]{_id, logo, logoInverse, favicon, heroImage, figureImage, "heroIllustrations": sections[_type == "heroSheet"].illustration}`, { ids: documents.map((d) => d._id) });
 const byId = new Map(existing.map((d) => [d._id, d]));
 const kept = (id: string) => {
   const old = byId.get(id);
@@ -33,8 +34,18 @@ const kept = (id: string) => {
   return Object.fromEntries(fields.filter((f) => old?.[f]).map((f) => [f, old?.[f]]));
 };
 
+// S5 : la photo du premier écran d'une page (heroSheet.illustration) vit dans ses sections : on la remet sur le nouveau heroSheet.
+type Section = { _type?: string; illustration?: unknown };
+const withKeptIllustrations = <T extends { _id: string }>(doc: T): T => {
+  const old = (byId.get(doc._id)?.heroIllustrations as unknown[] | undefined) ?? [];
+  const sections = (doc as { sections?: Section[] }).sections;
+  if (!sections || !old.some(Boolean)) return doc;
+  let n = 0;
+  return { ...doc, sections: sections.map((sec) => (sec._type === "heroSheet" ? { ...sec, ...(old[n] && !sec.illustration ? { illustration: old[n++] } : (n++, {})) } : sec)) };
+};
+
 const tx = client.transaction();
-for (const doc of documents) tx.createOrReplace({ ...doc, ...kept(doc._id) } as typeof doc);
+for (const doc of documents) tx.createOrReplace(withKeptIllustrations({ ...doc, ...kept(doc._id) }) as typeof doc);
 await tx.commit();
 
 await client.createIfNotExists({ _id: "formSettings", _type: "formSettings" });
