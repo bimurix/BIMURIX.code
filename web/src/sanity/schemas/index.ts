@@ -4,6 +4,7 @@ import { packageDoc } from "./documents/package";
 import { service } from "./documents/service";
 import { localeRichText, localeSlug, localeString, localeText } from "./objects/locale";
 import { cta, imageWithAlt, link, networkColor, seo, titleBlock } from "./objects/shared";
+import { deliverableRow, faqEntry, responsibilityRow, scenario } from "./objects/v5";
 import { emailTemplates } from "./singletons/email-templates";
 import { formSettings } from "./singletons/form-settings";
 import { launchSettings } from "./singletons/launch-settings";
@@ -24,6 +25,10 @@ export const schemaTypes = [
   seo,
   titleBlock,
   networkColor,
+  scenario,
+  responsibilityRow,
+  deliverableRow,
+  faqEntry,
   ...blockSchemas,
   settings,
   navigation,

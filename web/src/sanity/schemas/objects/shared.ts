@@ -39,6 +39,7 @@ export const imageWithAlt = defineType({
   options: { hotspot: true },
   fields: [
     defineField({ name: "alt", title: "Texte alternatif", type: "localeString", description: "Décris l'image pour les personnes qui ne la voient pas.", validation: requireFr }),
+    defineField({ name: "caption", title: "Légende (facultatif)", type: "localeString", description: "Ex. : « Photo d'illustration », « Schéma illustratif ». Affichée sous l'image." }),
     defineField({ name: "illustrative", title: "Exemple illustratif", type: "boolean", initialValue: false, description: "Coche si l'image n'est pas un vrai projet : la mention « exemple illustratif » s'affichera." }),
   ],
 });

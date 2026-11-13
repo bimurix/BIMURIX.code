@@ -1,6 +1,7 @@
 import type { Localized } from "@/lib/i18n/pick";
 import type { RouteTarget, SanityLink } from "@/lib/links";
 import type { PackageData } from "@/lib/packages/packages";
+import type { V5LabelKey } from "@/lib/i18n/v5-labels";
 
 export type { PackageData, PriceMode } from "@/lib/packages/packages";
 
@@ -18,6 +19,10 @@ export type ServiceSummary = RouteTarget & {
   code?: string;
   network?: NetworkColor;
   title?: Localized;
+  /** Nom court (menu, carte, formulaire) ; absent = nom complet. */
+  shortTitle?: Localized;
+  /** Famille du service (modeler | prefabriquer | livrer) ; absente = affichage sans groupes. */
+  family?: string | null;
   cardTitle?: Localized;
   cardText?: Localized;
   cardLinkLabel?: Localized;
@@ -27,7 +32,8 @@ export type UiStrings = Partial<Record<
   "requestQuote" | "discoverServices" | "learnMore" | "menu" | "closeMenu" | "services" | "skipToContent"
   | "networkHint" | "illustrativeExample" | "sheet" | "revision" | "date" | "backHome"
   | "priceFrom" | "priceQuote" | "businessDays" | "colCode" | "colPackage" | "colScope" | "colLeadTime" | "colPrice" | "colAction"
-  | "forWhom" | "responsibilities" | "offerPackages" | "inclusionsLabel" | "choosePackage" | "highlightedLabel" | "sourceLabel" | "bannerUntil",
+  | "forWhom" | "responsibilities" | "offerPackages" | "inclusionsLabel" | "choosePackage" | "highlightedLabel" | "sourceLabel" | "bannerUntil"
+  | V5LabelKey,
   Localized
 >>;
 
@@ -41,7 +47,7 @@ export type Shell = {
     cta?: Cta;
     languageLabel?: Localized;
   } | null;
-  footer?: { blurb?: Localized; copyright?: Localized; columns?: Array<{ _key: string; title?: Localized; links?: Cta[] }> } | null;
+  footer?: { blurb?: Localized; copyright?: Localized; columns?: Array<{ _key: string; title?: Localized; listServices?: boolean | null; links?: Cta[] }> } | null;
   ui?: UiStrings | null;
   /** Bandeau de lancement (réglage `launchSettings`), ADR-006 n° 13. */
   launch?: { bannerEnabled?: boolean | null; bannerText?: Localized; deadline?: string | null } | null;

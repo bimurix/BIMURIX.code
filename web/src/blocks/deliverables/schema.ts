@@ -20,6 +20,7 @@ export const deliverables = defineType({
           fields: [
             defineField({ name: "title", title: "Titre", type: "localeString", validation: requireFr }),
             defineField({ name: "text", title: "Texte", type: "localeText" }),
+            defineField({ name: "purpose", title: "À quoi ça sert", type: "localeText", description: "Une demi-phrase qui commence par un verbe. Facultatif." }),
             defineField({ name: "image", title: "Image", type: "imageWithAlt" }),
           ],
           preview: { select: { title: "title.fr", media: "image" } },

@@ -4,7 +4,9 @@ import { defineQuery } from "next-sanity";
 const link = `{kind, external, email, "internal": select(internal->visible == false => null, internal->{_type, kind, slug}), "serviceId": service->_id}`;
 const cta = `{label, style, "link": link${link}}`;
 const asset = `asset->{url, "width": metadata.dimensions.width, "height": metadata.dimensions.height}`;
-const image = `{alt, illustrative, ${asset}}`;
+const image = `{alt, caption, illustrative, ${asset}}`;
+// Cible d'un lien vers un service (adresse FR/EN) ; un service masqué ne donne aucun lien.
+const serviceRef = `{_id, _type, slug, title, shortTitle}`;
 
 // Petits textes et page de soumission joints aux blocs de l'offre (forfaits : lien `?forfait=`).
 const uiRef = `*[_id == "uiStrings"][0]`;
@@ -17,9 +19,17 @@ const sections = `sections[]{
   _type == "serviceNetworks" => {
     ...,
     "services": coalesce(services[]->, *[_type == "service"] | order(order asc))[visible != false]{
-      _id, _type, code, network, title, slug, cardTitle, cardText, cardLinkLabel
+      _id, _type, code, network, title, shortTitle, family, slug, cardTitle, cardText, cardLinkLabel
     }
   },
+  _type == "projectCycle" => {
+    ...,
+    "services": coalesce(services[]->, *[_type == "service"] | order(order asc))[visible != false]{
+      _id, _type, code, network, title, shortTitle, family, slug
+    }
+  },
+  _type == "problems" => { ..., "image": image${image}, items[]{..., "services": services[]->[visible != false]${serviceRef}} },
+  _type == "scenarios" => { ..., items[]{..., "image": image${image}, "service": select(service->visible == false => null, service->${serviceRef})} },
   _type == "packages" => {
     ...,
     "taxNote": *[_id == "launchSettings"][0].taxNote,
@@ -48,10 +58,10 @@ export const SHELL_QUERY = defineQuery(`{
   "navigation": *[_id == "navigation"][0]{
     items[]{_key, label, listServices, "link": link${link}}, "cta": cta${cta}, languageLabel
   },
-  "footer": *[_id == "footer"][0]{ blurb, copyright, columns[]{_key, title, links[]{_key, ...${cta}}} },
+  "footer": *[_id == "footer"][0]{ blurb, copyright, columns[]{_key, title, listServices, links[]{_key, ...${cta}}} },
   "ui": *[_id == "uiStrings"][0],
   "launch": *[_id == "launchSettings"][0]{bannerEnabled, bannerText, deadline},
-  "services": *[_type == "service" && visible != false] | order(order asc){_id, _type, code, network, title, slug, cardTitle},
+  "services": *[_type == "service" && visible != false] | order(order asc){_id, _type, code, network, title, shortTitle, family, slug, cardTitle},
   "quotePage": *[_type == "page" && kind == "quote"][0]{_type, kind, slug},
   "routes": *[_type in ["page", "service"] && visible != false && (defined(slug.fr) || kind == "home")]{_type, kind, slug, "noIndex": seo.noIndex, _updatedAt}
 }`);
@@ -72,7 +82,10 @@ export const DOCUMENT_BY_SLUG_QUERY = defineQuery(`*[_type in ["page", "service"
     code, network, heroHeading, heroIntro, "heroCta": heroCta${cta}, "heroImage": heroImage${image},
     offeringsHeading, offerings, deliverablesHeading, deliverables, deliverablesNote,
     methodHeading, methodSteps, extraHeading, extraItems, extraNote, moreHeading, moreItems, moreNote,
-    audience, responsibilityNote,
+    audience, responsibilityNote, quoteButtonLabel,
+    scenarios[]{..., "image": image${image}},
+    deliverableRows, "figureImage": figureImage${image}, needsHeading, needs, needsNote,
+    responsibilityRows, "proof": proof{..., "ui": ${uiRef}}, faq,
     ctaHeading, ctaText, "ctaButton": ctaButton${cta},
     "taxNote": *[_id == "launchSettings"][0].taxNote,
     "creditText": *[_id == "launchSettings"][0].creditText,
@@ -89,7 +102,7 @@ export const REDIRECT_QUERY = defineQuery(`*[_type == "redirect" && from == $fro
 export const QUOTE_FORM_QUERY = defineQuery(`{
   "form": *[_id == "formSettings"][0],
   "emails": *[_id == "emailTemplates"][0],
-  "services": *[_type == "service" && visible != false] | order(order asc){_id, title, code, network},
+  "services": *[_type == "service" && visible != false] | order(order asc){_id, title, shortTitle, code, network},
   "packages": *[_type == "package"]{_id, code, title, visible, order, "service": service->{_id, visible}},
   "privacyPage": *[_type == "page" && kind == "privacy"][0]{_type, kind, slug},
   "fromEmail": *[_id == "settings"][0].email

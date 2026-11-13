@@ -5,11 +5,11 @@ import { urlForImage } from "@/sanity/image";
 import type { ImageAsset } from "@/sanity/types-content";
 import { Section, SectionHeading } from "../section";
 
-type Item = { _key: string; title?: Localized; text?: Localized; image?: (ImageAsset & { alt?: Localized; illustrative?: boolean }) | null };
+type Item = { _key: string; title?: Localized; text?: Localized; purpose?: Localized; image?: (ImageAsset & { alt?: Localized; illustrative?: boolean }) | null };
 export type DeliverablesData = { heading?: Localized; intro?: Localized; note?: Localized; items?: Item[] };
 
 /** Exemples de livrables : vignette (si fournie) et texte ; un visuel synthétique porte sa mention. */
-export function Deliverables({ data, locale, illustrativeLabel }: { data: DeliverablesData; locale: Locale; illustrativeLabel: string }) {
+export function Deliverables({ data, locale, illustrativeLabel, purposeLabel = "" }: { data: DeliverablesData; locale: Locale; illustrativeLabel: string; purposeLabel?: string }) {
   const items = data.items ?? [];
   if (items.length === 0) return null;
   return (
@@ -28,6 +28,12 @@ export function Deliverables({ data, locale, illustrativeLabel }: { data: Delive
               )}
               <h3 className="font-display text-lg font-bold text-ink">{pick(item.title, locale, "")}</h3>
               <p className="mt-2 text-[16px] leading-relaxed text-ink-2">{pick(item.text, locale, "")}</p>
+              {pick(item.purpose, locale, "") && (
+                <p className="mt-2 text-[15px] leading-relaxed text-ink-2">
+                  <span className="block text-[12px] text-ink-3">{purposeLabel}</span>
+                  {pick(item.purpose, locale, "")}
+                </p>
+              )}
             </li>
           );
         })}

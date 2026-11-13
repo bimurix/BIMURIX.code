@@ -1,7 +1,9 @@
 import { Fragment } from "react";
 import type { Locale } from "@/lib/i18n/locales";
 import { pick } from "@/lib/i18n/pick";
+import { v5Label } from "@/lib/i18n/v5-labels";
 import { pathFor } from "@/lib/links";
+import { shortName } from "@/lib/services/families";
 import type { Shell, TitleBlockData } from "@/sanity/types-content";
 import type { IsoRun } from "@/ui/patterns/IsoNetworks";
 import { Conditions, type ConditionsData } from "./conditions/Conditions";
@@ -12,10 +14,14 @@ import { ImageFigure, type ImageFigureData } from "./image-figure/ImageFigure";
 import { Method, type MethodData } from "./method/Method";
 import { Packages, type PackagesData } from "./packages/Packages";
 import { PointsList, type PointsListData } from "./points-list/PointsList";
+import { Problems, type ProblemsData } from "./problems/Problems";
+import { ProjectCycle, type ProjectCycleData } from "./project-cycle/ProjectCycle";
 import { Proof, type ProofData } from "./proof/Proof";
 import { QuoteCta, type QuoteCtaData } from "./quote-cta/QuoteCta";
 import { QuoteFormBlock, type QuoteFormData } from "./quote-form/QuoteFormBlock";
+import { ResponsibilityTable, type ResponsibilityTableData } from "./responsibility-table/ResponsibilityTable";
 import { RichText, type RichTextData } from "./rich-text/RichText";
+import { Scenarios, type ScenariosData } from "./scenarios/Scenarios";
 import { ServiceNetworks, type ServiceNetworksData } from "./service-networks/ServiceNetworks";
 
 export type Section = { _key: string; _type: string } & Record<string, unknown>;
@@ -36,7 +42,7 @@ export function buildRuns(shell: Shell, locale: Locale): IsoRun[] {
   return (shell?.services ?? []).map((s) => ({
     id: s._id,
     code: s.code ?? "",
-    label: pick(s.title, locale, ""),
+    label: shortName(s, locale),
     network: s.network ?? "tqc",
     href: `${quotePath}?service=${encodeURIComponent(s._id)}`,
   }));
@@ -48,13 +54,13 @@ function renderSection(section: Section, ctx: RenderContext) {
     case "heroSheet":
       return <HeroSheet data={section as HeroSheetData} locale={locale} shell={shell} titleBlock={ctx.titleBlock} runs={ctx.isHome ? buildRuns(shell, locale) : []} aside={ctx.heroAside} />;
     case "serviceNetworks":
-      return <ServiceNetworks data={section as ServiceNetworksData} locale={locale} />;
+      return <ServiceNetworks data={section as ServiceNetworksData} locale={locale} ui={shell?.ui} />;
     case "method":
       return <Method data={section as MethodData} locale={locale} />;
     case "pointsList":
       return <PointsList data={section as PointsListData} locale={locale} />;
     case "deliverables":
-      return <Deliverables data={section as DeliverablesData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "")} />;
+      return <Deliverables data={section as DeliverablesData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "")} purposeLabel={v5Label(shell?.ui, "purposeLabel", locale)} />;
     case "richText":
       return <RichText data={section as RichTextData} locale={locale} />;
     case "quoteCta":
@@ -71,6 +77,14 @@ function renderSection(section: Section, ctx: RenderContext) {
       return <Conditions data={section as ConditionsData} locale={locale} />;
     case "proof":
       return <Proof data={section as ProofData} locale={locale} />;
+    case "problems":
+      return <Problems data={section as ProblemsData} locale={locale} illustrativeLabel={pick(shell?.ui?.illustrativeExample, locale, "") || undefined} />;
+    case "projectCycle":
+      return <ProjectCycle data={section as ProjectCycleData} locale={locale} ui={shell?.ui} />;
+    case "scenarios":
+      return <Scenarios data={section as ScenariosData} locale={locale} ui={shell?.ui} quotePath={pathFor(shell?.quotePage, locale)} />;
+    case "responsibilityTable":
+      return <ResponsibilityTable data={section as ResponsibilityTableData} locale={locale} ui={shell?.ui} />;
     default:
       return null;
   }
