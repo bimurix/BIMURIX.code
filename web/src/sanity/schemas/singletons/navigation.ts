@@ -42,6 +42,7 @@ export const footer = defineType({
           name: "footerColumn",
           fields: [
             defineField({ name: "title", title: "Titre", type: "localeString" }),
+            defineField({ name: "listServices", title: "Lister tous les services dans cette colonne", type: "boolean", initialValue: false, description: "Affiche automatiquement les services, rangés par famille, avant les liens ci-dessous." }),
             defineField({ name: "links", title: "Liens", type: "array", of: [defineArrayMember({ type: "cta" })] }),
           ],
           preview: { select: { title: "title.fr" } },

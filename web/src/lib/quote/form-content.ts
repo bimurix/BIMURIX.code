@@ -23,6 +23,10 @@ export type QuoteFormContent = {
     policyVersion?: string;
     notificationEmail?: string;
     callEnabled?: boolean;
+    /** Encart « Ce qu'il faut nous envoyer » à côté du formulaire (plan de contenu v5 § 3.8). */
+    needsHeading?: Localized;
+    needsItems?: Array<Localized & { _key?: string }>;
+    needsNote?: Localized;
   }) | null;
   emails?: {
     fromName?: string;
@@ -34,15 +38,18 @@ export type QuoteFormContent = {
     signature?: Localized;
     internalSubject?: string;
   } | null;
-  services?: Array<{ _id: string; title?: Localized; code?: string; network?: NetworkColor }>;
+  services?: Array<{ _id: string; title?: Localized; shortTitle?: Localized; code?: string; network?: NetworkColor }>;
   packages?: PackageData[] | null;
   privacyPage?: RouteTarget;
   fromEmail?: string;
 } | null;
 
+/** Nom court du service dans la liste du formulaire (par langue, repli sur le nom complet). */
+const serviceLabel = (s: { title?: Localized; shortTitle?: Localized }): Localized => ({ fr: s.shortTitle?.fr || s.title?.fr, en: s.shortTitle?.en || s.title?.en });
+
 /** Choix de service proposés : services publiés (si activé) puis choix supplémentaires. */
 export function serviceOptions(content: QuoteFormContent): FormOption[] {
-  const services = content?.form?.includeServices === false ? [] : (content?.services ?? []).map((s) => ({ value: s._id, label: s.title }));
+  const services = content?.form?.includeServices === false ? [] : (content?.services ?? []).map((s) => ({ value: s._id, label: serviceLabel(s) }));
   return [...services, ...(content?.form?.extraServiceOptions ?? [])];
 }
 

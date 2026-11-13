@@ -72,18 +72,25 @@ export function MobileMenu({ model, locale }: { model: NavModel; locale: Locale 
                     </Link>
                   )}
                   {!item.href && <p className="font-display flex min-h-12 items-center text-2xl font-bold">{item.label}</p>}
-                  {item.services && (
-                    <ul className="mb-4 border-s border-rule ps-4">
-                      {item.services.map((s) => (
-                        <li key={s.id}>
-                          <Link href={s.href} onClick={closeFromLink} className="flex min-h-12 items-center gap-3 text-[16px]">
-                            <NetworkSwatch network={s.network} />
-                            <span className="w-11 shrink-0 font-mono text-xs text-ink-2">{s.code}</span>
-                            <span>{s.label}</span>
-                          </Link>
-                        </li>
+                  {item.groups && (
+                    <div className="mb-4 border-s border-rule ps-4">
+                      {item.groups.map((group) => (
+                        <div key={group.key}>
+                          {group.label && <p className="pt-3 text-[13px] font-semibold text-ink-2">{group.label}</p>}
+                          <ul>
+                            {group.services.map((s) => (
+                              <li key={s.id}>
+                                <Link href={s.href} onClick={closeFromLink} className="flex min-h-12 items-center gap-3 text-[16px]">
+                                  <NetworkSwatch network={s.network} />
+                                  <span className="w-11 shrink-0 font-mono text-xs text-ink-2">{s.code}</span>
+                                  <span>{s.label}</span>
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   )}
                 </li>
               ))}

@@ -65,6 +65,10 @@ export const formSettings = defineType({
     defineField({ name: "requestTypeQuoteShort", title: "Nom court : soumission (courriels)", type: "localeString", group: "texts", description: "Variable {type} des courriels. Ex. : Soumission." }),
     defineField({ name: "packageOther", title: "Forfait : « autre »", type: "localeString", group: "texts", description: "Ex. : Autre ou je ne sais pas." }),
     defineField({ name: "descriptionHelp", title: "Aide sous « Description »", type: "localeText", group: "texts" }),
+    // decision: plan de contenu v5 § 3.8 et § 10 n° 9 — encart au-dessus du formulaire, vide = rien d'affiché.
+    defineField({ name: "needsHeading", title: "Encart « Ce qu'il faut nous envoyer » : titre", type: "localeString", group: "texts" }),
+    defineField({ name: "needsItems", title: "Encart « Ce qu'il faut nous envoyer » : lignes", type: "array", group: "texts", of: [defineArrayMember({ type: "localeString" })], description: "Les documents et informations utiles à une soumission juste. Vide : l'encart n'apparaît pas." }),
+    defineField({ name: "needsNote", title: "Encart « Ce qu'il faut nous envoyer » : note", type: "localeText", group: "texts", description: "Ex. : comment transmettre les documents." }),
     defineField({ name: "filesHelp", title: "Aide pour les fichiers", type: "localeText", group: "texts", description: "Ex. : partagez un lien (ACC, Drive, WeTransfer) dans la description." }),
 
     defineField({ name: "includeServices", title: "Proposer les services publiés", type: "boolean", initialValue: true, group: "lists" }),

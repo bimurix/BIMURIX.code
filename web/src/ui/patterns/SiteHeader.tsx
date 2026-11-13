@@ -26,8 +26,8 @@ export function SiteHeader({ shell, locale, model }: Props) {
 
         <nav aria-label={locale === "fr" ? "Navigation principale" : "Main navigation"} className="hidden flex-1 items-center gap-5 lg:flex">
           {model.items.map((item) =>
-            item.services ? (
-              <ServicesMenu key={item.key} label={item.label} services={item.services} />
+            item.groups ? (
+              <ServicesMenu key={item.key} label={item.label} groups={item.groups} />
             ) : (
               item.href && (
                 <Link key={item.key} href={item.href} className="inline-flex min-h-(--bx-tap-min) min-w-(--bx-tap-min) items-center justify-center px-1 text-[15px] text-ink hover:text-blue">

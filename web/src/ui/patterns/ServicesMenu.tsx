@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
-import type { NavService } from "./nav-model";
+import type { NavGroup } from "./nav-model";
 
 // Sous-menu « Services » (bureau) : s'ouvre au clic, se ferme avec Échap ou un clic à l'extérieur.
-export function ServicesMenu({ label, services }: { label: string; services: NavService[] }) {
+export function ServicesMenu({ label, groups }: { label: string; groups: NavGroup[] }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
@@ -38,17 +38,22 @@ export function ServicesMenu({ label, services }: { label: string; services: Nav
         </svg>
       </button>
       <div id={panelId} hidden={!open} className="absolute start-0 top-full z-30 mt-px w-[22rem] border border-ink bg-paper shadow-[0_18px_40px_-24px_rgb(15_23_42/0.45)]">
-        <ul className="divide-y divide-rule">
-          {services.map((s) => (
-            <li key={s.id}>
-              <Link href={s.href} onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 text-[15px] hover:bg-paper-2">
-                <NetworkSwatch network={s.network} />
-                <span className="shrink-0 whitespace-nowrap font-mono text-xs text-ink-2">{s.code}</span>
-                <span className="text-ink">{s.label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {groups.map((group) => (
+          <div key={group.key} className="border-b border-rule last:border-b-0">
+            {group.label && <p className="px-4 pt-3 pb-1 text-[13px] font-semibold text-ink-2">{group.label}</p>}
+            <ul className="divide-y divide-rule">
+              {group.services.map((s) => (
+                <li key={s.id}>
+                  <Link href={s.href} onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-3 text-[15px] hover:bg-paper-2">
+                    <NetworkSwatch network={s.network} />
+                    <span className="shrink-0 whitespace-nowrap font-mono text-xs text-ink-2">{s.code}</span>
+                    <span className="text-ink">{s.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );

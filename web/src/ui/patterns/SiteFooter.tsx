@@ -4,6 +4,7 @@ import { pick } from "@/lib/i18n/pick";
 import { isExternalHref, resolveLink } from "@/lib/links";
 import type { Shell } from "@/sanity/types-content";
 import { Logo } from "@/ui/components/Logo";
+import { navGroups } from "./nav-model";
 
 // Année du build : évite une date dynamique dans un rendu mis en cache.
 const YEAR = String(new Date().getFullYear());
@@ -17,6 +18,7 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
   const { settings, footer } = shell ?? {};
   const t = labels[locale];
   const columns = footer?.columns ?? [];
+  const groups = navGroups(shell, locale);
 
   return (
     <footer className="bg-ink text-paper">
@@ -29,6 +31,18 @@ export function SiteFooter({ shell, locale }: { shell: Shell; locale: Locale }) 
         {columns.map((col) => (
           <nav key={col._key} aria-label={pick(col.title, locale, "")}>
             <h2 className="mb-3 text-[13px] font-semibold text-paper/60">{pick(col.title, locale, "")}</h2>
+            {col.listServices && groups.map((group) => (
+              <div key={group.key} className="mb-2">
+                {group.label && <p className="mt-2 text-[13px] text-paper/60">{group.label}</p>}
+                <ul>
+                  {group.services.map((s) => (
+                    <li key={s.id}>
+                      <Link href={s.href} className="inline-flex min-h-11 min-w-11 items-center text-[15px] hover:underline">{s.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
             <ul className="space-y-1">
               {(col.links ?? []).map((cta) => {
                 const href = resolveLink(cta.link, locale);

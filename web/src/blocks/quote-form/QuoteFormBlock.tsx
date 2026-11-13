@@ -7,6 +7,7 @@ import { QUOTE_FORM_QUERY } from "@/sanity/queries";
 import { buildFormModel } from "@/ui/patterns/quote-form/form-model";
 import { QuoteForm } from "@/ui/patterns/quote-form/QuoteForm";
 import { Section, SectionHeading } from "../section";
+import { QuoteNeeds } from "./QuoteNeeds";
 
 export type QuoteFormData = { heading?: Localized; intro?: Localized };
 
@@ -17,6 +18,7 @@ export async function QuoteFormBlock({ data, locale }: { data: QuoteFormData; lo
   return (
     <Section>
       <SectionHeading intro={pick(data.intro, locale, "")}>{pick(data.heading, locale, "")}</SectionHeading>
+      <QuoteNeeds data={{ heading: content?.form?.needsHeading, items: content?.form?.needsItems, note: content?.form?.needsNote }} locale={locale} />
       {/* Le service pré-choisi vient de l'adresse (?service=…), lue côté client. */}
       <Suspense fallback={<div className="h-[60rem] max-w-3xl" aria-hidden="true" />}>
         <QuoteForm model={model} locale={locale} siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY} />
