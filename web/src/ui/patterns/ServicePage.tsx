@@ -1,16 +1,24 @@
+import { DeliverableRows, type DeliverableRowData } from "@/blocks/deliverables/DeliverableRows";
+import { Faq } from "@/blocks/faq/Faq";
 import { HeroSheet } from "@/blocks/hero-sheet/HeroSheet";
 import { Method } from "@/blocks/method/Method";
 import { Packages } from "@/blocks/packages/Packages";
 import { PointsList } from "@/blocks/points-list/PointsList";
+import { Proof, type ProofData } from "@/blocks/proof/Proof";
 import { QuoteCta } from "@/blocks/quote-cta/QuoteCta";
-import { Section, SectionHeading } from "@/blocks/section";
+import { ResponsibilityTable, type ResponsibilityRowData } from "@/blocks/responsibility-table/ResponsibilityTable";
+import type { ScenarioData } from "@/blocks/scenarios/ScenarioList";
+import { Scenarios } from "@/blocks/scenarios/Scenarios";
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
+import { v5Label } from "@/lib/i18n/v5-labels";
+import { pathFor } from "@/lib/links";
 import type { PackageData } from "@/lib/packages/packages";
-import type { Cta, ImageAsset, NetworkColor, Shell, TitleBlockData } from "@/sanity/types-content";
-import { networkVar, NetworkSwatch } from "@/ui/components/NetworkSwatch";
-
-type Keyed<T> = T & { _key: string };
+import { serviceQuoteCta } from "@/lib/services/quote-cta";
+import type { Cta, NetworkColor, Shell, TitleBlockData } from "@/sanity/types-content";
+import type { FigureImageData } from "@/ui/components/FigureImage";
+import { NetworkSwatch } from "@/ui/components/NetworkSwatch";
+import { NetworkList, Note, type Keyed } from "./service-sections";
 
 export type ServiceDoc = {
   _id: string;
@@ -21,12 +29,21 @@ export type ServiceDoc = {
   heroHeading?: Localized;
   heroIntro?: Localized;
   heroCta?: Cta;
-  heroImage?: (ImageAsset & { alt?: Localized }) | null;
+  /** Libellé du bouton « Demander une soumission » propre au service (haut de page et appel final). */
+  quoteButtonLabel?: Localized;
+  heroImage?: FigureImageData;
+  scenarios?: ScenarioData[] | null;
   offeringsHeading?: Localized;
   offerings?: Array<Keyed<{ title?: Localized; text?: Localized }>>;
   deliverablesHeading?: Localized;
   deliverables?: Array<Keyed<Localized & object>>;
+  /** Livrables avec « à quoi ça sert » : remplacent la liste simple `deliverables` quand ils existent. */
+  deliverableRows?: DeliverableRowData[] | null;
+  figureImage?: FigureImageData;
   deliverablesNote?: Localized;
+  needsHeading?: Localized;
+  needs?: Array<Keyed<Localized & object>> | null;
+  needsNote?: Localized;
   methodHeading?: Localized;
   methodSteps?: Array<Keyed<Localized & object>>;
   extraHeading?: Localized;
@@ -35,6 +52,9 @@ export type ServiceDoc = {
   moreHeading?: Localized;
   moreItems?: Array<Keyed<Localized & object>>;
   moreNote?: Localized;
+  responsibilityRows?: ResponsibilityRowData[] | null;
+  proof?: ProofData | null;
+  faq?: Array<{ _key: string; question?: Localized; answer?: Localized }> | null;
   ctaHeading?: Localized;
   ctaText?: Localized;
   ctaButton?: Cta;
@@ -45,40 +65,18 @@ export type ServiceDoc = {
   packages?: PackageData[];
 };
 
-/** Petit texte sous un titre de section (pour qui, qui fait quoi). */
-function Note({ heading, text, locale }: { heading?: Localized; text?: Localized; locale: Locale }) {
-  const body = pick(text, locale, "");
-  if (!body) return null;
-  return (
-    <Section>
-      <SectionHeading>{pick(heading, locale, "")}</SectionHeading>
-      <p className="max-w-[62ch] border-t-[1.5px] border-ink pt-5 text-[17px] leading-relaxed text-ink">{body}</p>
-    </Section>
-  );
-}
-
-/** Liste à puces « raccords » dans la couleur du réseau du service. */
-function NetworkList({ heading, items, note, network, locale }: { heading?: Localized; items?: Array<Keyed<Localized & object>>; note?: Localized; network: NetworkColor; locale: Locale }) {
-  if (!items?.length) return null;
-  return (
-    <Section>
-      <SectionHeading>{pick(heading, locale, "")}</SectionHeading>
-      <ul className="grid max-w-5xl gap-x-10 border-t-[1.5px] border-ink sm:grid-cols-2">
-        {items.map((item) => (
-          <li key={item._key} className="flex min-h-14 items-center gap-4 border-b border-rule py-3 text-[16px] text-ink">
-            <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full border-2 bg-paper" style={{ borderColor: networkVar[network] }} />
-            {pick(item, locale, "")}
-          </li>
-        ))}
-      </ul>
-      {note && <p className="mt-8 max-w-[60ch] text-[15px] text-ink-3">{pick(note, locale, "")}</p>}
-    </Section>
-  );
-}
-
-/** Gabarit commun des 6 pages de service : même feuille, couleur et code du réseau du service. */
+/**
+ * Gabarit commun des 6 pages de service, dans l'ordre du plan de contenu v5 § 2b :
+ * en-tête, pour qui, situations types, ce que nous faisons, ce que vous recevez, ce qu'il faut nous envoyer,
+ * (forfaits, s'il y en a), comment ça se passe, qui fait quoi, preuve, questions, appel final.
+ * Une section sans contenu ne s'affiche pas : un service sans les nouveaux champs garde son ancien rendu.
+ */
 export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: Locale; shell: Shell }) {
   const network = doc.network ?? "tqc";
+  const ui = shell?.ui;
+  const quotePath = pathFor(shell?.quotePage, locale);
+  const cta = { label: doc.quoteButtonLabel, quotePage: shell?.quotePage, serviceId: doc._id };
+  const heroCta = serviceQuoteCta(doc.heroCta, cta);
   const meta = (
     <p className="flex items-center gap-3 text-[14px] text-ink-2">
       <NetworkSwatch network={network} />
@@ -86,32 +84,39 @@ export function ServicePage({ doc, locale, shell }: { doc: ServiceDoc; locale: L
       <span>{pick(doc.title, locale, "")}</span>
     </p>
   );
+  const rows = doc.deliverableRows ?? [];
 
   return (
     <>
       <HeroSheet
-        data={{ heading: doc.heroHeading, intro: doc.heroIntro, ctas: doc.heroCta ? [doc.heroCta] : [], illustration: doc.heroImage }}
+        data={{ heading: doc.heroHeading, intro: doc.heroIntro, ctas: heroCta ? [heroCta] : [], illustration: doc.heroImage }}
         locale={locale}
         shell={shell}
         titleBlock={doc.titleBlock}
         meta={meta}
       />
-      <Note heading={shell?.ui?.forWhom} text={doc.audience} locale={locale} />
-      {doc.offerings?.length ? (
-        <PointsList data={{ heading: doc.offeringsHeading, items: doc.offerings, layout: "columns" }} locale={locale} />
-      ) : null}
-      <NetworkList heading={doc.deliverablesHeading} items={doc.deliverables} note={doc.deliverablesNote} network={network} locale={locale} />
-      <Packages
-        data={{ heading: shell?.ui?.offerPackages, taxNote: doc.taxNote, creditText: doc.creditText, packages: doc.packages, ui: shell?.ui, quotePage: shell?.quotePage }}
+      <Note heading={ui?.forWhom} text={doc.audience} locale={locale} />
+      <Scenarios
+        data={{ items: doc.scenarios ?? [] }}
         locale={locale}
+        ui={ui}
+        quoteLink={quotePath ? { href: `${quotePath}?service=${encodeURIComponent(doc._id)}`, label: v5Label(ui, "scenarioQuoteLink", locale) } : null}
       />
-      {doc.methodSteps?.length ? (
-        <Method data={{ heading: doc.methodHeading, steps: doc.methodSteps.map((s) => ({ _key: s._key, title: s })) }} locale={locale} />
-      ) : null}
+      {doc.offerings?.length ? <PointsList data={{ heading: doc.offeringsHeading, items: doc.offerings, layout: "columns" }} locale={locale} /> : null}
+      {rows.length > 0 ? (
+        <DeliverableRows heading={doc.deliverablesHeading} rows={rows} figure={doc.figureImage} note={doc.deliverablesNote} locale={locale} ui={ui} illustrativeLabel={pick(ui?.illustrativeExample, locale, "") || undefined} />
+      ) : (
+        <NetworkList heading={doc.deliverablesHeading} items={doc.deliverables} note={doc.deliverablesNote} network={network} locale={locale} />
+      )}
+      <NetworkList id="a-envoyer" heading={{ [locale]: pick(doc.needsHeading, locale, v5Label(ui, "needsHeadingDefault", locale)) }} items={doc.needs ?? undefined} note={doc.needsNote} network={network} locale={locale} />
+      <Packages data={{ heading: ui?.offerPackages, taxNote: doc.taxNote, creditText: doc.creditText, packages: doc.packages, ui, quotePage: shell?.quotePage }} locale={locale} />
+      {doc.methodSteps?.length ? <Method data={{ heading: doc.methodHeading, steps: doc.methodSteps.map((s) => ({ _key: s._key, title: s })) }} locale={locale} /> : null}
       <NetworkList heading={doc.extraHeading} items={doc.extraItems} note={doc.extraNote} network={network} locale={locale} />
       <NetworkList heading={doc.moreHeading} items={doc.moreItems} note={doc.moreNote} network={network} locale={locale} />
-      <Note heading={shell?.ui?.responsibilities} text={doc.responsibilityNote} locale={locale} />
-      <QuoteCta data={{ heading: doc.ctaHeading, text: doc.ctaText, button: doc.ctaButton }} locale={locale} />
+      <ResponsibilityTable data={{ heading: ui?.responsibilities, rows: doc.responsibilityRows ?? [], note: doc.responsibilityNote }} locale={locale} ui={ui} />
+      {doc.proof && <Proof data={doc.proof} locale={locale} />}
+      {doc.faq?.length ? <Faq data={{ heading: { [locale]: v5Label(ui, "serviceFaqHeading", locale) }, items: doc.faq }} locale={locale} /> : null}
+      <QuoteCta data={{ heading: doc.ctaHeading, text: doc.ctaText, button: serviceQuoteCta(doc.ctaButton, cta) }} locale={locale} />
     </>
   );
 }

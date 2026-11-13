@@ -16,7 +16,7 @@ export type HeroSheetData = {
   intro?: Localized;
   ctas?: Cta[];
   specialties?: Localized;
-  illustration?: (ImageAsset & { alt?: Localized }) | null;
+  illustration?: (ImageAsset & { alt?: Localized; caption?: Localized; illustrative?: boolean }) | null;
 };
 
 type Props = {
@@ -97,6 +97,11 @@ export function HeroSheet({ data, locale, shell, titleBlock, runs = [], aside, m
                   <Image src={urlForImage(illustration).width(1200).url()} alt={pick(illustration.alt, locale, "")} width={1200} height={Math.round(1200 * ((illustration.asset?.height ?? 3) / (illustration.asset?.width ?? 4)))} sizes="(min-width: 1024px) 50vw, 100vw" priority className="h-auto w-full" />
                 ) : (
                   <IsoNetworks runs={runs} title={t.figure} />
+                )}
+                {illustration && (pick(illustration.caption, locale, "") || illustration.illustrative) && (
+                  <figcaption className="mt-2 font-mono text-[12px] text-ink-3">
+                    {pick(illustration.caption, locale, "") || pick(ui?.illustrativeExample, locale, locale === "fr" ? "Exemple illustratif" : "Illustrative example")}
+                  </figcaption>
                 )}
               </figure>
             )}
