@@ -67,6 +67,8 @@ test("un compte connecté mais non admin est refusé", async ({ page }, info) =>
 
 test("admin : voit la demande, change le statut, ajoute une note et répond", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "une fois par exécution");
+  // R3 : la fiche /admin/demandes/[id] est compilée au premier passage en mode dev (route protégée, non préchauffable) : délai élargi.
+  test.setTimeout(120_000);
   // Une demande récente à traiter (créée via le vrai formulaire par quote-form.spec.ts, sinon par la clé serveur).
   const server = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, { auth: { persistSession: false } });
   const reference = `BX-T${Date.now().toString(36).slice(-5).toUpperCase()}`;
@@ -79,7 +81,7 @@ test("admin : voit la demande, change le statut, ajoute une note et répond", as
   await magicLogin(page, ADMIN);
   await expect(page.getByRole("heading", { name: "Demandes de soumission" })).toBeVisible();
   await page.getByRole("link", { name: reference }).click();
-  await expect(page.getByRole("heading", { name: "Client Essai" })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Client Essai" })).toBeVisible({ timeout: 60_000 });
 
   await page.locator("#request-status").selectOption("in_review");
   await expect(page.getByText("Statut : En cours")).toBeVisible();

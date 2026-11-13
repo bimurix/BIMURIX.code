@@ -36,7 +36,8 @@ test("le sélecteur de langue garde la page courante", async ({ page, isMobile }
   test.skip(isMobile, "couvert sur bureau");
   await page.goto("/services/prefabrication-tuyauterie");
   await page.getByRole("link", { name: "English", exact: true }).click();
-  await expect(page).toHaveURL("/en/services/piping-prefabrication");
+  // R3 : en mode dev, la route EN se compile au premier passage ; 5 s ne suffisent pas sous charge.
+  await expect(page).toHaveURL("/en/services/piping-prefabrication", { timeout: 30_000 });
 });
 
 test("sitemap et robots", async ({ request }) => {
