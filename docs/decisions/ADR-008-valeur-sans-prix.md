@@ -20,7 +20,9 @@ et un meilleur design, **sans remplacer le site** (ADR-007 : on ajoute et on aju
 | 4 | **Chaque livrable cité dit à quoi il sert** (demi-phrase) au chantier ou à l'atelier. | Une liste de fichiers ne vend rien ; l'usage, oui. |
 | 5 | **Images d'illustration** : emplacements prévus sur chaque page, tous alimentés par un champ Sanity. Trois types : schéma au trait SVG « feuille de plan », capture d'un vrai livrable fourni par le client, photo d'illustration (banque d'images). Une photo de banque porte « photo d'illustration », ne laisse jamais croire à un projet de Bimurix et ne montre aucun logo ni marque. | Direction A conservée ; budget JS de l'accueil (149,8 Ko sur 150) respecté : SVG et HTML serveur seulement. |
 | 6 | **Gabarit unique des pages de service** : résumé en tête, pour qui, situations types, ce que nous faisons, ce que vous recevez, ce qu'il faut nous envoyer, comment ça se passe, qui fait quoi, preuve, questions, action. Même ordre sur les six pages. | Un lecteur pressé sait où chercher. |
-| 7 | **L'action reste « Demander une soumission »**, répétée à 3 endroits par page. Aucun engagement de délai de réponse n'est écrit (question au client). | ADR-007 n° 5. |
+| 7 | **L'action reste « Demander une soumission »**, répétée à 3 endroits par page. **Délai de réponse** : « Nous vous répondons d'ici un jour ouvrable » (même engagement que ADR-006 n° 23, qui est rétabli sur ce seul point), dans le message de succès et l'accusé, modifiable dans Studio. **Délais de production** : aucun délai fixe ; « délai confirmé dans la soumission, selon la portée et les documents reçus ». | ADR-007 n° 5 ; le visiteur sait quand il aura des nouvelles sans qu'on promette un délai de production. |
+| 8 | **Choix par défaut au lieu de questions ouvertes** (consigne du client, 2026-11-12) : toute information manquante reçoit une valeur raisonnable, changeable ensuite dans Studio ; liste au § 10 du plan. Par défaut : exemples de livrables en **schéma au trait marqué « exemple »** ; photos d'illustration Unsplash marquées « photo d'illustration » ; ancien texte « Préfabrication MEP » repris dans la page tuyauterie là où il apporte quelque chose ; **conditions de paiement et 100 $/h retirés du site** (ils iront dans la soumission). | Le client n'a pas le temps de répondre à des questions. |
+| 9 | **Limite** : un choix par défaut est une formulation ou une décision d'affichage, **jamais un fait inventé**. Téléphone, NEQ, nom légal, noms de clients, chiffres de résultats et certifications restent vides ou non affichés. | CLAUDE.md § 4 ; ADR-006 n° 15 et 17. |
 
 ## Ce qui remplace quoi
 | Texte des ADR-006 et ADR-007 | Sort |
@@ -32,6 +34,7 @@ et un meilleur design, **sans remplacer le site** (ADR-007 : on ajoute et on aju
 | ADR-007 n° 2 (six services, adresses) | Gardé : mêmes six services, mêmes adresses ; nouveaux noms. |
 | ADR-007 n° 3, 4 (accueil « dans son ordre d'origine ») | Remplacé : nouvel ordre des sections (plan v5). |
 | ADR-007 n° 5 (action « Demander une soumission ») | Gardé. |
+| ADR-006 n° 23 (délai « un jour ouvrable ») | **Rétabli** pour la réponse à une soumission seulement (décision 7) ; ADR-006 n° 7 et 22 (appel de 20 minutes) restent remplacés. |
 | ADR-007 n° 6 (code de la refonte conservé) | Gardé : le code des forfaits reste, sans affichage. |
 
 ## Conséquences

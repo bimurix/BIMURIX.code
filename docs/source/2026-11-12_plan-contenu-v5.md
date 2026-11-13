@@ -3,6 +3,8 @@
 **Date** : 2026-11-12 · **Statut** : proposition à approuver par le client · **Décisions** : `docs/decisions/ADR-008-valeur-sans-prix.md`
 **Lecture seule** : rien n'a été modifié dans le site, dans Sanity ni dans la base. Ce document est le seul livrable de la tâche S1.
 
+> **Mise à jour 2026-11-12 (consigne du client)** : plus de question ouverte. Le § 10 devient « Choix par défaut, modifiables dans Studio » ; tout ce qui était « à confirmer » a une valeur retenue.
+
 ## Comment lire ce document
 - **Ce que le client doit regarder** : § 3 (nouveaux textes), § 4 (situations types) et § 10 (questions). Le reste sert aux personnes qui appliqueront le plan.
 - Mots de verdict : **Garder** (texte conservé tel quel) · **Réécrire** (même sens et mêmes faits, nouveaux mots) · **Déplacer** · **Fusionner** (le contenu va dans une autre section) · **Retirer** (ne s'affiche plus ; reste dans Studio quand c'est un forfait).
@@ -22,7 +24,7 @@ Règles de rédaction appliquées partout (skill `impeccable`, volet clarté) :
 3. Pas de mots vides : « accompagner », « optimiser », « solutions », « expertise orientée », « selon le périmètre convenu » répété.
 4. Lexique de chantier québécois (`CLAUDE.md` § 4) : soumission = le prix ; devis = le cahier des charges ; dessins d'atelier ; corps de métier ; détection de conflits ; réunion de coordination ; percements et manchons ; salle mécanique ; colonnes montantes ; mise en service ; manuels d'exploitation et d'entretien ; demande de changement ; tel que construit ; courriel.
 5. Le français suit la casse de phrase (« Demander une soumission »), pas la casse de titre anglaise des Web Interface Guidelines.
-6. Un fait absent du texte d'origine n'est pas ajouté. Là où une phrase nouvelle suppose un fait que seul le client connaît, elle est marquée **[à confirmer]** et reprise dans le § 10.
+6. Un fait absent du texte d'origine n'est pas ajouté. Là où une phrase nouvelle suppose un fait que seul le client connaît, elle est reprise dans le § 10 avec son choix par défaut.
 
 ## 1. Les six services, leurs noms et leurs familles (décision ADR-008 n° 2)
 
@@ -36,7 +38,7 @@ Règles de rédaction appliquées partout (skill `impeccable`, volet clarté) :
 | | Q-06 | Modèles et plans tel que construit (TQC) | Tel que construit (TQC) | `/services/tqc-controle-qualite` |
 
 Notes : les codes restent dans l'ordre D-05 puis Q-06 pour ne pas renuméroter les feuilles, les tests et les adresses ; l'ordre
-d'affichage suit les codes (question 9 au client). « MEP » est écrit « mécanique du bâtiment (MEP) » à sa première apparition de chaque page.
+d'affichage suit les codes (choix par défaut n° 11, § 10). « MEP » est écrit « mécanique du bâtiment (MEP) » à sa première apparition de chaque page.
 
 ---
 
@@ -83,7 +85,7 @@ Aucune section ne montre une situation de chantier. L'action (« Demander une so
 | TUY-1 | Titre « Fabriquez votre tuyauterie en atelier… » + intro (« en 5 jours ouvrables ») | Réécrire | Le titre est bon (on le garde) ; le délai fixe sort de l'intro. | P1 |
 | TUY-2 | « Pour qui » | Garder | Précis et factuel. | P2 |
 | TUY-3 | « Ce que couvre l'offre » (6 prestations) | Réécrire | Faits justes ; on ajoute l'usage et deux prestations de l'ancien texte « Préfabrication MEP ». | P4 |
-| TUY-4 | « Ce que vous recevez » (8 livrables + bilan de zone pilote) | Réécrire | Livrables bons mais sans usage ; le bilan « zone pilote » est un forfait (question 6). | P5 |
+| TUY-4 | « Ce que vous recevez » (8 livrables + bilan de zone pilote) | Réécrire | Livrables bons mais sans usage ; le bilan « zone pilote » est un forfait (choix par défaut n° 8, § 10). | P5 |
 | TUY-5 | « Forfaits de cette offre » (tableau F-01, F-02) | Retirer | Prix, portée, délais. | (masqué) |
 | TUY-6 | « Comment ça marche » (3 étapes, « 5 jours ouvrables ») | Réécrire | Utile ; le délai fixe sort. | P7 |
 | TUY-7 | « Ce dont nous avons besoin pour démarrer » | Déplacer | Information clé pour le lecteur, trop loin ; elle monte avant « Comment ça se passe ». | P6 |
@@ -247,7 +249,7 @@ Les faits d'origine sont gardés : SysQue, AutoSPRINK, pièces réelles du fabri
 | Carte D-05 | BIM 7D et données d'actifs · Des données prêtes pour la livraison et l'exploitation · Structuration des paramètres, vérification de la complétude des informations et préparation des données d'équipements selon les exigences de remise du projet. · Découvrir le BIM 7D | Données d'actifs (BIM 7D) · Des données prêtes pour la remise et l'exploitation · Paramètres structurés, complétude vérifiée, équipements codifiés, données prêtes pour les manuels d'exploitation et d'entretien et la maintenance. · Voir les données d'actifs |
 | Carte Q-06 | TQC et contrôle qualité · Des livrables finaux cohérents et documentés · Mise à jour des modèles et documents à partir des informations validées du chantier, avec des contrôles de cohérence et de complétude. · Découvrir les TQC et le contrôle qualité | Tel que construit (TQC) · Des plans et des modèles qui reflètent le chantier · Mise à jour des modèles et des plans à partir des relevés, des changements approuvés et des informations validées du chantier. Contrôles de cohérence et de complétude. · Voir le tel que construit |
 | H4 (titre) | (nouveau) | Où Bimurix intervient dans votre projet. |
-| H4 (intro) | (nouveau) | Du modèle de conception à la remise du bâtiment, chaque service prend la suite du précédent. Un mandat peut couvrir une étape ou plusieurs. **[à confirmer, question 10]** |
+| H4 (intro) | (nouveau) | Du modèle de conception à la remise du bâtiment, chaque service prend la suite du précédent. Un mandat peut couvrir une étape ou plusieurs. (choix par défaut n° 12, § 10) |
 | H5 (titre) | Inclus pour l'atelier et le chantier | Ce que vous recevez, et à quoi ça sert. |
 | H5 (lignes) | 5 livrables en une phrase chacun | Voir § 5 (livrables avec usage). |
 | H6 (titre) | (nouveau) | Trois situations types de chantier. |
@@ -256,12 +258,12 @@ Les faits d'origine sont gardés : SysQue, AutoSPRINK, pièces réelles du fabri
 | H8 (titre) | (nouveau) | Qui fait quoi. |
 | H8 (corps) | La conception, les calculs (y compris parasismique), l'approbation, la signature et le sceau des dessins restent à l'ingénieur ou à l'entrepreneur. | Tableau, voir § 3.9. La phrase d'origine reste sous le tableau, mot pour mot. |
 | H9 (titre) | Une méthode claire, du besoin au livrable. | Comment se déroule un mandat. |
-| H9, étape 1 | 01 Comprendre · Nous clarifions les exigences du projet, les disciplines concernées, les usages BIM, les formats attendus et les critères d'acceptation. | 01 Vous demandez une soumission. Dites-nous le projet, la discipline et ce que vous voulez recevoir. |
+| H9, étape 1 | 01 Comprendre · Nous clarifions les exigences du projet, les disciplines concernées, les usages BIM, les formats attendus et les critères d'acceptation. | 01 Vous demandez une soumission. Dites-nous le projet, la discipline et ce que vous voulez recevoir. Nous vous répondons d'ici un jour ouvrable. |
 | H9, étape 2 | 02 Produire · Nous réalisons ou mettons à jour les modèles, les données et la documentation selon le périmètre convenu. | 02 Nous clarifions la portée. Exigences du projet, disciplines, formats attendus et critères d'acceptation. |
 | H9, étape 3 | 03 Vérifier · Nous contrôlons les éléments convenus : cohérence, paramètres, coordination, complétude et conformité aux exigences communiquées. | 03 Nous produisons et nous vérifions. Modèles, dessins et données ; cohérence, paramètres, coordination et complétude. |
 | H9, étape 4 | 04 Livrer · Nous préparons les fichiers et documents convenus pour faciliter leur revue, leur utilisation par les équipes et leur intégration au processus du projet. | 04 Nous livrons. Les fichiers et documents convenus, avec la liste des points à confirmer. |
 | H9, « À nous envoyer » | (nouveau, tiré de « Documents requis » et des pages de service) | Les plans ou le modèle de l'ingénieur · les dessins d'atelier approuvés · les fabricants retenus (raccords, vannes, supports) · les standards de votre atelier · les exigences de remise du propriétaire. |
-| H10 | Questions fréquentes | **Garder** : Faut-il avoir SysQue ? · Qui conçoit le parasismique ? · Qui signe les dessins ? · Quels fabricants ? — **Réécrire** : « Et si un projet démarre vite ? » → « Mon projet démarre bientôt : pouvez-vous suivre ? » ; réponse : « Le délai dépend de la portée et des documents reçus. Indiquez votre échéancier dans la demande ; la soumission le précise. » — **Remplacer** « Le prix inclut-il les taxes ? » et « Le montant du forfait est-il perdu ? » par **« Comment se calcule le prix ? »** : « Sur soumission, selon la portée : ce qu'il faut modéliser ou dessiner, la quantité d'éléments, les documents reçus et l'échéancier. Prix en dollars canadiens, avant TPS et TVQ. » **[facteurs à confirmer, question 5]** — **Ajouter** « Quels documents faut-il envoyer ? » (liste de H9) — **Garder** « Quelle région desservez-vous ? » : Le Grand Montréal. Nous travaillons en français et en anglais. |
+| H10 | Questions fréquentes | **Garder** : Faut-il avoir SysQue ? · Qui conçoit le parasismique ? · Qui signe les dessins ? · Quels fabricants ? — **Réécrire** : « Et si un projet démarre vite ? » → « Mon projet démarre bientôt : pouvez-vous suivre ? » ; réponse : « Délai confirmé dans la soumission, selon la portée et les documents reçus. Indiquez votre échéancier dans la demande. » — **Remplacer** « Le prix inclut-il les taxes ? » et « Le montant du forfait est-il perdu ? » par **« Comment se calcule le prix ? »** : « Sur soumission, selon la portée : ce qu'il faut modéliser ou dessiner, la quantité d'éléments, les documents reçus et l'échéancier. Prix en dollars canadiens, avant TPS et TVQ. » (choix par défaut n° 7, § 10) — **Ajouter** « Quels documents faut-il envoyer ? » (liste de H9) — **Garder** « Quelle région desservez-vous ? » : Le Grand Montréal. Nous travaillons en français et en anglais. |
 | H11 | Parlons de votre prochain projet. · Vous avez besoin de soutien en modélisation BIM, coordination MEP, préfabrication, données d'actifs ou documentation TQC ? Présentez-nous votre projet et les livrables attendus. · Demander une soumission | Envoyez-nous votre projet. · Dites-nous la discipline, les plans disponibles et ce que vous voulez recevoir : modèle, dessins d'atelier, plans tel que construit ou données d'actifs. · Demander une soumission |
 
 ### 3.2 Modélisation et coordination BIM (P-01)
@@ -302,7 +304,7 @@ Les faits d'origine sont gardés : SysQue, AutoSPRINK, pièces réelles du fabri
 | P4, 6 | Parasismique · Contreventements rigides modélisés et coordonnés selon les dessins et les calculs approuvés. | **Inchangé.** |
 | P4, 7 (repris de l'ancien texte « Préfabrication MEP ») | Coordination des parcours · Vérification de la cohérence des parcours avec les modèles et contraintes communiqués par les autres disciplines. | Coordination des parcours · Vérification des parcours des réseaux avec les modèles et les contraintes des autres corps de métier, avant la fabrication. |
 | P4, 8 (repris de l'ancien texte) | Contrôle des informations · Vérification des dimensions, raccords, assemblages, annotations et propriétés inclus dans le périmètre convenu. | Contrôle des informations · Vérification des dimensions, des raccords, des assemblages, des annotations et des propriétés. |
-| P5 | Ce que vous recevez · 8 lignes · « À la fin d'une zone pilote, vous recevez un bilan d'une page… » · Les livrables dépendent des outils utilisés, des informations reçues et du processus de fabrication du client. | Ce que vous recevez · 8 lignes avec usage (§ 5) + « Vues isométriques et listes de points à vérifier » (repris de l'ancien texte) · Bilan d'une page : **retiré** (question 6) · Note sur les outils : **inchangée**. |
+| P5 | Ce que vous recevez · 8 lignes · « À la fin d'une zone pilote, vous recevez un bilan d'une page… » · Les livrables dépendent des outils utilisés, des informations reçues et du processus de fabrication du client. | Ce que vous recevez · 8 lignes avec usage (§ 5) + « Vues isométriques et listes de points à vérifier » (repris de l'ancien texte) · Bilan d'une page : **retiré** (choix par défaut n° 8, § 10) · Note sur les outils : **inchangée**. |
 | P6 | Ce dont nous avons besoin pour démarrer · Les dessins d'atelier approuvés · Le modèle de l'ingénieur ou les plans · Les fabricants retenus (raccords, vannes, supports) · Les standards de votre atelier | Ce qu'il faut nous envoyer · **Mêmes quatre lignes**, plus : la zone ou les systèmes à préfabriquer. |
 | P7 | Comment ça marche · 01 Vous demandez une soumission : zone pilote, fabricants retenus et délai souhaité. · 02 Vous envoyez les dessins d'atelier approuvés ou le modèle de l'ingénieur. · 03 Vous recevez le paquet d'atelier en 5 jours ouvrables à partir de documents complets. | Comment ça se passe · 01 Vous demandez une soumission : zone ou systèmes à préfabriquer, fabricants retenus, échéancier. · 02 Vous envoyez les dessins d'atelier approuvés ou le modèle de l'ingénieur. · 03 Nous modélisons, nous vérifions, puis vous recevez le paquet d'atelier. |
 | P3 « Pourquoi… » | Pourquoi préparer la préfabrication avec une approche BIM ? · 5 points | Fusionné dans les situations types (« Ce que ça évite »). La liste d'origine reste dans `production`. |
@@ -386,8 +388,8 @@ Les faits d'origine sont gardés : SysQue, AutoSPRINK, pièces réelles du fabri
 | AP6 | Parlons de vos besoins BIM. · Nous contacter | Un projet à nous confier ? · Demander une soumission |
 | Soumission, H1 | Parlez-nous de votre projet. | **Inchangé.** |
 | Soumission, intro | Décrivez votre besoin dans le formulaire ci-dessous. Les informations transmises nous aideront à comprendre votre demande et à déterminer les prochaines étapes. | Décrivez votre projet et le service qui vous intéresse. Plus nous avons de détails (plans, disciplines, échéancier), plus la soumission est juste. |
-| Soumission, encart (nouveau) | (aucun) | Ce qu'il faut nous envoyer : les plans ou le modèle de l'ingénieur · les dessins d'atelier approuvés · les fabricants retenus · les exigences de remise du propriétaire · vos standards. Vous pouvez aussi les envoyer après votre demande. **[à confirmer, question 7]** |
-| Soumission, message de succès | Votre message a été transmis. Nous examinerons les informations fournies et communiquerons avec vous si des précisions sont nécessaires. | **Inchangé** (ne promet aucun délai). |
+| Soumission, encart (nouveau) | (aucun) | Ce qu'il faut nous envoyer : les plans ou le modèle de l'ingénieur · les dessins d'atelier approuvés · les fabricants retenus · les exigences de remise du propriétaire · vos standards. Nous vous indiquons comment les transmettre dans notre réponse. (choix par défaut n° 9, § 10) |
+| Soumission, message de succès | Votre message a été transmis. Nous examinerons les informations fournies et communiquerons avec vous si des précisions sont nécessaires. | Votre message a été transmis. **Nous vous répondons d'ici un jour ouvrable.** (même engagement que ADR-006 n° 23 ; choix par défaut n° 1, § 10) Même phrase dans l'accusé de réception par courriel. |
 
 ### 3.9 Tableau « Qui fait quoi » (nouveau bloc, identique sur l'accueil, À propos et les six services)
 | Responsabilité | Bimurix | Ingénieur | Entrepreneur |
@@ -401,7 +403,7 @@ Les faits d'origine sont gardés : SysQue, AutoSPRINK, pièces réelles du fabri
 | Fabrication et installation | | | ● |
 
 Phrase sous le tableau, **mot pour mot** : « La conception, les calculs (y compris parasismique), l'approbation, la signature et le sceau des dessins restent à l'ingénieur ou à l'entrepreneur. »
-Sur chaque page de service, seules les lignes pertinentes sont affichées (champ « lignes à afficher » dans Studio). Le tableau n'affirme rien que le texte d'origine ne dit déjà ; la ligne « Détection de conflits » est à confirmer (question 3).
+Sur chaque page de service, seules les lignes pertinentes sont affichées (champ « lignes à afficher » dans Studio). Le tableau n'affirme rien que le texte d'origine ne dit déjà ; la ligne « Détection de conflits » est à confirmer (choix par défaut n° 4, § 10).
 
 ---
 
@@ -532,7 +534,7 @@ Chaque ligne de « Ce que vous recevez » porte une demi-phrase d'usage (champ �
 | Q-06 | Liste des réserves restantes | à savoir ce qui reste à confirmer avant la fermeture du dossier |
 
 Pour les trois lignes « D-05 données d'actifs », « Q-06 dossier de remise » et « C-04 listes des deux disciplines », les usages sont des
-déductions tirées des prestations d'origine ; le client les relit (question 12).
+déductions tirées des prestations d'origine ; le client les relit (choix par défaut n° 14, § 10).
 
 ---
 
@@ -562,7 +564,7 @@ Règle : **un seul bouton principal visible par écran**. Les autres liens vers 
 
 ### 6.3 « Ce qu'il faut nous envoyer »
 Section P6 sur chaque service, H9 sur l'accueil, encart SO2 sur la page Soumission. Contenu : § 3.2 à 3.8. Le message est le même partout :
-*plus la demande est précise, plus la soumission l'est.* Aucun engagement de délai de réponse n'est écrit nulle part (question 1).
+*plus la demande est précise, plus la soumission l'est.* Le seul engagement de délai est la réponse à la demande : « Nous vous répondons d'ici un jour ouvrable » (message de succès et accusé de réception ; choix par défaut n° 1). Aucun délai de production n'est publié : « délai confirmé dans la soumission, selon la portée et les documents reçus » (choix n° 2).
 
 ### 6.4 FAQ refaite (accueil ; trois à quatre questions par service reprises de la liste)
 1. Faut-il avoir SysQue ? — Non. Vous recevez des PDF, des listes Excel et des étiquettes. Le modèle Revit est inclus si vous le voulez. *(inchangé)*
@@ -571,7 +573,7 @@ Section P6 sur chaque service, H9 sur l'accueil, encart SO2 sur la page Soumissi
 4. Quels fabricants ? — Ceux que vous utilisez déjà, pour les raccords, les vannes et les supports, grâce au contenu fabricant de SysQue. *(inchangé)*
 5. **Quels documents faut-il envoyer ?** — Les plans ou le modèle de l'ingénieur, les dessins d'atelier approuvés, les fabricants retenus, vos standards, les exigences de remise du propriétaire. *(nouveau)*
 6. **Comment se calcule le prix ?** — Sur soumission, selon la portée : ce qu'il faut modéliser ou dessiner, la quantité d'éléments, les documents reçus et l'échéancier. Prix en dollars canadiens, avant TPS et TVQ. *(nouveau ; question 5)*
-7. **Mon projet démarre bientôt : pouvez-vous suivre ?** — Le délai dépend de la portée et des documents reçus. Indiquez votre échéancier dans la demande ; la soumission le précise. *(réécrit)*
+7. **Mon projet démarre bientôt : pouvez-vous suivre ?** — Délai confirmé dans la soumission, selon la portée et les documents reçus. Indiquez votre échéancier dans la demande. *(réécrit)*
 8. Quelle région desservez-vous ? — Le Grand Montréal. Nous travaillons en français et en anglais. *(inchangé)*
 
 Questions retirées : « Le prix inclut-il les taxes ? » (fondue dans la 6) et « Le montant du forfait est-il perdu ? » (crédit de forfait).
@@ -584,7 +586,7 @@ Questions par service : P-01 → 3, 5, 6 ; H-02 → 1, 2, 3, 4 ; G-03 → 2, 3, 
 Règles (valables pour toutes les images) :
 1. **Toute image passe par un champ Sanity** (`imageWithAlt` : fichier + texte alternatif FR/EN + légende) ; aucune image dans le code.
 2. **Photo de banque d'images** : légende « Photo d'illustration » obligatoire ; jamais de nom de projet, de client ni de lieu ; aucun logo ni marque visible (casques, camions, panneaux, ordinateurs) ; pas de visage identifiable en gros plan ; elle ne suggère jamais un projet de Bimurix.
-3. **Capture d'un vrai livrable** : fournie par le client, anonymisée (nom du projet, du client, de l'entrepreneur retirés) ; légende « Exemple de livrable, informations masquées ».
+3. **Exemple de livrable** : par défaut un schéma au trait marqué « exemple » (choix n° 5) ; si le client fournit un vrai livrable, il est anonymisé (nom du projet, du client, de l'entrepreneur retirés) ; légende « Exemple de livrable, informations masquées ».
 4. **Schéma au trait SVG** : dessiné dans le style feuille de plan (trait 1,5 px, couleurs de réseau des tokens, JetBrains Mono pour les cotes) ; légende « Schéma illustratif ».
 5. Dimensions et ratio fixés dans le gabarit (pas de saut de mise en page), chargement différé sous la ligne de flottaison, `fetchpriority` haut seulement pour l'image du haut. Une photo pèse au plus 120 Ko après compression (AVIF/WebP).
 6. L'image décorative a un texte alternatif vide ; l'image qui informe a un texte alternatif de une phrase.
@@ -600,20 +602,20 @@ Règles (valables pour toutes les images) :
 | À propos | Équipe | — | **Aucune photo d'équipe** : aucun membre n'est publié (CLAUDE.md § 4) | — | — | — |
 | Soumission | SO2 : encart « Ce qu'il faut nous envoyer » | — | Aucune image (la page est un formulaire) | — | — | — |
 | P-01 | P1 : image du haut | 4:3 | Modèle fédéré : trois corps de métier de trois couleurs, un conflit marqué d'un nuage de révision | « Schéma illustratif : trois modèles superposés, un conflit entre un conduit et une poutre. » | Schéma SVG | — |
-| P-01 | P5 : exemple de livrable | 4:3 | Extrait d'un rapport de conflits | « Exemple de livrable : liste de conflits classés par étage. » | **Capture d'un vrai livrable** (client) | — |
+| P-01 | P5 : exemple de livrable | 4:3 | Extrait d'un rapport de conflits | « Exemple de livrable (schéma illustratif) : liste de conflits classés par étage. » | Schéma au trait marqué « exemple » (remplaçable par un vrai livrable) | — |
 | H-02 | P1 : image du haut | 4:3 | Atelier de préfabrication, spools de tuyauterie alignés | « Photo d'illustration : spools de tuyauterie en atelier de préfabrication. » | Photo d'illustration | `pipe spools workshop` · `pipe prefabrication shop` · `plumbing pipes fabrication` |
-| H-02 | P5 : exemple de livrable | 4:3 | Un dessin de spool numéroté avec sa liste de coupe | « Exemple de livrable : dessin de spool numéroté et liste de coupe. » | **Capture d'un vrai livrable** (client) | — |
+| H-02 | P5 : exemple de livrable | 4:3 | Un dessin de spool numéroté avec sa liste de coupe | « Exemple de livrable (schéma illustratif) : dessin de spool numéroté et liste de coupe. » | Schéma au trait marqué « exemple » (remplaçable par un vrai livrable) | — |
 | H-02 | P3 : vignette de chaque situation (2) | 3:2 | Spool numéroté ; skid en plan | « Schéma illustratif : … » | Schéma SVG | — |
 | G-03 | P1 : image du haut | 4:3 | Réseau de gicleurs au plafond | « Photo d'illustration : réseau de gicleurs apparent au plafond d'un chantier. » | Photo d'illustration | `fire sprinkler pipes ceiling` · `sprinkler system installation` · `fire protection piping` |
-| G-03 | P5 : exemple de livrable | 4:3 | Un dessin d'atelier de gicleurs (un étage) | « Exemple de livrable : dessin d'atelier de gicleurs d'un étage. » | **Capture d'un vrai livrable** (client) | — |
+| G-03 | P5 : exemple de livrable | 4:3 | Un dessin d'atelier de gicleurs (un étage) | « Exemple de livrable (schéma illustratif) : dessin d'atelier de gicleurs d'un étage. » | Schéma au trait marqué « exemple » (remplaçable par un vrai livrable) | — |
 | C-04 | P1 : image du haut | 4:3 | Coupe d'un corridor avec tuyauterie et gicleurs, conflit réglé | « Schéma illustratif : coupe d'un corridor technique avec tuyauterie et gicleurs coordonnés. » | Schéma SVG | — |
-| C-04 | P5 : exemple de livrable | 4:3 | Vue du modèle coordonné de la zone | « Exemple de livrable : vue du modèle coordonné d'une zone. » | **Capture d'un vrai livrable** (client), sinon schéma SVG | — |
+| C-04 | P5 : exemple de livrable | 4:3 | Vue du modèle coordonné de la zone | « Exemple de livrable (schéma illustratif) : vue du modèle coordonné d'une zone. » | Schéma au trait marqué « exemple » (remplaçable) | — |
 | D-05 | P1 : image du haut | 4:3 | Salle mécanique avec robinets et équipements identifiés | « Photo d'illustration : robinets et équipements dans une salle mécanique. » | Photo d'illustration | `mechanical room valves` · `boiler room pipes` · `building plant room` |
-| D-05 | P5 : exemple de livrable | 4:3 | Extrait du rapport Excel des données manquantes | « Exemple de livrable : rapport Excel des données manquantes par élément. » | **Capture d'un vrai livrable** (client) | — |
+| D-05 | P5 : exemple de livrable | 4:3 | Extrait du rapport Excel des données manquantes | « Exemple de livrable (schéma illustratif) : rapport Excel des données manquantes par élément. » | Schéma au trait marqué « exemple » (remplaçable par un vrai livrable) | — |
 | Q-06 | P1 : image du haut | 4:3 | Plan « conçu » et plan « tel que construit » superposés, avec nuage de révision | « Schéma illustratif : un plan de conception et le même plan tel que construit, les différences entourées. » | Schéma SVG | — |
-| Q-06 | P5 : exemple de livrable | 4:3 | Plan tel que construit avec cartouche de révision | « Exemple de livrable : plan tel que construit avec cartouche de révision. » | **Capture d'un vrai livrable** (client), sinon schéma SVG | — |
+| Q-06 | P5 : exemple de livrable | 4:3 | Plan tel que construit avec cartouche de révision | « Exemple de livrable (schéma illustratif) : plan tel que construit avec cartouche de révision. » | Schéma au trait marqué « exemple » (remplaçable) | — |
 
-Priorité : les captures de vrais livrables valent plus que toutes les photos, parce qu'elles prouvent ce que le lecteur reçoit. Tant qu'elles ne sont pas fournies, le schéma SVG tient la place et le champ image reste vide (le gabarit n'affiche rien si le champ est vide).
+Par défaut (choix n° 5 et 6) : schémas au trait marqués « exemple » pour les livrables, photos d'illustration Unsplash marquées « photo d'illustration ». Un vrai livrable fourni plus tard remplace le schéma dans le même champ Sanity ; un champ vide n'affiche rien.
 Budget JS : photos en `<img>` natives, schémas en SVG ou HTML rendu côté serveur ; aucune bibliothèque d'images ni de carrousel.
 
 ---
@@ -648,42 +650,52 @@ Rien n'est supprimé du code ni de Studio : tout est masqué (ADR-008 n° 1). R�
 | Page | Ce qui est retiré | Réglage Studio |
 |---|---|---|
 | Accueil | Titre « Commencez petit, à prix fixe », tableau F-01 à F-05 (prix 1 800 $, 2 200 $, 1 500 $, 2 800 $, 1 200 $ ; délais 5, 5, 5, 7, 3 jours ouvrables ; portées en pi² et en spools), pastille « Recommandé », boutons « Choisir ce forfait — … », « Prix en dollars canadiens, avant TPS et TVQ », exemple de crédit « 12 000 $ − 1 800 $ = 10 200 $ » | Forfaits masqués ; bloc `packages` retiré de la page |
-| Accueil | Section « Conditions des forfaits de lancement » (portée d'une zone pilote, portée gicleurs, crédit, documents requis, délai, révisions, **100 $/h**, **paiement 50 % / 50 %, net 15 jours**, exclusions) | Bloc `conditions` retiré ; « Documents requis » et « Exclusions » réutilisés dans « Ce qu'il faut nous envoyer » et « Qui fait quoi » |
+| Accueil | Section « Conditions des forfaits de lancement » (portée d'une zone pilote, portée gicleurs, crédit, documents requis, délai, révisions, **100 $/h**, **paiement 50 % / 50 %, net 15 jours** — ces deux dernières conditions iront dans la soumission, pas sur le site —, exclusions) | Bloc `conditions` retiré ; « Documents requis » et « Exclusions » réutilisés dans « Ce qu'il faut nous envoyer » et « Qui fait quoi » |
 | Accueil | FAQ : « Et si un projet démarre vite ? » (5 jours ouvrables), « Le prix inclut-il les taxes ? », « Le montant du forfait est-il perdu ? » | Document FAQ : questions modifiées (§ 6.4) |
 | Accueil | Bande « Commencez petit… » dans les cartes de service s'il y en a ; mention « jusqu'à 30 spools » dans toute carte | — |
 | Toutes | Bandeau de lancement et date limite | `bannerEnabled` faux (déjà), `deadline` vide |
 | P-01 | Rien (aucun forfait) ; vérifier le SEO | — |
-| H-02 | « en 5 jours ouvrables » (intro) ; tableau « Forfaits de cette offre » (F-01 Zone pilote, F-02 Skid standard) ; phrase de crédit ; étape 1 « zone pilote… délai souhaité » ; étape 3 « en 5 jours ouvrables » ; bilan « À la fin d'une zone pilote… » (question 6) | F-01, F-02 masqués ; bloc `packages` retiré du gabarit |
+| H-02 | « en 5 jours ouvrables » (intro) ; tableau « Forfaits de cette offre » (F-01 Zone pilote, F-02 Skid standard) ; phrase de crédit ; étape 1 « zone pilote… délai souhaité » ; étape 3 « en 5 jours ouvrables » ; bilan « À la fin d'une zone pilote… » (choix par défaut n° 8, § 10) | F-01, F-02 masqués ; bloc `packages` retiré du gabarit |
 | G-03 | « livrés en 5 jours ouvrables » (titre) ; « Un étage à la fois… 10 000 pi² » ; tableau F-03 ; étape 3 « 5 jours ouvrables » ; appel final « cette semaine » | F-03 masqué |
 | C-04 | Tableau F-04 (« Recommandé », 7 jours, 2 800 $) ; étape 3 « 7 jours ouvrables » ; appel « une seule zone à essayer » | F-04 masqué |
 | D-05 | Tableau F-05 (Audit 7D, 3 jours, 1 200 $) ; « Ce que vous recevez avec l'audit 7D » est repris sans le mot « forfait » | F-05 masqué |
 | Q-06 | Rien (aucun forfait) | — |
 | À propos | Rien | — |
-| Soumission | Paramètre d'adresse `?forfait=F-0n` (reste accepté mais sans effet visible) ; champ « Forfait visé » du formulaire ; phrase « Forfait visé : {package} » des courriels (déjà omise si vide) ; champ « Budget approximatif » (question 8) | Formulaire : option masquée ; modèles de courriel inchangés |
+| Soumission | Paramètre d'adresse `?forfait=F-0n` (reste accepté mais sans effet visible) ; champ « Forfait visé » du formulaire ; phrase « Forfait visé : {package} » des courriels (déjà omise si vide) ; champ « Budget approximatif » (choix par défaut n° 10, § 10) | Formulaire : option masquée ; modèles de courriel inchangés |
 | Courriels | « Forfait visé » (vide quand aucun forfait) | `emailTemplates` inchangé |
 | Textes d'interface | « Choisir ce forfait », « Recommandé », « Forfaits de cette offre », « Prix en dollars canadiens », bandeau « jusqu'au… » | `ui-strings` laissés en place, inutilisés |
 | Données structurées et SEO | Vérifier qu'aucune description SEO ni donnée structurée ne cite un prix, un délai ou « forfait » | S2 balaie les champs SEO |
 
-Gardé volontairement : « avant TPS et TVQ » (dans la réponse « Comment se calcule le prix ? »), les budgets du formulaire s'ils restent (question 8).
+Gardé volontairement : « avant TPS et TVQ » (dans la réponse « Comment se calcule le prix ? »), les budgets du formulaire s'ils restent (choix par défaut n° 10, § 10).
 
 ---
 
-## 10. Questions au client
+## 10. Choix par défaut, modifiables dans Studio
 
-1. **Délai de réponse** : voulez-vous écrire un engagement (« Nous répondons d'ici… ») ou ne rien promettre ? Ce plan ne promet rien.
-2. **Noms** : approuvez-vous les six noms complets et courts du § 1, et les trois familles ?
-3. **Coordination** : pour « détecter les conflits » et préparer la réunion de coordination, Bimurix prépare-t-il seulement les documents, ou anime-t-il aussi la réunion ? Le tableau « Qui fait quoi » dépend de la réponse.
-4. **Images** : pouvez-vous fournir, anonymisés, un dessin de spool, un dessin d'atelier de gicleurs, un rapport de conflits et un rapport Excel de données manquantes ? Acceptez-vous des photos d'illustration de banque d'images (avec la mention « Photo d'illustration ») en attendant ?
-5. **Calcul du prix** : la réponse « selon la portée : ce qu'il faut modéliser ou dessiner, la quantité d'éléments, les documents reçus et l'échéancier » est-elle exacte ?
-6. **Bilan d'une page** (pourcentage préfabriqué, nombre de spools, heures de modélisation) : le garder comme livrable sans le mot « zone pilote », ou le retirer ?
-7. **Envoi des documents** : par courriel après la demande ? Par un lien de partage ? Le formulaire n'a pas de téléversement.
-8. **Formulaire** : retirer ou rendre facultatif le champ « Budget approximatif » ? Masquer « Forfait visé » ?
-9. **Ordre des codes** : garder D-05 (données d'actifs) puis Q-06 (tel que construit) pour ne pas renuméroter, ou les échanger pour suivre l'ordre du chantier (tel que construit avant l'exploitation) ?
-10. **Un ou plusieurs services** : un mandat peut-il couvrir une seule étape du schéma (H4) ? La phrase « une étape ou plusieurs » le dit.
-11. **Ancien texte « Préfabrication MEP »** (audit R3 § 2 et § 8 n° 1) : acceptez-vous la reprise de ses quatre éléments utiles (coordination des parcours, contrôle des informations, vues isométriques, listes de points à vérifier) dans la page tuyauterie ?
-12. **Usages des livrables** (§ 5) : les trois lignes déduites (données d'actifs, dossier de remise, listes des deux disciplines) vous conviennent-elles ?
-13. **Preuve Brennan** : on garde l'encadré sur l'accueil seulement, plus sur les pages tuyauterie et tuyauterie + gicleurs ? (Aucune preuve n'est ajoutée ailleurs.)
-14. **Rapports d'audit avant et après, export Excel pour le logiciel de maintenance** (document v3.1, lié à la « mise en conformité 7D ») : les publier comme livrables du service Données d'actifs ?
+Consigne du client (2026-11-12) : pas de question ouverte ; pour toute information manquante, on retient une réponse raisonnable que le client change ensuite dans Studio.
+Limite : un choix par défaut est **une formulation ou une décision d'affichage, jamais un fait inventé**. Téléphone, NEQ, nom légal, noms de clients, chiffres de résultats et certifications restent vides ou non affichés (CLAUDE.md § 4, ADR-006 n° 15 et 17).
+« Nouveau champ » = champ créé par S3a (§ 11) ; les autres existent déjà dans Studio.
+
+| N° | Point | Valeur retenue | Raison | Où la changer dans Studio |
+|---|---|---|---|---|
+| 1 | Délai de réponse à une soumission | « Nous vous répondons d'ici un jour ouvrable. » Même engagement que ADR-006 n° 23, dans le message de succès et l'accusé de réception. | Le visiteur sait quand il aura des nouvelles ; le client peut allonger ou retirer la phrase. | Formulaire → Message de succès ; Courriels → Corps de l'accusé de réception |
+| 2 | Délais de production | Aucun délai fixe. Phrase : « Délai confirmé dans la soumission, selon la portée et les documents reçus. » | Le délai dépend du projet. | Questions fréquentes (réponse 7) ; nouveau champ « Délai » de chaque service (vide par défaut) |
+| 3 | Noms des services et familles | Noms complets et courts du § 1, trois familles. | C'est la proposition déjà faite au client. | Services → Nom du service ; nouveau champ « Nom court » ; nouveau champ « Famille » |
+| 4 | Rôle de Bimurix en coordination | « Prépare le modèle fédéré, détecte les conflits, liste les conflits pour la réunion de coordination et suit leur résolution. » La phrase n'affirme pas que Bimurix anime la réunion. | On décrit ce que le texte d'origine dit déjà (préparation, revue, suivi), sans rien ajouter. | Services → Prestations ; bloc « Qui fait quoi » (ligne « Détection de conflits ») |
+| 5 | Exemple de livrable (spool, dessin de gicleurs, rapport de conflits, rapport Excel) | **Schéma au trait marqué « exemple »**, dans le style feuille de plan, en attendant un vrai livrable du client. | Aucun livrable réel n'est disponible ; on n'en simule pas un. | Services → nouveau champ « Image de livrable » (remplaçable par une capture anonymisée) |
+| 6 | Photos | Photos d'illustration Unsplash, légende « Photo d'illustration », sans logo ni marque visible, jamais présentées comme un projet de Bimurix. | Donne de la matière visuelle sans fausse référence. | Services → Image du haut ; page À propos → Image |
+| 7 | Calcul du prix | « Sur soumission, selon la portée : ce qu'il faut modéliser ou dessiner, la quantité d'éléments, les documents reçus et l'échéancier. Prix en dollars canadiens, avant TPS et TVQ. » | Dit comment se forme un prix sans en donner un. | Questions fréquentes → « Comment se calcule le prix ? » |
+| 8 | Bilan d'une page (zone pilote) | Retiré. | Il est lié au forfait « zone pilote », qui n'est plus publié. | Service Tuyauterie → Note sous les livrables |
+| 9 | Envoi des documents | « Nous vous indiquons comment les transmettre dans notre réponse. » Le formulaire reste sans téléversement. | Évite de promettre un outil qui n'existe pas. | Soumission → encart « Ce qu'il faut nous envoyer » (nouveau champ) |
+| 10 | Champs du formulaire | « Forfait visé » masqué (aucun forfait affiché). « Budget approximatif » gardé mais **facultatif**, avec le choix « À déterminer » déjà présent. | Un budget n'est pas un prix publié ; le rendre facultatif évite de bloquer une demande. | Formulaire → Options du budget et champs facultatifs ; Forfaits → « Affiché sur le site » |
+| 11 | Codes D-05 puis Q-06 | Gardés dans cet ordre ; l'affichage suit les codes. | Aucune feuille, aucun test, aucune adresse à renuméroter. | Services → Code de réseau et Ordre |
+| 12 | Un mandat sur une étape ou plusieurs | Phrase gardée : « Un mandat peut couvrir une étape ou plusieurs. » | Le formulaire permet déjà de choisir un service. | Bloc « Cycle du projet » → introduction |
+| 13 | Ancien texte « Préfabrication MEP » | Repris dans la page tuyauterie : coordination des parcours, contrôle des informations, vues isométriques, listes de points à vérifier. | Ces éléments apportent des faits que la page n'a pas. | Services → Tuyauterie → Prestations et Livrables |
+| 14 | Usages des livrables (§ 5) | Gardés comme rédigés. | Ce sont des formulations déduites des prestations d'origine. | Services → Livrables → champ « À quoi ça sert » (nouveau) |
+| 15 | Preuve Brennan | Gardée sur l'accueil, sur la page tuyauterie et sur la page tuyauterie + gicleurs, avec sa source. Aucune autre preuve n'est ajoutée. | Chiffres d'un tiers, source et lien présents (ADR-006 n° 21). | Blocs « Preuve » des pages concernées |
+| 16 | Rapports d'audit avant/après, export Excel pour la maintenance (v3.1) | Publiés comme livrables **possibles** du service Données d'actifs, sans le nom « mise en conformité » ni prix. | Ils ne sont pas marqués « hypothèse à valider » dans le document v3.1. | Services → Données d'actifs → Livrables |
+| 17 | Paiement et 100 $/h | Retirés du site ; ils iront dans la soumission. | Conditions propres à chaque mandat. | Lancement et conditions → Conditions (vidé / non posé) |
+| 18 | Faits non fournis | Téléphone, NEQ, nom légal, noms de clients, chiffres de résultats, certifications : **vides ou non affichés**. | On ne les invente pas. | Réglages du site ; champs vides |
 
 ---
 
