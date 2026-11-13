@@ -32,7 +32,7 @@ export function DeliverableTable({ lines, labels, caption, className = "" }: Pro
       </thead>
       <tbody role="rowgroup" className="block [counter-reset:bx-row]">
         {lines.map((line) => (
-          <tr key={line.key} role="row" className={`${ROW} ${COTE} border-b border-rule py-3`}>
+          <tr key={line.key} role="row" className={`bx-reveal ${ROW} ${COTE} border-b border-rule py-3`}>
             <th role="rowheader" scope="row" className="text-start text-[16px] leading-snug font-semibold text-ink">
               <span className="flex items-start gap-3">
                 <Icon name={line.icon} className="mt-px text-blue" />

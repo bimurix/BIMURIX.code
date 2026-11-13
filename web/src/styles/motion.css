@@ -1,0 +1,79 @@
+/*
+ * Mouvement (cahier v6 T4) : CSS seulement, aucun script. Durées et courbes : jetons de tokens.css.
+ * Règles : on n'anime que opacity, transform, clip-path, stroke-dashoffset et les couleurs (la hauteur de la FAQ fait exception) ;
+ * l'état de départ est VISIBLE par défaut ; un état caché n'existe que dans `@supports (animation-timeline: view())` ET
+ * `@media (prefers-reduced-motion: no-preference)`. Un navigateur sans animations liées au défilement montre tout, immobile.
+ * Rien dans le premier écran (titre, accroche, boutons, image) : l'isométrique garde son tracé au chargement (globals.css).
+ * Le test tests/unit/motion-css.test.ts vérifie ces règles.
+ */
+
+/* M-09 : la flèche avance de 4 px au survol et au focus. */
+.bx-arrow { transition: transform var(--bx-dur-1) var(--bx-ease-out); }
+.group:is(:hover, :focus-visible) .bx-arrow { transform: translateX(4px); }
+[dir="rtl"] .group:is(:hover, :focus-visible) .bx-arrow { transform: translateX(-4px) scaleX(-1); }
+
+/* M-10 : ligne cliquable, fond au survol (couleur seulement). */
+.bx-hover-bg { transition: background-color var(--bx-dur-1) var(--bx-ease-out); }
+.group:is(:hover, :focus-visible) > .bx-hover-bg { background-color: var(--bx-paper-2); }
+
+/* M-12 : focus de l'isométrique, même contour que le reste du site, sans transition. */
+.bx-run:focus-visible { outline: 2px solid var(--bx-blue); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Seuls les changements de couleur restent ; aucun déplacement. */
+  .bx-arrow { transition: none; }
+  .group:is(:hover, :focus-visible) .bx-arrow { transform: none; }
+  [dir="rtl"] .group:is(:hover, :focus-visible) .bx-arrow { transform: scaleX(-1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* M-08 : ouverture de la FAQ en hauteur ; le « + » pivote en « × ». Sans prise en charge : ouverture immédiate. */
+  @supports (interpolate-size: allow-keywords) {
+    .bx-faq { interpolate-size: allow-keywords; }
+    .bx-faq::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition: block-size var(--bx-dur-2) var(--bx-ease-inout), content-visibility var(--bx-dur-2) var(--bx-ease-inout) allow-discrete;
+    }
+    .bx-faq[open]::details-content { block-size: auto; }
+  }
+  .bx-faq .bx-icon { transition: transform var(--bx-dur-2) var(--bx-ease-inout); }
+
+  /* Animations liées au défilement : chacune ne joue qu'une fois, de gauche à droite ou de haut en bas. */
+  @supports (animation-timeline: view()) {
+    /* M-05 : lignes de listes et de tableaux, fondu et montée de 8 px à l'entrée dans l'écran. */
+    .bx-reveal {
+      animation: bx-reveal var(--bx-dur-3) var(--bx-ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+    /* M-03 : le tuyau des services se trace de haut en bas, tronçon par tronçon. */
+    .bx-rail {
+      transform-origin: top;
+      animation: bx-grow-y linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 60%;
+    }
+    /* M-04 : le trait des étapes relie 01 à 04 (horizontal dès lg, vertical sinon). */
+    .bx-method-line {
+      transform-origin: top;
+      animation: bx-grow-y linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 70%;
+    }
+    @media (min-width: 64rem) {
+      .bx-method-line { transform-origin: left; animation-name: bx-grow-x; }
+    }
+    /* M-06 : un schéma au trait se dévoile de gauche à droite, comme une feuille qui sort du traceur. */
+    .bx-figure-draw {
+      animation: bx-unveil linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+
+@keyframes bx-reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes bx-grow-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes bx-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes bx-unveil { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }

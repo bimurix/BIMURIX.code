@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
+@import "../styles/motion.css";
 
 @theme inline {
   --color-blue: var(--bx-blue);
@@ -35,7 +36,8 @@ body {
 
 :focus-visible {
   outline: 2px solid var(--bx-blue);
-  outline-offset: 3px;
+  outline-offset: 2px;
+  transition: none;
 }
 
 /* Titres en largeur étendue : lettrage de plan (direction A). */
@@ -55,16 +57,16 @@ body {
 .bx-pipe {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: bx-draw 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: calc(var(--i, 0) * 220ms + 120ms);
+  animation: bx-draw var(--bx-dur-draw) var(--bx-ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * var(--bx-iso-step) + var(--bx-dur-1));
 }
 .bx-fitting {
   opacity: 0;
-  animation: bx-appear 0.4s ease-out forwards;
-  animation-delay: calc(var(--i, 0) * 220ms + 900ms);
+  animation: bx-appear var(--bx-dur-3) var(--bx-ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * var(--bx-iso-step) + var(--bx-iso-fittings));
 }
 .bx-run {
-  transition: opacity 0.2s ease-out;
+  transition: opacity var(--bx-dur-2) var(--bx-ease-out);
   outline: none;
 }
 @keyframes bx-draw {

@@ -48,6 +48,17 @@
   --bx-space-section-lg: 2rem;
   --bx-space-head: 1.25rem;
 
+  /* Mouvement (cahier v6 T4) : durées et courbes, seules valeurs permises dans le CSS. */
+  --bx-dur-1: 120ms;
+  --bx-dur-2: 240ms;
+  --bx-dur-3: 480ms;
+  --bx-dur-draw: 1400ms;
+  --bx-stagger: 80ms;
+  --bx-iso-step: 220ms; /* décalage entre deux tracés de l'isométrique (premier écran) */
+  --bx-iso-fittings: 900ms;
+  --bx-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --bx-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+
   /* Barre d'action fixe du mobile (S3b) : hauteur réservée en bas de page pour ne rien masquer. */
   --bx-actionbar-h: 62px;
 }

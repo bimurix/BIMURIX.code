@@ -73,7 +73,7 @@ function ServiceRow({ service: s, locale, first, last }: RowProps) {
         <span className="mt-4 flex size-8 shrink-0 items-center justify-center rounded-full border-2 bg-paper font-mono text-[10px] text-ink sm:size-10 sm:text-[11px]" style={{ borderColor: networkVar[s.network ?? "tqc"] }}>
           {s.code}
         </span>
-        <span className="relative grid flex-1 gap-x-8 gap-y-0.5 border-b border-rule py-3 pe-7 sm:pe-0 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] lg:items-center">
+        <span className="bx-hover-bg relative grid flex-1 gap-x-8 gap-y-0.5 border-b border-rule py-3 pe-7 sm:pe-0 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] lg:items-center">
           <span className="font-display flex items-center gap-2.5 text-lg leading-snug sm:text-xl font-bold text-ink group-hover:text-blue">
             <Icon name={s.cardIcon} className="text-blue" />
             {shortName(s, locale)}

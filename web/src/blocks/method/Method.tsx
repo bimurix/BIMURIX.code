@@ -16,7 +16,7 @@ export function Method({ data, locale }: { data: MethodData; locale: Locale }) {
     <Section>
       <SectionHeading>{pick(data.heading, locale, "")}</SectionHeading>
       <div className="relative">
-        <span aria-hidden="true" className="absolute start-[18px] top-5 bottom-5 w-[5px] bg-blue lg:start-5 lg:end-5 lg:top-[18px] lg:bottom-auto lg:h-[5px] lg:w-auto" />
+        <span aria-hidden="true" className="bx-method-line absolute start-[18px] top-5 bottom-5 w-[5px] bg-blue lg:start-5 lg:end-5 lg:top-[18px] lg:bottom-auto lg:h-[5px] lg:w-auto" />
         <ol className="relative grid gap-7 lg:grid-cols-(--bx-steps) lg:gap-6" style={columns}>
           {steps.map((step, i) => (
             <li key={step._key} className="flex gap-5 lg:flex-col lg:gap-4">

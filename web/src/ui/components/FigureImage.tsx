@@ -33,7 +33,7 @@ export function FigureImage({ image, locale, ratio = "4 / 3", ratioSm, sizes, pr
   // Schéma au trait (SVG) : servi tel quel, entier dans son cadre ; une photo est recadrée au rapport du gabarit.
   const vector = image.asset.url.split("?")[0].endsWith(".svg");
   return (
-    <figure className={`border-[1.5px] border-ink bg-paper ${className}`}>
+    <figure className={`${vector ? "bx-figure-draw " : ""}border-[1.5px] border-ink bg-paper ${className}`}>
       <div className="relative aspect-(--bx-r-sm) w-full sm:aspect-(--bx-r)" style={{ "--bx-r": ratio, "--bx-r-sm": ratioSm ?? ratio } as React.CSSProperties}>
         <Image src={vector ? image.asset.url : urlForImage(image).width(1400).url()} alt={pick(image.alt, locale, "")} fill sizes={sizes} priority={priority} unoptimized={vector} className={vector ? "object-contain" : "object-cover"} />
       </div>

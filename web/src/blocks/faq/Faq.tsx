@@ -12,7 +12,7 @@ export function Faq({ data, locale }: { data: FaqData; locale: Locale }) {
       <SectionHeading>{pick(data.heading, locale, "")}</SectionHeading>
       <div className="grid items-start border-t-[1.5px] border-ink lg:max-w-none lg:grid-cols-2 lg:gap-x-12">
         {(data.items ?? []).map((item) => (
-          <details key={item._key} className="group border-b border-rule">
+          <details key={item._key} className="bx-faq group border-b border-rule">
             <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-2.5 text-[16px] leading-snug sm:py-3 sm:text-[17px] font-semibold text-ink">
               {pick(item.question, locale, "")}
               <Icon name="plus" size="sm" className="transition-transform group-open:rotate-45" />

@@ -90,7 +90,7 @@ export function PointsList({ data, locale, illustrativeLabel }: { data: PointsLi
             {group.items.map((item) => {
               const Title = grouped ? "h4" : "h3";
               return (
-                <li key={item._key} className="border-b border-rule py-3.5 sm:py-5">
+                <li key={item._key} className="bx-reveal border-b border-rule py-3.5 sm:py-5">
                   <Title className="font-display flex items-start gap-3 text-lg font-bold text-ink sm:text-xl">
                     <Icon name={item.icon} className="mt-0.5 text-blue sm:mt-1" />
                     {pick(item.title, locale, "")}

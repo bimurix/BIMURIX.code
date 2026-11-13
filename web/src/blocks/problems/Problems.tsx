@@ -40,7 +40,7 @@ export function Problems({ data, locale, illustrativeLabel }: { data: ProblemsDa
             return href ? [{ id: s._id, href, label: shortName(s, locale), code: s.code, network: s.network ?? "tqc" }] : [];
           });
           return (
-            <li key={item._key} className="border-b border-rule py-3 lg:py-4">
+            <li key={item._key} className="bx-reveal border-b border-rule py-3 lg:py-4">
               <h3 className="font-display flex max-w-[40ch] items-start gap-3 text-lg leading-snug font-bold text-ink">
                 <Icon name={item.icon} className="mt-0.5 text-blue" />
                 {pick(item.title, locale, "")}

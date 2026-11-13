@@ -57,7 +57,7 @@ export function Projects({ data, locale, ui }: { data: ProjectsData; locale: Loc
           const delivered = (item.delivered ?? []).map((d) => ({ key: d._key ?? pick(d, locale, ""), text: pick(d, locale, "") })).filter((d) => d.text);
           const tools = pick(item.tools, locale, "");
           return (
-            <li key={item._key} className={`grid grid-cols-2 gap-x-6 gap-y-1 border-b border-rule py-3.5 lg:gap-x-8 lg:gap-y-3 lg:py-5 ${COLUMNS}`}>
+            <li key={item._key} className={`bx-reveal grid grid-cols-2 gap-x-6 gap-y-1 border-b border-rule py-3.5 lg:gap-x-8 lg:gap-y-3 lg:py-5 ${COLUMNS}`}>
               <div className={`col-span-2 lg:col-span-1 ${item.image?.asset?.url ? "grid grid-cols-[7rem_minmax(0,1fr)] items-start gap-x-3 lg:grid-cols-[9rem_minmax(0,1fr)] lg:gap-x-4" : ""}`}>
                 <div>
                 <h3 className="font-display max-w-[30ch] text-lg leading-snug font-bold text-ink sm:text-xl">{pick(item.title, locale, "")}</h3>
