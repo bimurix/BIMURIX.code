@@ -9,6 +9,11 @@ describe("valeurs d'exemple (ADR-009 n° 1 à 5)", () => {
       expect(isPlaceholder(v), v).toBe(true);
     }
   });
+  it("T7 : reconnaît aussi les formes « — exemple » et les mentions de validation juridique des pages légales", () => {
+    for (const v of ["(lieux exacts à confirmer — exemple)", "(30 jours — example, to be confirmed)", "à compléter — exemple)", "Il doit être validé par un conseiller juridique avant la mise en ligne.", "It must be validated by a legal adviser before launch.", "(à faire valider par un conseiller juridique)", "(to be validated by a legal adviser)"]) {
+      expect(isPlaceholder(v), v).toBe(true);
+    }
+  });
   it("ne marque ni une valeur réelle ni une valeur vide", () => {
     for (const v of ["514 555-1234", "Bimurix inc.", "contact@bimurix.com", "", null, undefined]) expect(isPlaceholder(v), String(v)).toBe(false);
   });

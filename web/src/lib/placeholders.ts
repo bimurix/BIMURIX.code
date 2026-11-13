@@ -1,7 +1,12 @@
 // Valeurs génériques à remplacer avant la mise en ligne (ADR-009 n° 1 à 5, CLAUDE.md § 4).
 // Source unique : le seed (scripts/seed/helpers.mts), le contrôle `pnpm check:placeholders` et le site la lisent.
 // Fichier sans import, avec des annotations seulement : Node 24 l'exécute tel quel (seed, scripts).
-export const PLACEHOLDER_MARKERS = ["555-01", "1234567890", "(exemple)", "(example)", "Exemple — à remplacer", "Example — to be replaced"];
+// T7 : les formes « — exemple » / « — example » (pages légales, T5) et les mentions de validation par un conseiller juridique
+// (à retirer une fois le texte validé) bloquent aussi la mise en ligne.
+export const PLACEHOLDER_MARKERS: string[] = [
+  "555-01", "1234567890", "(exemple)", "(example)", "Exemple — à remplacer", "Example — to be replaced",
+  "— exemple", "— example", "validé par un conseiller juridique", "validated by a legal adviser", "faire valider par un conseiller", "to be validated by a legal adviser",
+];
 
 /** Vrai si le texte porte un marqueur d'exemple : il ne doit alors jamais devenir un lien (`tel:`) ni une donnée structurée. */
 export function isPlaceholder(value: unknown): boolean {
