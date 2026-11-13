@@ -28,6 +28,7 @@ export const proof = defineType({
     }),
     defineField({ name: "attribution", title: "Attribution", type: "localeText", description: "À qui appartiennent ces résultats (un tiers, jamais Bimurix)." }),
     defineField({ name: "sourceName", title: "Nom de la source", type: "string", validation: (r) => r.required() }),
+    defineField({ name: "sourceNameEn", title: "Nom de la source (version anglaise)", type: "string", description: "Facultatif : affiché sur les pages en anglais à la place du nom ci-dessus." }),
     defineField({ name: "sourceUrl", title: "Lien de la source", type: "url", validation: (r) => r.required().uri({ scheme: ["https", "http"] }) }),
   ],
   preview: blockPreview("Preuve chiffrée"),

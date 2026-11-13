@@ -12,3 +12,9 @@ export function canShowProof(data: ProofGate | null | undefined): boolean {
     return false;
   }
 }
+
+/** Nom de la source selon la langue : le champ anglais facultatif en EN, sinon le nom d'origine (S5). */
+export function proofSourceName(data: { sourceName?: string | null; sourceNameEn?: string | null }, locale: "fr" | "en"): string {
+  const en = data.sourceNameEn?.trim();
+  return (locale === "en" && en ? en : data.sourceName) ?? "";
+}

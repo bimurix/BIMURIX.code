@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { formatPrice, isVisible, visiblePackages, type PackageData } from "@/lib/packages/packages";
-import { canShowProof } from "@/lib/packages/proof";
+import { canShowProof, proofSourceName } from "@/lib/packages/proof";
 
 const plain = (s: string) => s.replace(/\s/g, " ");
 
@@ -85,5 +85,17 @@ describe("forfaits masqués par défaut (ADR-008) et rallumables dans Studio", (
     expect(docs.every((d) => d.visible === false)).toBe(true);
     expect(visiblePackages(asData(false))).toEqual([]);
     expect(visiblePackages(asData(true)).map((p) => p.code)).toEqual(["F-01", "F-02", "F-03", "F-04", "F-05"]);
+  });
+});
+
+describe("proofSourceName (S5 : nom de la source bilingue)", () => {
+  const base = { sourceName: "Étude de cas Trimble MEP", sourceNameEn: "Trimble MEP case study" };
+  it("EN : le nom anglais quand il existe, sinon le nom d'origine", () => {
+    expect(proofSourceName(base, "en")).toBe("Trimble MEP case study");
+    expect(proofSourceName({ sourceName: base.sourceName }, "en")).toBe("Étude de cas Trimble MEP");
+    expect(proofSourceName({ ...base, sourceNameEn: "  " }, "en")).toBe("Étude de cas Trimble MEP");
+  });
+  it("FR : toujours le nom d'origine", () => {
+    expect(proofSourceName(base, "fr")).toBe("Étude de cas Trimble MEP");
   });
 });

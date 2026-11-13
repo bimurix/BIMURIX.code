@@ -13,5 +13,6 @@ export const brennanProof = () => ({
     "Results published by contractor J.M. Brennan, using SysQue. These are not Bimurix results.",
   ),
   sourceName: "Étude de cas Trimble MEP",
+  sourceNameEn: "Trimble MEP case study",
   sourceUrl: "https://www.casestudies.com/company/trimble-mep/case-study/15-cost-savings-with-streamlined-bim-workflow",
 });

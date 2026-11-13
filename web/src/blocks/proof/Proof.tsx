@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/locales";
 import { pick, type Localized } from "@/lib/i18n/pick";
-import { canShowProof } from "@/lib/packages/proof";
+import { canShowProof, proofSourceName } from "@/lib/packages/proof";
 import { Section, SectionHeading } from "../section";
 
 export type ProofData = {
@@ -8,6 +8,7 @@ export type ProofData = {
   heading?: Localized;
   attribution?: Localized;
   sourceName?: string | null;
+  sourceNameEn?: string | null;
   sourceUrl?: string | null;
   figures?: Array<{ _key: string; value?: string; label?: Localized }> | null;
   ui?: { sourceLabel?: Localized } | null;
@@ -39,7 +40,7 @@ export function Proof({ data, locale }: { data: ProofData; locale: Locale }) {
           <span className="mt-1 block text-[14px]">
             {sourceLabel && `${sourceLabel}${locale === "fr" ? " : " : ": "}`}
             <a href={data.sourceUrl ?? undefined} rel="noopener noreferrer" className="inline-flex min-h-(--bx-tap-min) items-center text-ink underline underline-offset-4 hover:text-blue">
-              {data.sourceName}
+              {proofSourceName(data, locale)}
             </a>
           </span>
         </figcaption>
