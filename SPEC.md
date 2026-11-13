@@ -43,6 +43,8 @@ export async function submitQuote(input: unknown, deps: QuoteDeps): Promise<Subm
 - Contrat : un forfait ou une offre masqué n'apparaît nulle part (page, menu, sitemap, formulaire) ; avec tous les forfaits masqués (état par défaut),
   aucune page n'affiche de prix, de forfait, de délai fixe ni de condition de paiement, et le champ « Forfait visé » est absent du formulaire.
 - Contrat : un forfait remis à visible: true réapparaît (le code des forfaits reste).
+- Contrat (S4) : une adresse inconnue répond un vrai 404 et une ancienne adresse un 308 avec `Location`, dès la première visite, sur le build de production ; une page ou une redirection ajoutée dans Studio est prise en compte en environ une à deux minutes (cache de 60 s du proxy + CDN Sanity).
+- Contrat (S5) : les situations types de l'accueil sont numérotées 1, 2, 3 ; le nom de la source de la preuve s'affiche en anglais sur les pages EN (champ facultatif).
 
 ## Limites
 - **Toujours** : valider les entrées, tester avant de committer, textes dans Sanity.

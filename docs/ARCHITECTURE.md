@@ -1,6 +1,6 @@
 # Architecture — Bimurix
 
-> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-12 (S3b : finition visuelle et images).
+> Où va chaque chose, et pourquoi. À lire avant de créer un fichier. Mis à jour le 2026-11-13 (S5 : audit, proxy S4, scripts relançables).
 
 ## 1. Le dossier de travail
 
@@ -45,6 +45,7 @@ web/
 │  │  ├─ i18n/v5-labels.ts    Valeurs de secours FR/EN des petits textes v5 (le texte public vit dans « Petits textes du site »)
 │  │  ├─ packages/            Forfaits : prix affiché ou « sur soumission », visibilité, date limite, garde de la preuve
 │  │  ├─ redirect-target.ts   Cible d'une redirection (interne seulement, sans boucle)
+│  │  ├─ route-table.ts       Décision 404 / 308 / suite, avant le rendu (S4) ; route-table-source.ts lit la table dans Sanity (cache de 60 s)
 │  │  ├─ supabase/            Clients serveur, admin, session
 │  │  ├─ mail/  i18n/         Envoi (Mailpit / Resend) · langues et routage
 │  ├─ ui/
@@ -52,9 +53,10 @@ web/
 │  │  ├─ patterns/            Assemblages du site (en-tête, pied, feuille, formulaire, ServicePage = gabarit P1 à P11 du plan v5)
 │  │  └─ admin/               Pièces du tableau de bord
 │  ├─ styles/tokens.css       Seule source des couleurs, tailles et traits
-│  └─ proxy.ts                Routage FR / EN et garde de /admin
+│  └─ proxy.ts                Routage FR / EN, garde de /admin, vrai 404 et redirection 308 avec `Location` (S4)
 ├─ scripts/                   seed-sanity.mts + seed/*.mts, db-env, add-admin, check-placeholders,
-│                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset), capture-pages.mjs (captures pour le client),
+│                             patch-*.mts (mises à jour du dataset `development` : refusent tout autre dataset ; S2, S3b et S5 se relancent dans n'importe quel ordre : photos conservées),
+│                             capture-pages.mjs (captures pour le client : `node scripts/capture-pages.mjs <dossier> [adresse]`, build de production sur le port 3200),
 │                             assets/s3b/ (schémas au trait générés par make-schematics.mjs, photos d'illustration ; importés par patch-design-s3b.mts)
 ├─ supabase/migrations/       SQL versionné, appliqué par `pnpm db:reset`
 └─ tests/unit · tests/e2e     Vitest · Playwright (mobile et bureau ; warm-up.ts préchauffe les routes en dev)
@@ -79,7 +81,7 @@ web/
 | Une colonne en base | Nouvelle migration dans `supabase/migrations/` (jamais modifier une ancienne) |
 
 ### Limites
-Fichier ≤ 300 lignes, fonction ≤ 40 lignes (au 2026-11-12 : plus gros fichier de `src/` 168 lignes).
+Fichier ≤ 300 lignes (au 2026-11-13 : plus gros fichier de `src/` 173 lignes), fonction ≤ 40 lignes : **non tenu par une quinzaine de composants JSX** (QuoteForm, InboxPage, MobileMenu, SiteFooter…), voir l'audit S5 ; à découper au fil des modifications, pas en bloc.
 Server Components par défaut ; `"use client"` seulement pour l'interaction.
 
 ## 3. Les données
@@ -90,6 +92,8 @@ Server Components par défaut ; `"use client"` seulement pour l'interaction.
 | Demandes, notes, admins | Supabase (RLS partout) | Docker `bimurix`, ports 54421–54429 | projet `bimurix-prod` (Canada) |
 | Courriels | — | Mailpit `localhost:54424` | Resend |
 | Antispam | Turnstile | clés de test | vraies clés |
+
+**Dataset neuf** : `pnpm seed` (documents sans images) puis `patch-design-s3b.mts` (schémas et photos, téléversés dans Sanity). Le seed contient déjà l'état final du texte (accueil sans bloc cycle, situations numérotées 1 à 3, nom de source anglais).
 
 Le dataset est choisi par `NEXT_PUBLIC_SANITY_DATASET` : `development` en mode dev (écrit par
 `node scripts/db-env.mjs`), `production` par défaut ailleurs (ADR-004, révision du 2026-11-10).

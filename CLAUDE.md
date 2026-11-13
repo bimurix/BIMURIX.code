@@ -81,7 +81,8 @@ Hébergement plus tard : Netlify. Code dans `web/`.
 ```bash
 pnpm dev            # http://localhost:3100
 pnpm lint && pnpm typecheck && pnpm test && pnpm build
-pnpm test:e2e       # Playwright
+pnpm test:e2e       # Playwright (mode dev, instable sous charge)
+node scripts/next-dev-env.mjs build && PLAYWRIGHT_PROD=1 PLAYWRIGHT_BASE_URL=http://localhost:3200 pnpm test:e2e   # référence : build de production
 pnpm db:start       # Supabase local isolé (Docker)
 pnpm db:stop
 ```
