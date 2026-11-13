@@ -8,6 +8,22 @@ const localStackReady = existsSync(resolve(__dirname, "../../.env.development.lo
 const MAILPIT = "http://127.0.0.1:54424";
 if (localStackReady) process.loadEnvFile(resolve(__dirname, "../../.env.development.local"));
 
+/**
+ * T7 : le plafond global d'envois (60 demandes par heure, S-02) est un comportement voulu ; les relances répétées de la suite
+ * (et les tests du tableau de bord) l'atteignaient. Comme pour la connexion /admin (T6), le test antidate dans SA base locale les
+ * demandes d'essai (@example.com) de la dernière heure avant d'envoyer. Le code de la limite n'est pas touché ;
+ * `tests/unit/quote-abuse.test.ts` prouve que le plafond refuse la 61e demande.
+ */
+async function clearRecentTestRequests() {
+  const server = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, { auth: { persistSession: false } });
+  const since = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+  // Marge d'une minute : une demande créée à l'instant par un test du tableau de bord (autre fichier, en parallèle) reste intacte.
+  const until = new Date(Date.now() - 60 * 1000).toISOString();
+  // Antidater plutôt que supprimer : jamais de DELETE de demande (CLAUDE.md § 6), et les échanges liés restent attachés.
+  const { error } = await server.from("quote_requests").update({ created_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString() }).like("email", "%@example.com").gte("created_at", since).lte("created_at", until);
+  expect(error).toBeNull();
+}
+
 test("formulaire vide : erreurs sous les champs, rien n'est envoyé", async ({ page }) => {
   await page.goto("/soumission");
   // Le clic peut précéder l'hydratation : on réessaie jusqu'à la réponse de l'action serveur.
@@ -48,6 +64,7 @@ test("aucun forfait affiché : le champ « Forfait visé » est absent, même av
 test("soumission par un ancien lien ?forfait=F-01 : demande enregistrée sans forfait, référence, 2 courriels avec le délai de réponse et sans mention de forfait ni d'appel", async ({ page, request }, info) => {
   test.skip(!localStackReady, "pile Supabase locale non configurée (pnpm db:start puis pnpm db:env)");
   test.skip(info.project.name !== "desktop", "une seule demande réelle par exécution");
+  await clearRecentTestRequests();
   const email = `e2e-ancien-lien-${Date.now()}@example.com`;
   await page.setExtraHTTPHeaders({ "x-forwarded-for": `10.1.${Date.now() % 250}.${Math.floor(Math.random() * 250)}` });
 
@@ -92,6 +109,7 @@ test("soumission par un ancien lien ?forfait=F-01 : demande enregistrée sans fo
 test("demande complète : enregistrée, référence affichée, 2 courriels dans Mailpit", async ({ page, request }, info) => {
   test.skip(!localStackReady, "pile Supabase locale non configurée (pnpm db:start puis pnpm db:env)");
   test.skip(info.project.name !== "desktop", "une seule demande réelle par exécution");
+  await clearRecentTestRequests();
   const email = `e2e-${Date.now()}@example.com`;
   // IP fictive propre à ce test (prise en compte en local seulement) : la limite d'envois par IP
   // ne bloque pas les exécutions répétées. Sur Netlify, seul l'en-tête de Netlify compte.
